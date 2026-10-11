@@ -52,6 +52,13 @@ def inspect_repository(root: Path) -> dict:
                     entry["classes"] = sum(isinstance(n, ast.ClassDef) for n in ast.walk(tree))
                     entry["imports"] = sorted({a.name.split(".")[0] for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names} |
                                               {n.module.split(".")[0] for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module})
+                    entry["import_paths"] = sorted(
+                        {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
+                        | {n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module and n.level == 0}
+                        | {n.module + "." + a.name for n in ast.walk(tree)
+                           if isinstance(n, ast.ImportFrom) and n.module and n.level == 0
+                           for a in n.names if a.name != "*"}
+                    )
                     for n in ast.walk(tree):
                         if isinstance(n, ast.ExceptHandler) and len(n.body) == 1 and isinstance(n.body[0], ast.Pass):
                             findings.append({"rule": "silent_exception", "severity": "medium", "evidence": f"{rel}:{n.lineno}", "message": "Exception handler silently discards errors"})

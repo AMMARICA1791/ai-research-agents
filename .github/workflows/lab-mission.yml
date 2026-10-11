@@ -1,33 +1,94 @@
-name: Research Lab - Manual Mission
+name: Research Lab - Persistent Missions
+
 on:
   workflow_dispatch:
     inputs:
       goal:
-        description: 'Read-only research mission for this lab'
+        description: 'Research goal (do not include secrets or private information)'
         required: true
-        default: 'Inspect this research laboratory and propose the next improvements'
+        default: 'Inspect our research laboratory and recommend evidence-backed improvements'
         type: string
+      enable_model:
+        description: 'Use optional external LLM reviewers if provider credentials are configured'
+        default: false
+        type: boolean
+  push:
+    branches:
+      - main
+    paths:
+      - 'lab/**'
+      - '.github/workflows/lab-mission.yml'
+
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: lab-knowledge-serialized
+  cancel-in-progress: false
+
 jobs:
   research:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     env:
-      LAB_GOAL: "${{ inputs.goal }}"
+      LAB_GOAL: ${{ github.event_name == 'workflow_dispatch' && inputs.goal || 'Inspect our research laboratory and recommend evidence-backed improvements' }}
+      LAB_LLM_ENDPOINT: ${{ github.event_name == 'workflow_dispatch' && inputs.enable_model && vars.LAB_LLM_ENDPOINT || '' }}
+      LAB_LLM_MODEL: ${{ github.event_name == 'workflow_dispatch' && inputs.enable_model && vars.LAB_LLM_MODEL || '' }}
+      LAB_LLM_API_KEY: ${{ github.event_name == 'workflow_dispatch' && inputs.enable_model && secrets.LAB_LLM_API_KEY || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Run five-stage research cycle (no model key required)
+      - name: Restore sanitized persistent research memory
         run: |
-          python -m lab.cli mission --repo . --goal "$LAB_GOAL" --output results/mission.json
-      - name: Keep report and SQLite memory as artifacts
+          set -euo pipefail
+          mkdir -p .data
+          git fetch --no-tags origin refs/heads/lab-memory:refs/remotes/origin/lab-memory
+          git show refs/remotes/origin/lab-memory:knowledge/state.json > .data/knowledge.json
+          python - <<'PY'
+          from lab.knowledge import load_state
+          state = load_state('.data/knowledge.json')
+          print("RESTORED KNOWLEDGE RUNS:", len(state["runs"]))
+          PY
+      - name: Execute read-only research cycle
+        run: |
+          python -m lab.cli mission --repo . --goal "$LAB_GOAL" --knowledge .data/knowledge.json --output results/mission.json > /tmp/lab-mission-result.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from lab.knowledge import load_state
+          report = json.loads(Path('results/mission.json').read_text())
+          journal = load_state('.data/knowledge.json')
+          assert report['report']['validation']['changes_applied'] is False
+          assert all(p['status'] == 'pending_review' for p in report['proposals'])
+          assert len(journal['runs']) >= 1
+          print('RESEARCH MISSION COMPLETED:', report['id'])
+          print('TOTAL SHARED KNOWLEDGE RUNS:', len(journal['runs']))
+          print('MODEL MODE:', report['report']['model']['mode'])
+          PY
+      - name: Persist only sanitized aggregate knowledge to dedicated branch
+        run: |
+          set -euo pipefail
+          git worktree add --detach "$RUNNER_TEMP/lab-memory" refs/remotes/origin/lab-memory
+          mkdir -p "$RUNNER_TEMP/lab-memory/knowledge"
+          cp .data/knowledge.json "$RUNNER_TEMP/lab-memory/knowledge/state.json"
+          git -C "$RUNNER_TEMP/lab-memory" config user.name "ai-research-lab[bot]"
+          git -C "$RUNNER_TEMP/lab-memory" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$RUNNER_TEMP/lab-memory" add knowledge/state.json
+          if git -C "$RUNNER_TEMP/lab-memory" diff --cached --quiet; then
+            echo "Knowledge journal unchanged."
+          else
+            git -C "$RUNNER_TEMP/lab-memory" commit -m "chore(memory): persist redacted research aggregates [skip ci]"
+            git -C "$RUNNER_TEMP/lab-memory" push origin HEAD:refs/heads/lab-memory
+          fi
+      - name: Upload detailed single-run report (potentially public)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lab-mission-${{ github.run_id }}
           path: |
             results/mission.json
-            .data/lab.sqlite
-          retention-days: 14
+          if-no-files-found: warn
+          retention-days: 7

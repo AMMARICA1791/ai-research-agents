@@ -14,6 +14,7 @@ def main(argv=None) -> int:
     mission.add_argument("--repo", default=".")
     mission.add_argument("--goal", required=True)
     mission.add_argument("--output", default="", help="Optional JSON report destination")
+    mission.add_argument("--knowledge", default="", help="Optional sanitized cross-run JSON journal")
     sub.add_parser("history", help="List completed missions")
     sub.add_parser("proposals", help="List human-review proposals")
     review = sub.add_parser("review", help="Record human review; never executes changes")
@@ -24,7 +25,7 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     store = LabMemory(args.db)
     if args.command == "mission":
-        result = LabOrchestrator(store).run(Path(args.repo), args.goal)
+        result = LabOrchestrator(store, knowledge_path=args.knowledge or None).run(Path(args.repo), args.goal)
         if args.output:
             path = Path(args.output)
             path.parent.mkdir(parents=True, exist_ok=True)

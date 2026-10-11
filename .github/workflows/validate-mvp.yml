@@ -36,7 +36,7 @@ jobs:
           import json
           from pathlib import Path
           result = json.loads(Path('results/ci-mission.json').read_text())
-          assert result['agent_stages'] == ['explorer', 'analyst', 'engineer', 'validator', 'synthesizer']
+          assert result['agent_stages'] == ['explorer', 'analyst', 'dependency_mapper', 'engineer', 'critic', 'validator', 'synthesizer']
           assert result['report']['validation']['changes_applied'] is False
           assert all(p['status'] == 'pending_review' for p in result['proposals'])
           print('SELF RESEARCH COMPLETED:', result['id'])

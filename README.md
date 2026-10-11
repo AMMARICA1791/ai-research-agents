@@ -1,50 +1,31 @@
-# AI Research Agents — Independent Research & Development Laboratory
+# AI Research Agents — Internal Research & Development Laboratory
 
-This is an internal research center, not a commercial SaaS product.
+An owner-directed multi-role R&D environment, currently for internal experimentation — not a commercial offering.
 
-## Implemented
+## Phase 2: implemented foundations
+- Seven coordinated research roles: Explorer, Analyst, Dependency Mapper, Engineer, Critic, Validator, Synthesizer.
+- Read-only Python AST source analysis and conservative internal import-cycle mapping with file evidence.
+- SQLite mission reports and human-gated proposed actions. Approving proposals never changes source code.
+- Durable **sanitized** cross-run research summaries on a separate lab-memory branch. No raw goals, source or private SQLite history is committed there.
+- Optional two-pass language-model critique using an explicitly configured OpenAI-compatible HTTPS provider. Unconfigured by default; no claims of live model execution without evidence.
+- Manual and initial main-branch GitHub Actions workflow that executes a research mission and uploads its report.
 
-The new lab/ package runs five ordered research stages:
-1. Explorer — bounded read-only file inventory.
-2. Analyst — real Python AST inspection with file/line evidence.
-3. Engineer — creates proposed actions, without changing source code.
-4. Validator — checks proposals against evidence.
-5. Synthesizer — produces a report and saves SQLite history.
+## Tablet workflow
+Open **Actions → Research Lab - Persistent Missions → Run workflow**. Enter a non-sensitive goal. Review the logs and mission artifact. Future runs restore aggregate prior findings from lab-memory.
 
-An optional OpenAI-compatible model comments on finding metadata when
-LAB_LLM_ENDPOINT, LAB_LLM_MODEL and LAB_LLM_API_KEY are configured.
-Otherwise the lab performs deterministic research and explicitly reports
-that language-model inference is not configured. Original agents under
-agents/ remain demonstration implementations.
-
-## On GitHub, including an Android tablet
-
-Open Actions → Research Lab - Manual Mission → Run workflow.
-Enter a research goal. Download mission.json and SQLite from run Artifacts.
-Each GitHub Actions run starts with fresh SQLite memory; a long-term cloud
-database is planned for a later phase.
-
-## Local setup
-
+## Locally
 Python 3.11+:
 
     pip install -r requirements.txt
     python main.py
-
-Dashboard: http://127.0.0.1:8000
-
-    python -m lab.cli mission --repo . --goal "Inspect this research laboratory"
-    python -m lab.cli history
-    python -m lab.cli proposals
+    python -m lab.cli mission --repo . --goal "Review our laboratory" --knowledge .data/knowledge.json
     python -m pytest -q tests/test_mvp.py tests/test_lab.py
 
-All source change proposals require human review; approval does not
-automatically edit code, open PRs or merge. This is an early research
-foundation, not a full autonomous coding agent or security audit.
-Do not publish its HTTP interface without authentication.
+Local dashboard: http://127.0.0.1:8000.
 
-See docs/RESEARCH_LAB_VISION.md, docs/MISSION_PROTOCOL.md and README.ar.md.
-Past business, investor and pricing drafts are preserved under
-archive/commercial-drafts/ and are not part of this phase.
+## Optional real AI reasoning
+In repository Settings → Secrets and variables → Actions, explicitly add variables LAB_LLM_ENDPOINT, LAB_LLM_MODEL, plus a repository secret LAB_LLM_API_KEY. Then opt in using enable_model=true on manual runs. May incur provider charges. GitHub Models was retired in July 2026 and is not used. The model is given only aggregate finding counts, no source/goal text.
 
-License: MIT.
+Public repository safety: GitHub Actions artifacts may reveal report details. Do not use private or sensitive mission goals. No automatic source edits or public web deployment.
+
+Read [Phase 2 guide](docs/PHASE2_GUIDE.md) and [Arabic instructions](README.ar.md). Historical commercial materials remain archived.

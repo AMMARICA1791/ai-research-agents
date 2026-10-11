@@ -38,7 +38,7 @@ def test_pipeline_durable_memory_and_review_gate(tmp_path):
     store = LabMemory(tmp_path / ".data" / "memory.sqlite")
     orchestrator = LabOrchestrator(store, model=OptionalModel(endpoint="", api_key="", model=""))
     report = orchestrator.run(tmp_path, "Find improvements for the laboratory itself")
-    assert report["agent_stages"] == ["explorer", "analyst", "engineer", "validator", "synthesizer"]
+    assert report["agent_stages"] == ["explorer", "analyst", "dependency_mapper", "engineer", "critic", "validator", "synthesizer"]
     assert report["report"]["model"]["mode"] == "not_configured"
     assert report["report"]["validation"]["evidence_grounded"] is True
     assert report["report"]["validation"]["changes_applied"] is False
@@ -93,7 +93,7 @@ def test_model_adapter_mock_no_source_sent(monkeypatch):
         def raise_for_status(self): return None
         def json(self): return {"choices": [{"message": {"content": "Review the recorded finding"}}]}
     captured = {}
-    def fake_post(url, headers, json, timeout):
+    def fake_post(url, headers, json, timeout, allow_redirects):
         captured["body"] = json
         return FakeReply()
     monkeypatch.setattr(provider.requests, "post", fake_post)
@@ -102,3 +102,57 @@ def test_model_adapter_mock_no_source_sent(monkeypatch):
     assert result["mode"] == "remote_model"
     assert "NEVER_SEND" not in str(captured["body"])
     assert "test-key" not in str(captured["body"])
+    assert "Improve our lab" not in str(captured["body"])
+    assert len(result["reviews"]) == 2
+
+
+def test_cross_run_shared_knowledge_is_sanitized(tmp_path):
+    from lab.knowledge import load_state
+    seed_repo(tmp_path)
+    knowledge = tmp_path / ".data" / "knowledge.json"
+    engine = LabOrchestrator(
+        LabMemory(tmp_path / ".data" / "first.sqlite"),
+        model=OptionalModel(endpoint="", api_key="", model=""),
+        knowledge_path=knowledge,
+    )
+    first = engine.run(tmp_path, "First internal confidential goal: DO_NOT_PUBLISH")
+    second = engine.run(tmp_path, "Second internal confidential goal: NEVER_EXPOSE_ME")
+    state = load_state(knowledge)
+    assert len(state["runs"]) == 2
+    assert second["report"]["prior_knowledge"]["previous_runs"] == 1
+    assert first["report"]["prior_knowledge"]["previous_runs"] == 0
+    assert "DO_NOT_PUBLISH" not in knowledge.read_text()
+    assert "NEVER_EXPOSE_ME" not in knowledge.read_text()
+    assert "agent.py" not in knowledge.read_text()
+    assert set(state["runs"][0]) == {"at", "files_scanned", "python_parsed",
+                                      "finding_count", "risk_counts", "rule_counts", "model_mode"}
+
+def test_dependency_mapper_finds_real_internal_cycle(tmp_path):
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "__init__.py").write_text("", encoding="utf-8")
+    (tmp_path / "pkg" / "a.py").write_text("import pkg.b\n", encoding="utf-8")
+    (tmp_path / "pkg" / "b.py").write_text("import pkg.a\n", encoding="utf-8")
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_one.py").write_text("def test_1():\n    pass\n", encoding="utf-8")
+    report = LabOrchestrator(
+        LabMemory(tmp_path / ".data" / "test.sqlite"),
+        model=OptionalModel(endpoint="", api_key="", model=""),
+    ).run(tmp_path, "Find cyclical imports for refactoring")
+    dependencies = report["report"]["dependencies"]
+    assert ["pkg/a.py", "pkg/b.py"] in dependencies["cycles"]
+    assert dependencies["edge_count"] == 2
+    assert any(f["rule"] == "internal_dependency_cycle" for f in report["report"]["findings"])
+    assert report["report"]["validation"]["evidence_grounded"]
+
+def test_reject_corrupt_or_unexpected_journal(tmp_path):
+    from lab.knowledge import load_state
+    import pytest
+    path = tmp_path / "bad.json"
+    path.write_text('{"schema_version":1,"runs":[{"goal":"leak"}]}')
+    with pytest.raises(ValueError):
+        load_state(path)
+
+def test_model_refuses_insecure_http_without_external_request():
+    model = OptionalModel(endpoint="http://untrusted.example/v1/chat/completions",
+                          api_key="dummy", model="mock")
+    assert model.summarize("secret", [])["mode"] == "invalid_endpoint"
