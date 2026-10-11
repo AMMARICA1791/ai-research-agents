@@ -42,7 +42,7 @@ Local UI: http://127.0.0.1:8000. Windows users can use their normal Python envir
 ## Help shape the project
 Read [Roadmap](ROADMAP.md), [Contributing](CONTRIBUTING.md), [Governance](GOVERNANCE.md), [Security](SECURITY.md), and [Code of conduct](CODE_OF_CONDUCT.md).
 
-**Licensing decision pending:** This public repository has not yet adopted an explicit software license. Public visibility alone does not grant permission to redistribute the code. See [license decision](docs/LICENSING_DECISION.md). For now, share reproducible bug reports, benchmark ideas, and documentation feedback; code contributions must await clear licensing terms.
+**License:** [Apache License, Version 2.0](LICENSE). The owner approved it for this repository on 11 October 2026. Original copyright remains with the respective authors; see the [attribution notice](NOTICE), [trademark guidance](TRADEMARKS.md) and [rights explained](docs/LICENSING_DECISION.md). The license permits commercial reuse and derivatives subject to its conditions, **not** exclusive control of the public code. Contributors can now submit original or lawfully authorized changes under the documented contribution policy.
 
 Languages: [Arabic](README.ar.md) · [Portuguese](README.pt-BR.md) · [Spanish](README.es.md) · [Chinese](README.zh-CN.md). Some translations cover older phases; this page is the up-to-date capability summary.
 

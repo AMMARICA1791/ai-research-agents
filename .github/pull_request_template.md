@@ -11,4 +11,4 @@ Explain what this change fixes, with an issue or reproducible example.
 ## Scope and limitations
 List which files changed, what is not verified and any runner/API costs.
 
-**Licensing:** this repository does not yet have an approved open-source license. Do not offer redistribution-dependent source contributions until the owner approves terms.
+**Licensing:** Contributions must be original or submitted with lawful rights to distribute under [Apache-2.0](../LICENSE), as described in [CONTRIBUTING.md](../CONTRIBUTING.md). Preserve applicable attribution and mark modified files where required.

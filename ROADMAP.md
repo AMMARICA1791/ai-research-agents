@@ -8,7 +8,7 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 - [x] A narrowly pre-scoped model-generated real repository fix, owner-merged as PR #17.
 - [x] Full `tests/` suite in CI, including the security regression.
 - [x] Document contribution rules, security, governance, and current limitations.
-- [ ] **Repository owner explicitly selects an OSI-approved software license.**
+- [x] **Repository owner approved Apache-2.0**, and the canonical license and attribution notices are published.
 - [ ] Update GitHub repository topics and description after verifying maintainer access.
 
 ## Earn community trust (next)

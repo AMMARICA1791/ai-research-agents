@@ -9,6 +9,6 @@ The repository owner retains all project, licensing, release, commercial, fundin
 4. Review the changes and limitations; human approval before merging.
 5. Record a testable result rather than an unsupported capability claim.
 
-Until an explicit software license is approved, postpone accepting external source-code contributions that need redistribution rights. Non-sensitive bug reports, feedback and research suggestions are welcome.
+External contributions may be reviewed under [Apache-2.0](LICENSE) and [CONTRIBUTING.md](CONTRIBUTING.md). Contributors retain rights in their original contributions; submitting a patch does not assign copyright to the owner. Maintainers must reject material submitted without adequate redistribution rights. Non-sensitive bug reports and feedback are welcome.
 
 An eventual paid product is a possibility, not an existing business or revenue commitment. Licensing, commercial terms and contributor policies require transparent owner approval.
