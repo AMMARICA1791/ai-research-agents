@@ -50,7 +50,8 @@ def test_bad_utf8_is_reported_instead_of_silently_ignored(tmp_path, caplog):
 
 def test_programming_defects_are_not_swallowed(tmp_path, monkeypatch):
     (tmp_path / "foo.py").write_text("def inspect():\n    return 4\n", encoding="utf-8")
-    import web.app as web_module
+    from importlib import import_module
+    web_module = import_module('web.app')
 
     def unexpected_bug(_content):
         raise RuntimeError("Unexpected analyzer defect")
