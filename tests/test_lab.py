@@ -156,3 +156,19 @@ def test_model_refuses_insecure_http_without_external_request():
     model = OptionalModel(endpoint="http://untrusted.example/v1/chat/completions",
                           api_key="dummy", model="mock")
     assert model.summarize("secret", [])["mode"] == "invalid_endpoint"
+
+
+def test_shared_memory_rejects_nested_private_fields(tmp_path):
+    from lab.knowledge import load_state
+    import pytest
+    path = tmp_path / "state.json"
+    malicious = {"schema_version": 1, "runs": [{
+        "at": "2026-10-11T00:00:00+00:00",
+        "files_scanned": 1, "python_parsed": 1, "finding_count": 1,
+        "risk_counts": {"high": 0, "medium": 1, "low": 0},
+        "rule_counts": {"secret_raw_goal": 1},
+        "model_mode": "not_configured"
+    }]}
+    path.write_text(json.dumps(malicious), encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_state(path)
