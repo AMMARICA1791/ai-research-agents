@@ -17,6 +17,7 @@ We value reproducible bug reports, test cases and honest results, including fail
 - Add a regression test that fails before the fix and passes afterward.
 - Do not mark actual failures as skipped, disable checks, or use mocks to claim live AI inference.
 - Never commit private source, secrets, credentials or personal data.
+- Identify the origin and applicable licenses of any third-party material; model-generated text does not prove that redistribution rights exist.
 - Clearly label model-written code, deterministic scripts and human-authored changes.
 - Human review is mandatory before merging to `main`.
 
