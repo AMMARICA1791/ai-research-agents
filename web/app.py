@@ -182,7 +182,7 @@ def _parse_github_url(url: str) -> Dict[str, str]:
     value = (url or "").strip()
     if not value:
         raise ValueError("GitHub URL is required")
-    match = re.search(r"github\.com/([^/]+)/([^/]+)", value)
+    match = re.match(r'^https://github\.com/([^/]+)/([^/]+)', value)
     if not match:
         raise ValueError("Invalid GitHub URL")
     owner, repo = match.group(1), match.group(2)
