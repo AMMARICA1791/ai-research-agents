@@ -30,3 +30,18 @@ A source-grounded Arabic report with a claim/evidence matrix, explicit uncertain
 
 ## Current status
 Protocol registered; no workflow has been run for this question, and no paper's full text has been verified for this protocol.
+
+## Actual laboratory discovery run #7 (2026-10-11)
+
+**Evidence:** Owner-provided GitHub Actions run #7 screenshot and complete job summary text. **Status: Success (14s).** Crossref retrieval timestamp: 2026-10-11T23:38:36+00:00. Metadata candidates: 5; invalid/incomplete records: 0. Response SHA-256: `36173f9ec796cdc813102e2887956ecdba01771caeb7c388dd2650cecb3d2e3a`. Artifact: `public-research-metadata` (2.29 KB; SHA-256 `778ec76680ec89011906e7fcf8ce317a5ed5b0ee25a42619fe7be8888cd7b83e`).
+
+**Returned titles (unreviewed Crossref metadata, not paper findings):**
+1. *Chapter 8 Part B. Rare Earth Elements in Iron-Formation* (1983) — weak direct relevance.
+2. *Challenges in nucleosynthesis of trans-iron elements* (2014) — indirect context (beyond iron).
+3. *Nuclear Aspects of Stellar and Explosive Nucleosynthesis* (2002) — high apparent relevance to stellar production.
+4. *Supernova Pumps Iron in Inside-Out Blast* (2021) — potentially relevant; publication type and underlying evidence not verified.
+5. *IRON ISOTOPE CONSTRAINTS ON PLANETESIMAL CORE FORMATION IN THE EARLY SOLAR SYSTEM* (2016) — high apparent relevance to differentiation of early solar system bodies.
+
+**Assessment:** Discovery and provenance gate passed; source relevance mixed. No abstracts, full texts, isotopic measurements, models, or claims were checked by the workflow. The query returned no Quranic exegesis; classical tafsir must be evaluated in a separate textual track. Two GitHub annotations concern Node.js 20 deprecation and future ubuntu-latest migration; they did not prevent this run. **Do not present these five titles as verified evidence of any cosmological or theological claim.**
+
+**Next gate:** Manually examine original research sources (especially stellar nucleosynthesis and isotope constraints), document methods and limitations, and keep the tafsir comparison separate. No new workflow or code changes needed.
