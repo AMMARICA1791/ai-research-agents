@@ -140,6 +140,19 @@
       },
       "rule_counts": {},
       "model_mode": "not_configured"
+    },
+    {
+      "at": "2026-10-11T07:00:02.721917+00:00",
+      "files_scanned": 73,
+      "python_parsed": 43,
+      "finding_count": 0,
+      "risk_counts": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "rule_counts": {},
+      "model_mode": "not_configured"
     }
   ],
   "lessons": [
