@@ -99,10 +99,12 @@ def normalize_crossref(
     question = validate_question(question)
     try:
         document = json.loads(payload.decode("utf-8"))
+        if not isinstance(document, dict) or not isinstance(document.get("message"), dict):
+            raise ValueError("Malformed provider envelope")
         entries = document["message"]["items"]
     except (UnicodeError, ValueError, KeyError, TypeError) as exc:
         raise ValueError("Scholarly provider returned malformed JSON metadata") from exc
-    if not isinstance(entries, list) or len(entries) > MAX_WORKS:
+    if not isinstance(entries, list) or len(entries) > max_results:
         raise ValueError("Scholarly response violates bounded entry limits")
     unique = {}
     invalid = 0
