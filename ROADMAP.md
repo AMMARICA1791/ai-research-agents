@@ -16,6 +16,7 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 - [x] Bounded read-only audit of another public GitHub Python repository, without running its code or needing a paid model API.
 - [ ] Public interactive hosted demo; GitHub Actions audit is currently maintainer-triggered and is not a hosted service.
 - [ ] Independent external user reproduces one research result.
+- [x] Evidence-linked, fixed-rule review ordering for external public-repository findings (human validation mandatory).
 - [ ] An unseen-task benchmark with successes *and* failures.
 - [ ] Confine any third-party code execution to an isolated environment without write permissions.
 - [ ] Contribution onboarding and automated checks for documentation links.
