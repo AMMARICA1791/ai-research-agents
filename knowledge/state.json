@@ -30,6 +30,21 @@
         "silent_exception": 1
       },
       "model_mode": "not_configured"
+    },
+    {
+      "at": "2026-10-11T06:08:46.223447+00:00",
+      "files_scanned": 57,
+      "python_parsed": 34,
+      "finding_count": 1,
+      "risk_counts": {
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "rule_counts": {
+        "silent_exception": 1
+      },
+      "model_mode": "not_configured"
     }
   ]
 }
