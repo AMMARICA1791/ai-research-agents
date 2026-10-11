@@ -1,0 +1,66 @@
+name: Research Evidence & Bounded Repair
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'lab/autorepair.py'
+      - 'lab/benchmark.py'
+      - '.github/workflows/research-evidence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute actual scanner precision/recall experiment
+        run: |
+          set -euo pipefail
+          mkdir -p results
+          python -m lab.benchmark > results/scanner-benchmark.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x = json.loads(Path('results/scanner-benchmark.json').read_text())
+          assert x['scope'] == 'bundled_synthetic_fixtures_only'
+          assert x['passed_cases'] == x['case_count'] == 8
+          assert x['false_positive'] == x['false_negative'] == 0
+          print('SYNTHETIC_SCANNER_CASES_PASSED=' + str(x['passed_cases']))
+          print('SCANNER_PRECISION_SYNTHETIC=' + str(x['precision']))
+          print('SCANNER_RECALL_SYNTHETIC=' + str(x['recall']))
+          PY
+      - name: Generate and verify bounded fail-closed code patch
+        run: |
+          set -euo pipefail
+          python -m lab.autorepair > results/synthetic-repair.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x = json.loads(Path('results/synthetic-repair.json').read_text())
+          assert x['status'] == 'validated_synthetic_only'
+          assert x['baseline']['passed'] is False
+          assert x['repaired']['passed'] is True
+          assert x['changes_applied_to_repository'] is False
+          assert x['safety']['auto_merge'] is False
+          print('BOUNDED_REPAIR_RED_TO_GREEN_CONFIRMED')
+          print('REAL_PROJECT_SOURCE_CHANGED=false')
+          print('HUMAN_REVIEW_REQUIRED=true')
+          PY
+      - name: Publish reproducible research reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-evidence-${{ github.run_id }}
+          path: |
+            results/scanner-benchmark.json
+            results/synthetic-repair.json
+          if-no-files-found: warn
+          retention-days: 7
