@@ -45,3 +45,14 @@ LAB_LLM_ENDPOINT عنوان HTTPS متوافقاً مع Chat Completions وLAB_L
 
 افتح Actions > Research Evidence & Bounded Repair ثم Run workflow.
 التفاصيل بالإنجليزية في docs/PHASE4_EVIDENCE.md.
+
+
+## تجربة توليد إصلاح بنموذج Qwen مخصص للبرمجة
+أضفنا تجربة محدودة المصدر للتحقق من قدرة نموذج Qwen2.5-Coder 1.5B
+المجاني على **توليد الشيفرة بنفسه** لعينة اصطناعية فقط.
+لا يُنفذ أي ناتج قبل فحص AST صارم ومقارنة البنية بإصلاح آمن محدد،
+ثم اختبار سلوكي يفشل قبل الإصلاح وينجح بعده.
+عند رفض المرشح يفشل الاختبار ولا يحدث أي تعديل بالمستودع.
+
+من Actions افتح Real Qwen Coder Patch Trial لقراءة التقرير.
+ملف التوثيق: docs/MODEL_CODER_EXPERIMENT.md.
