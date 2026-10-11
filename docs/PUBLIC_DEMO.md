@@ -1,14 +1,15 @@
 # Public proof tour — review the results in one minute
 
-This is a **small, verifiable demonstration** for developers encountering AI Research Agents for the first time. It does not require paid model keys, your own API keys, a laptop, or a hosted SaaS service.
+This is a **small, verifiable demonstration** for developers encountering AI Research Agents for the first time. Viewing the existing GitHub Actions report does not require paid model keys, your own API keys, a laptop, or a hosted SaaS service.
 
-## On GitHub (including an Android tablet)
+## For any visitor (including an Android tablet)
 
-1. Open [Public One-Click Proof Tour](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml).
-2. Choose **Run workflow**, leave the branch as **main**, then confirm **Run workflow**.
-3. Open the newest workflow run and inspect the **Summary** page and the job named **proof-tour**.
-4. Look for **three bounded demonstrations**: an eight-case synthetic scanner benchmark, a synthetic before/after repair, and the before/after GitHub URL parser regression associated with [the actual Qwen-authored PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17).
-5. Download the **public-proof** artifact for the machine-readable JSON and Markdown report. The artifact is temporary; rerun the workflow for new evidence.
+1. Open the [public proof runs](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml).
+2. Select the most recent **successful run**, and read its **Summary** page and the job named **proof-tour**. No installation or GitHub repository write access is needed to view public results.
+3. Look for **three bounded demonstrations**: an eight-case synthetic scanner benchmark, a synthetic before/after repair, and the before/after GitHub URL parser regression associated with [the actual Qwen-authored PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17).
+4. **Sign in to GitHub** if you want to download the temporary **public-proof** artifact with machine-readable JSON and Markdown.
+
+**Running it again:** GitHub shows **Run workflow** only to users with appropriate repository write access. The owner/collaborators can select **Run workflow → main**. External visitors can clone or fork the repository and rerun the command below, or use GitHub Actions in their own fork if enabled. Do not tell a visitor that public read access alone grants the Run workflow button.
 
 Do not confuse the review of historical code with a new AI-generated fix: **this demo does not run an LLM**. It repeats tests against a reconstructed vulnerable version of the actual repository function and against its merged, repaired version. The real model inference and original patch are documented in PR #17.
 

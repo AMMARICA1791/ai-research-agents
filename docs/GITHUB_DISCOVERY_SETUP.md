@@ -29,7 +29,7 @@ Website: leave blank until we have a real, tested public demo website. Do not pr
 
 ## Before broader publicity
 
-- Confirm README links and one-click workflow are green.
+- Confirm README links and the public workflow results are green; outside visitors view successful runs, rather than triggering the original repository workflow without write access.
 - Get at least one independent developer to reproduce a result.
 - Listen to the first outside bug reports instead of promoting unmeasured claims.
 - Avoid world-first or paid-product claims.
