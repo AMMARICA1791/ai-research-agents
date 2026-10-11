@@ -2,7 +2,7 @@
 
 We value reproducible bug reports, test cases and honest results, including failed experiments.
 
-**Licensing hold:** this public repository does not yet have an approved open-source license. Please start with non-sensitive issues, benchmark ideas and documentation suggestions. Do not submit third-party source code or redistribution-dependent patches until the owner approves licensing terms.
+**License:** This project is distributed under [Apache-2.0](LICENSE). By intentionally submitting an authorized contribution for inclusion in the project, you normally license that contribution under Apache-2.0 in accordance with Section 5, unless expressly stated otherwise or a separate agreement applies. You retain copyright in your own work; no assignment to the maintainer is presumed. Submit only material you own or are authorized to redistribute. See [NOTICE](NOTICE) and [licensing guidance](docs/LICENSING_DECISION.md).
 
 ## A strong report contains
 1. Expected versus actual behavior.
@@ -11,7 +11,7 @@ We value reproducible bug reports, test cases and honest results, including fail
 4. An automated assertion or test demonstrating the defect.
 5. Boundaries and uncertainties: synthetic results are not production accuracy.
 
-## After the licensing decision
+## Development and contribution requirements
 - Keep each pull request focused on one issue.
 - Run `python -m pytest -q tests/`, as CI does.
 - Add a regression test that fails before the fix and passes afterward.

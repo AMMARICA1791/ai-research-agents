@@ -5,7 +5,7 @@ labels: ["research"]
 body:
   - type: markdown
     attributes:
-      value: "Use public, permissioned data only. The repository's software license has not yet been selected."
+      value: "Use public, permissioned data only. Project code is Apache-2.0; third-party data and code retain their own license requirements."
   - type: textarea
     id: hypothesis
     attributes:

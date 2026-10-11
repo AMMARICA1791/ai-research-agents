@@ -20,4 +20,4 @@
 ## Evidence labels
 Distinguish *mocked*, *synthetic real execution*, *live local model*, *real repository patch*, and *unseen task benchmark*. Report failures as well as successes. Require human review before merging AI-generated code.
 
-An explicit legal license has not yet been selected. See [licensing decision](LICENSING_DECISION.md).
+The owner adopted [Apache License 2.0](../LICENSE) in October 2026. This permits commercial reuse subject to the license conditions; the original authors retain their respective copyrights. See [rights and limitations](LICENSING_DECISION.md).
