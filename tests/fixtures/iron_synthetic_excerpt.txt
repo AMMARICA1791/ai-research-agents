@@ -1,0 +1,6 @@
+SYNTHETIC TEST PASSAGE — NOT AN ORIGINAL RESEARCH PAPER.
+Hypothesis: Some iron-group elements are formed during explosive stellar nucleosynthesis.
+Methods: The fictional investigators simulate stellar explosions with a simplified reaction network.
+Evidence: Their synthetic dataset contains modeled isotope yields, not direct measurements of terrestrial iron.
+Findings: In this artificial example, changing explosion energy changes the modeled iron yield.
+Limitations: These sentences are fabricated for testing citation matching and must never be cited as scientific evidence.
