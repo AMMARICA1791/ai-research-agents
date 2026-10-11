@@ -48,6 +48,9 @@ def test_digest_changes_when_source_changes():
     lambda r: r["source"].update(provider="unknown"),
     lambda r: r["records"].append(copy.deepcopy(r["records"][0])),
     lambda r: r["records"][0].update(doi="bad"),
+    lambda r: r["records"][0].update(doi_url="https://doi.org/10.1234/other"),
+    lambda r: r["records"][0].update(year=True),
+    lambda r: r["records"][0].update(year=3000),
 ])
 def test_inconsistent_evidence_rejected(change):
     value = report()
