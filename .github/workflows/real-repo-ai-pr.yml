@@ -1,0 +1,149 @@
+name: Real Repository AI Fix PR
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'lab/real_repo_repair.py'
+      - '.github/workflows/real-repo-ai-pr.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: real-repo-ai-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    env:
+      OLLAMA_HOST: 127.0.0.1:11434
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Ollama and minimal HTTP client
+        run: |
+          set -euo pipefail
+          python -m pip install requests==2.32.2
+          curl -fsSL https://ollama.com/install.sh -o /tmp/ollama-install.sh
+          sh /tmp/ollama-install.sh
+          OLLAMA_HOST=127.0.0.1:11434 ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
+              echo OLLAMA_LOCAL_READY
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - name: Pull open Qwen Coder model
+        run: timeout 360 ollama pull qwen2.5-coder:1.5b
+      - name: Generate actual source fix and prove original red, candidate green
+        run: |
+          set -euo pipefail
+          python -m lab.real_repo_repair generate --repo . --out results/real-repo
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x = json.loads(Path('results/real-repo/real-repo-report.json').read_text())
+          assert x['status'] == 'model_generated_real_repo_patch_verified'
+          assert x['baseline_test'] == 'FAIL' and x['candidate_test'] == 'PASS'
+          print('REAL_REPO_AI_GENERATED_PATCH_VERIFIED')
+          print('MODEL=' + x['model'])
+          PY
+      - name: Upload model-written candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-repo-patch-${{ github.run_id }}
+          path: results/real-repo/
+          retention-days: 7
+          if-no-files-found: warn
+
+  verify:
+    needs: generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-repo-patch-${{ github.run_id }}
+          path: results/real-repo
+      - name: Validate AST and real behavior again without credentials
+        run: |
+          python -m lab.real_repo_repair verify --repo . --out results/real-repo
+          cp results/real-repo/proposed-app.py web/app.py
+          cp results/real-repo/trusted-url-regression.py tests/test_github_url_safety.py
+          python -m compileall -q web lab tests
+      - name: Run all tests with candidate and no write token
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pytest -q tests/
+          echo REAL_REPOSITORY_FULL_TESTS_PASSED
+
+  publish:
+    needs: [generate, verify]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-repo-patch-${{ github.run_id }}
+          path: results/real-repo
+      - name: Third validation only - never execute model code with write token
+        run: |
+          python -m lab.real_repo_repair verify --repo . --out results/real-repo
+          cp results/real-repo/proposed-app.py web/app.py
+          cp results/real-repo/trusted-url-regression.py tests/test_github_url_safety.py
+      - name: Push model-generated code to separate branch and open review PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ai/real-repo-url-fix-${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git
+          git config user.name "ai-research-lab[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -- web/app.py tests/test_github_url_safety.py
+          if git diff --cached --quiet; then echo "No patch"; exit 1; fi
+          git commit -m "fix(ai-generated): require canonical GitHub host"
+          git push origin "HEAD:refs/heads/$BRANCH"
+          cat > /tmp/ai-pr.md <<'BODY'
+          A genuine open-weight Qwen2.5-Coder 1.5B model generated a single-line
+          security repair to the real web/app.py GitHub URL parser.
+          Independent static verification proved that only the validated
+          regex assignment changed. Separate unprivileged GitHub Actions
+          tested original behavior (red), corrected behavior (green), and
+          the full pytest suite with trusted additional host-spoof tests.
+          Human approval required; no auto merge. This is a narrowly scoped
+          model-generated fix, not general autonomous engineering.
+          BODY
+          gh pr create --base main --head "$BRANCH" \
+            --title "AI-generated fix: block spoofed GitHub URL hosts" \
+            --body-file /tmp/ai-pr.md
+          echo "MODEL_GENERATED_REVIEW_PR_CREATED=$BRANCH"
