@@ -1,0 +1,78 @@
+name: Zero-Key Local Qwen Research
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/no-key-local-llm.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  real-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      LAB_MODEL_BACKEND: ollama
+      OLLAMA_HOST: 127.0.0.1:11434
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python HTTP client
+        run: python -m pip install requests==2.32.2
+      - name: Install local Ollama runtime (no API keys)
+        run: |
+          set -euo pipefail
+          curl -fsSL https://ollama.com/install.sh -o /tmp/ollama-install.sh
+          sh /tmp/ollama-install.sh
+          ollama --version
+      - name: Start localhost-only model server
+        run: |
+          set -euo pipefail
+          OLLAMA_HOST=127.0.0.1:11434 ollama serve > /tmp/ollama-server.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:11434/api/tags > /dev/null 2>&1; then
+              echo "LOCAL_MODEL_SERVER_READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Ollama did not become ready"
+          tail -n 30 /tmp/ollama-server.log
+          exit 1
+      - name: Download free open-weight Qwen model (~398 MB)
+        run: |
+          timeout 300 ollama pull qwen2.5:0.5b
+      - name: Run real multi-role research with local inference
+        run: |
+          python -m lab.cli mission --repo . \
+            --goal "Audit this open-source research lab and describe concrete software checks" \
+            --output results/no-key-model-mission.json > /tmp/no-key-output.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('results/no-key-model-mission.json').read_text())
+          provider = data["report"]["model"]
+          assert provider["mode"] == "local_model", provider["mode"]
+          assert len(provider["reviews"]) == 2
+          assert all(x["text"].strip() for x in provider["reviews"])
+          assert data["report"]["validation"]["changes_applied"] is False
+          print("LIVE_FREE_LOCAL_INFERENCE_CONFIRMED")
+          print("MODEL=" + provider["model"])
+          print("REAL_MODEL_REVIEWS=" + str(len(provider["reviews"])))
+          print("RESEARCH_ROLE_STAGES=" + str(len(data["agent_stages"])))
+          for item in provider["reviews"]:
+              print("REVIEWER=" + item["role"] + " | " + item["text"][:350].replace("\n"," "))
+          PY
+      - name: Save research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: no-key-local-qwen-research
+          path: results/no-key-model-mission.json
+          if-no-files-found: warn
+          retention-days: 7

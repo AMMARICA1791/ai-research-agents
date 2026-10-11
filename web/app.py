@@ -251,6 +251,7 @@ def analyze_github_repository(url: str) -> Dict[str, Any]:
 from lab.memory import LabMemory
 from lab.pipeline import LabOrchestrator
 from lab.model import OptionalModel
+from lab.local_model import LocalOllamaModel
 from pydantic import BaseModel
 
 HTML_LANDING = """
@@ -399,7 +400,7 @@ def lab_status() -> Dict[str, Any]:
     return {
         "purpose": "internal_research",
         "roles": list(LabOrchestrator.stages),
-        "model_enabled": OptionalModel().configured,
+        "model_enabled": (LocalOllamaModel().configured if os.getenv("LAB_MODEL_BACKEND") == "ollama" else OptionalModel().configured),
         "autonomous_code_changes": False,
         "history_scope": "local_sqlite",
     }

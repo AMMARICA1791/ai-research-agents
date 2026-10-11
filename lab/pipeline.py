@@ -13,6 +13,7 @@ from .inspector import inspect_repository
 from .knowledge import historical_context, load_state, record, save_state
 from .memory import LabMemory
 from .model import OptionalModel
+from .local_model import LocalOllamaModel
 
 
 class LabOrchestrator:
@@ -23,7 +24,7 @@ class LabOrchestrator:
                  model: OptionalModel | None = None,
                  knowledge_path: str | Path | None = None):
         self.memory = memory or LabMemory()
-        self.model = model or OptionalModel()
+        self.model = model if model is not None else (LocalOllamaModel() if os.getenv("LAB_MODEL_BACKEND") == "ollama" else OptionalModel())
         self.knowledge_path = Path(knowledge_path) if knowledge_path else (
             Path(os.environ["LAB_KNOWLEDGE_PATH"]) if os.getenv("LAB_KNOWLEDGE_PATH") else None)
 
