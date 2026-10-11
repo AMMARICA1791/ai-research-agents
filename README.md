@@ -21,10 +21,10 @@ The demo independently rechecks 8 synthetic scanner cases, a synthetic red/green
 
 ## Inspect a public Python repository without executing it
 
-**New experimental capability:** enter a canonical public GitHub URL and review bounded static Python AST findings tied to an exact commit SHA. No external source code is executed; no paid model API is needed.
+**Experimental capability:** enter a canonical public GitHub URL and receive bounded static Python AST findings, plus an **evidence-linked human review queue** with fixed P1–P3 order, proposed validation steps, and links to the exact inspected commit. No outside source is executed; no paid model API is needed.
 
 - [Read-only public repository audit workflow](.github/workflows/public-repo-audit.yml) — maintainers can run it on GitHub Actions; anyone can view completed public runs.
-- [How it works and its safety/coverage limits](docs/PUBLIC_REPO_AUDIT.md).
+- [How it works and its safety/coverage limits](docs/PUBLIC_REPO_AUDIT.md), including the [manual review queue](docs/REVIEW_QUEUE.md).
 - Example public project: [pallets/itsdangerous](https://github.com/pallets/itsdangerous). A pattern finding is a review hint, not proof of a security defect.
 
 This is **static evidence gathering, not autonomous patch creation or an external security certification**.

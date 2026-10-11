@@ -110,6 +110,11 @@ def test_public_audit_without_network_execution_or_secrets(tmp_path, monkeypatch
     assert data["scan_coverage"]["python_files_parsed"] == 2
     assert any(f["rule"] == "silent_exception" and f["evidence"] == "app.py:5"
                for f in data["findings"])
+    assert data["review_queue"]["human_review_required"] is True
+    assert data["review_queue"]["automated_patch_generated"] is False
+    assert len(data["review_queue"]["work_orders"]) == 1
+    assert data["review_queue"]["work_orders"][0]["rule"] == "silent_exception"
+    assert data["review_queue"]["work_orders"][0]["evidence_url"].endswith("/app.py#L5")
     assert not marker.exists()
     assert "SECRET_VALUE" not in json.dumps(data)
     assert all("github.com" in u for u in urls)
