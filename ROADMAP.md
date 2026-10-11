@@ -9,7 +9,9 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 - [x] Full `tests/` suite in CI, including the security regression.
 - [x] Document contribution rules, security, governance, and current limitations.
 - [x] **Repository owner approved Apache-2.0**, and the canonical license and attribution notices are published.
-- [ ] Update GitHub repository topics and description after verifying maintainer access.
+- [x] Add relevant GitHub topics for discoverability.
+- [ ] Replace the generic GitHub About description; this requires repository settings access.
+- [ ] Publish and validate the `v0.1.0-experimental` prerelease only after full release gates pass.
 
 ## Earn community trust (next)
 - [x] One-click evidence tour on GitHub Actions, with independent synthetic and historical real-source regression tests.
@@ -20,6 +22,14 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 - [ ] An unseen-task benchmark with successes *and* failures.
 - [ ] Confine any third-party code execution to an isolated environment without write permissions.
 - [ ] Contribution onboarding and automated checks for documentation links.
+
+## Next focus after baseline freeze — restore the research mission
+
+- [ ] **Research and exploration:** gather reproducible evidence from permissioned sources beyond code analysis.
+- [ ] **Actual specialist roles:** run measurable, clearly attributed model/tool contributions rather than rename deterministic stages as agents.
+- [ ] **Experiments and comparisons:** evaluate open models on identical disclosed tasks, including unsuccessful results.
+- [ ] **Cumulative knowledge:** store versioned, source-linked conclusions and uncertainty, not merely counts.
+- [ ] **Engineering and independent validation:** only bounded, reviewable proposals with test evidence and explicit human decisions.
 
 ## Research platform (later)
 - [ ] Evidence ledger linking each proposal to source commit, model and checks.

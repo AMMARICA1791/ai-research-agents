@@ -1,6 +1,8 @@
 # Research scope: evidence before claims
 
-**Goal:** build reproducible, free-first research tools for verifying code improvements proposed by open-weight AI models.
+**Goal:** develop an evidence-first, free-first **AI research and development laboratory** for source-grounded exploration, specialist contributions, reproducible experiments and comparisons, cumulative knowledge, bounded engineering and independent verification. Code fixes are one experimental discipline, not the entire mission.
+
+**Architecture boundary:** the seven-stage orchestrator is mostly deterministic coordination, **not seven independent AI agents**. Older specialist modules are prototypes until validated otherwise. [Reproduce the three-command demo](../DEMO.md) and consult [experimental release notes](RELEASE_0.1.0_EXPERIMENTAL.md).
 
 ## Verified
 - Read-only Python AST inspection for a narrow group of rule patterns.
@@ -8,6 +10,7 @@
 - A sanitized count-based research journal on `lab-memory`.
 - Real local Qwen/Ollama inference on aggregate findings.
 - A narrowly scoped, genuine model-generated patch to `web/app.py` correcting spoofed GitHub URLs, independently tested and merged by the owner in [PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17).
+- Read-only AST scan of an external public repository, with bounded source retrieval and evidence-linked pending *human* review tasks; no execution of external code.
 
 ## Not yet demonstrated
 - Autonomous discovery and repair of unknown bugs in arbitrary programs.

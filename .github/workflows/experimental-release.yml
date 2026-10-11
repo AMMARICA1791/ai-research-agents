@@ -1,0 +1,153 @@
+name: Freeze v0.1.0 Experimental Research Baseline
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'DEMO.md'
+      - 'README.md'
+      - 'README.ar.md'
+      - 'ARCHITECTURE.md'
+      - 'CHANGELOG.md'
+      - 'ROADMAP.md'
+      - 'docs/PROJECT_SCOPE.md'
+      - 'docs/RELEASE_0.1.0_EXPERIMENTAL.md'
+      - 'archive/commercial-drafts/**'
+      - 'tests/test_release_readiness.py'
+      - '.github/workflows/experimental-release.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'DEMO.md'
+      - 'README.md'
+      - 'README.ar.md'
+      - 'ARCHITECTURE.md'
+      - 'CHANGELOG.md'
+      - 'ROADMAP.md'
+      - 'docs/PROJECT_SCOPE.md'
+      - 'docs/RELEASE_0.1.0_EXPERIMENTAL.md'
+      - 'archive/commercial-drafts/**'
+      - 'tests/test_release_readiness.py'
+      - '.github/workflows/experimental-release.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: experimental-research-release
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact source revision
+        uses: actions/checkout@v4
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned project dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Test entire repository, including release integrity gates
+        run: python -m pytest -q tests/
+      - name: Reproduce three no-key experiments
+        run: |
+          set -euo pipefail
+          mkdir -p results/experimental-release
+          python -m lab.public_demo --repo . --out results/experimental-release/proof
+          python -m lab.benchmark > results/experimental-release/benchmark.json
+          python -m lab.autorepair > results/experimental-release/repair.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("results/experimental-release")
+          tour = json.loads((root / "proof/evidence.json").read_text())
+          benchmark = json.loads((root / "benchmark.json").read_text())
+          repair = json.loads((root / "repair.json").read_text())
+          assert tour["model_inference_this_run"] is False
+          assert tour["external_user_code_executed"] is False
+          assert tour["repository_files_changed"] is False
+          assert tour["experiments"]["static_scanner"]["cases_passed"] == 8
+          assert benchmark["passed_cases"] == benchmark["case_count"] == 8
+          assert repair["status"] == "validated_synthetic_only"
+          assert not repair["baseline"]["passed"] and repair["repaired"]["passed"]
+          assert repair["changes_applied_to_repository"] is False
+          print("EXPERIMENTAL_RELEASE_THREE_COMMANDS_VERIFIED")
+          PY
+      - name: Verify local web server health and shut it down
+        run: |
+          set -euo pipefail
+          python main.py > /tmp/research-release-web.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --max-time 2 -fsS http://127.0.0.1:8000/health >/tmp/release-health.json; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          test "$ready" = 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          assert json.loads(Path("/tmp/release-health.json").read_text())["status"] == "ok"
+          print("EXPERIMENTAL_RELEASE_HTTP_SMOKE_VERIFIED")
+          PY
+      - name: Publish test evidence, successes and limitations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: experimental-release-verification
+          path: results/experimental-release/
+          if-no-files-found: warn
+          retention-days: 30
+
+  publish:
+    needs: verify
+    if: github.event_name == 'push' && github.repository == 'AMMARICA1791/ai-research-agents' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout tested main revision
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Fail closed if main moved since verification
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          remote_sha="$(git ls-remote origin refs/heads/main | cut -f1)"
+          test -n "$remote_sha"
+          test "$remote_sha" = "$GITHUB_SHA"
+      - name: Publish a single immutable experimental prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: v0.1.0-experimental
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Verified release already published; no rewriting."
+            exit 0
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+            git fetch origin "refs/tags/$TAG:refs/tags/$TAG"
+            test "$(git rev-list -n1 "$TAG")" = "$GITHUB_SHA"
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git tag -a "$TAG" -m 'Evidence-first research baseline; experimental, not production' "$GITHUB_SHA"
+            git push origin "refs/tags/$TAG"
+          fi
+          gh release create "$TAG" \
+            --target "$GITHUB_SHA" \
+            --verify-tag \
+            --prerelease \
+            --title "v0.1.0-experimental — evidence-first research baseline" \
+            --notes-file docs/RELEASE_0.1.0_EXPERIMENTAL.md
+          gh release view "$TAG" --json url,isPrerelease,tagName

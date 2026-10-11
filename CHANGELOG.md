@@ -1,69 +1,25 @@
-# AI Research Agents - MVP v0.1.0
+# Changelog
 
-## What's New in This Release
+This file records demonstrated experimental milestones. Historical draft marketing materials do not describe present capabilities.
 
-### ✨ Core Features
-- ✅ Repository analysis engine
-- ✅ File structure extraction
-- ✅ Python module detection
-- ✅ Relationship graph generation
-- ✅ Language detection
-- ✅ Code complexity metrics
-- ✅ Professional web interface
-- ✅ REST API endpoints
-- ✅ JSON export
-- ✅ Zip file upload support
+## [0.1.0-experimental] — 2026-10-11
 
-### 🎯 Use Cases Ready
-- Repository analysis and documentation
-- Codebase exploration
-- Architecture mapping
-- Dependency tracking
-- Module discovery
-- Language distribution analysis
+**Experimental research baseline; not production-ready.** The [full scope and evidence](docs/RELEASE_0.1.0_EXPERIMENTAL.md) document verified behavior, limitations, and the reproducibility process. A release exists only once the corresponding GitHub release and tag are actually published.
 
-### 🚀 Quick Start
-```bash
-git clone https://github.com/AMMARICA1791/ai-research-agents.git
-cd ai-research-agents
-pip install -r requirements.txt
-python main.py
-# Open http://localhost:8000
-```
+### Demonstrated
+- Deterministic seven-stage research **orchestration**; these stages are **not seven independent AI agents**.
+- Bounded Python AST inspection and conservative dependency relationships.
+- Count-based, sanitized research observations between runs.
+- Optional open-weight local Qwen/Ollama inference; no paid LLM API required for the standard demonstration.
+- A genuinely model-authored, narrowly pre-selected fix for the GitHub URL parser, independently tested and owner-merged as [PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17).
+- Read-only analysis of an external **public** Python repository, with bounded download/extraction and evidence-linked human-review suggestions; source code is not executed or changed.
+- Reproducible [three-command demo](DEMO.md), regression suite and GitHub Actions CI.
 
-### 📊 Analysis Output
-The platform provides:
-- Complete file inventory
-- Python module statistics (classes, functions, imports)
-- Relationship graphs (nodes and edges)
-- Language distribution
-- Code statistics (lines, size)
-- Real-time JSON export
+### Explicit nonclaims
+No generic autonomous bug discovery or repair, independent seven-agent reasoning network, production-grade security auditing, hosted commercial offering, existing enterprise support, or demonstrated performance on unseen real-world repair tasks. Synthetic experiments do not establish general model accuracy. Failure reports must be preserved, not hidden.
 
-### 🔌 API Endpoints
-- `GET /` - Web interface
-- `GET /health` - Health check
-- `GET /api/demo` - Demo analysis
-- `POST /api/analyze` - Analyze repository path
-- `POST /api/analyze/upload` - Upload and analyze ZIP file
+### Licensing and provenance
+The repository is licensed under [Apache-2.0](LICENSE). External software dependencies and contributor-owned material keep their own applicable rights; see [NOTICE](NOTICE) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
-### 📈 Roadmap
-Planned for future releases:
-- Advanced graph visualization
-- AI-powered insights and recommendations
-- Risk assessment and scoring
-- Compliance reporting
-- Identity mapping
-- Reverse engineering layer
-- Multi-agent research pipeline
-- Commercial API and SaaS platform
-
-### 🤝 Community
-- Open source (MIT License)
-- GitHub: https://github.com/AMMARICA1791/ai-research-agents
-- Issues and PRs welcome
-- Enterprise support available
-
----
-
-**Version 0.1.0** | Local MVP, not a production SaaS deployment | October 2026
+### Archive cleanup
+Removed obsolete `archive/commercial-drafts/` documents and mock pricing pages **from the active branch** to avoid false enterprise and licensing claims. The historical files may remain accessible in earlier Git commits; this is not a confidential-data deletion.
