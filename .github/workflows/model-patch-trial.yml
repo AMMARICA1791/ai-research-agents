@@ -1,0 +1,66 @@
+name: Real Qwen Coder Patch Trial
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/model-patch-trial.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  model-patch-trial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    env:
+      OLLAMA_HOST: 127.0.0.1:11434
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install minimal HTTP dependency
+        run: python -m pip install requests==2.32.2
+      - name: Start Ollama locally without API keys
+        run: |
+          set -euo pipefail
+          curl -fsSL https://ollama.com/install.sh -o /tmp/ollama-install.sh
+          sh /tmp/ollama-install.sh
+          OLLAMA_HOST=127.0.0.1:11434 ollama serve >/tmp/ollama.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
+              echo "LOCAL_OLLAMA_READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - name: Pull coding model weights (~986MB, free)
+        run: timeout 360 ollama pull qwen2.5-coder:1.5b
+      - name: Ask real model to propose source and verify strictly
+        run: |
+          set -euo pipefail
+          mkdir -p results
+          python -m lab.model_patch > results/model-patch-trial.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('results/model-patch-trial.json').read_text())
+          assert report['status'] == 'accepted_verified_model_generated_patch', report['status']
+          assert report['baseline_failed_as_expected'] and report['repaired_test_passed']
+          assert report['repository_modified'] is False
+          print('REAL_QWEN_CODER_PATCH_GENERATED_AND_VERIFIED')
+          print('MODEL=' + report['model'])
+          print('REPOSITORY_MODIFIED=false')
+          print('HUMAN_REVIEW_REQUIRED=true')
+          PY
+      - name: Publish actual evidence report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-coding-evidence-${{ github.run_id }}
+          path: results/model-patch-trial.json
+          if-no-files-found: warn
+          retention-days: 7

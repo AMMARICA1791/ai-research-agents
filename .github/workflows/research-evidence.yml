@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'lab/autorepair.py'
+      - 'lab/__init__.py'
       - 'lab/benchmark.py'
       - '.github/workflows/research-evidence.yml'
 
