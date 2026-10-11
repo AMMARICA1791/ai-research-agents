@@ -23,3 +23,11 @@ O código do projeto é disponibilizado sob a [Apache License 2.0](LICENSE), apr
 **Compromisso:** nenhum resultado de IA será apresentado como comprovado sem testes e evidências verificáveis.
 
 Idiomas: [English](README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [中文](README.zh-CN.md).
+
+## Estado atual harmonizado — outubro de 2026
+
+- Laboratório experimental, não um SaaS pronto nem um desenvolvedor autônomo. As sete etapas são fases de orquestração, não sete agentes independentes.
+- [Demonstração em três comandos](DEMO.md): Python 3.11+, sem chave de API ou modelo local; oito casos sintéticos, reparo determinístico sintético e repetição do teste histórico do [PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17). **Não executa Qwen novamente**.
+- [Auditoria de repositórios públicos Python](docs/PUBLIC_REPO_AUDIT.md): análise estática limitada sem executar código externo; indícios para revisão humana, não certificação de segurança.
+- [Descoberta bibliográfica](docs/SCHOLARLY_DISCOVERY.md): metadados reais do Crossref com fonte, data de coleta e incertezas; não lê artigos completos, não avalia qualidade científica nem usa LLM.
+- [Evidências da versão](VERIFIED_RELEASE.md) distinguem histórico de testes novos; [contribuições](CONTRIBUTING.md) têm escopo limitado. Sem garantia de produção.
