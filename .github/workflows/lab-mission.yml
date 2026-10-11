@@ -17,6 +17,7 @@ on:
       - main
     paths:
       - 'lab/**'
+      - 'web/**'
       - '.github/workflows/lab-mission.yml'
 
 permissions:
