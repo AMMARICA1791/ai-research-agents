@@ -18,6 +18,10 @@ Non-sensitive bugs belong in the public bug report form.
 - The `lab-memory` branch contains allowlisted aggregates, not a secret store.
 - Automatic merge into `main` is not part of this project.
 
+## External repository inspection boundary
+
+The **current read-only public Python repository inspection path** fetches bounded source content and analyzes Python syntax/AST; it does **not intentionally execute the inspected repository's code**. This is a scope statement for that inspection path, **not** a guarantee that the whole project or every dependency is immune to remote code execution or other vulnerabilities. Running third-party installation scripts, test suites, or other tools is outside this read-only boundary and requires separate isolation and security review. Report a concrete exploit privately through the disclosure process above.
+
 ## Supported releases
 
 No production release is supported yet. Security improvements are reviewed through pull requests.

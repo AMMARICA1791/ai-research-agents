@@ -2,6 +2,15 @@
 
 A direction of work, not a delivery schedule or promise of global uniqueness.
 
+## Two complementary pillars (status is evidence-based, not a percentage)
+
+| Pillar | Current verified scope | Not yet demonstrated |
+| --- | --- | --- |
+| **A — Code Intelligence** | Bounded AST/dependency inspection, synthetic benchmark, historical scoped Qwen fix evidence, read-only public GitHub Python audit | General autonomous repair, unseen-task accuracy, safe execution of arbitrary external projects |
+| **B — Research Center** | Bounded Crossref metadata discovery and source-linked evidence ledger | Scientific literature review, independent specialist-agent team, controlled live model comparisons, independent research verification, shared production-grade knowledge service |
+
+These pillars complement rather than replace each other. Crossref metadata is **bibliographic discovery**, not proof of scientific conclusions. Experimental persistent memory is developed separately and must pass its own review and CI gates before being counted as merged capability. Completion percentages are deliberately omitted because no validated scoring rubric exists.
+
 ## Foundation (current milestone)
 - [x] Basic source inspection and bounded evidence.
 - [x] Model-backed research experiments with local open-weight Qwen.

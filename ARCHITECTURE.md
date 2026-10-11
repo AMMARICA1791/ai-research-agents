@@ -2,6 +2,10 @@
 
 **Seven coordinated pipeline stages are NOT seven independent LLM agents.** The present mission orchestrator performs mostly deterministic steps and can optionally request a local Qwen/Ollama summary. Specialist-agent modules in `agents/` contain prototypes and demonstrations; their presence does not prove a deployed multi-model research team.
 
+## Pipeline stages versus independent agents
+
+The orchestration stages describe workflow functions, **not seven separately invoked reasoning agents**. For clarity, the conceptual sequence is **Stage 1 Inspect → Stage 2 Record → Stage 3 Map → Stage 4 Propose → Stage 5 Test → Stage 6 Review → Stage 7 Archive**. These labels summarize responsibilities; they are not a claim that each stage has its own model, independent reasoning, or complete automated implementation. The actual current modules and their execution evidence govern capability claims.
+
 ## Current verified execution
 
 ```text
