@@ -39,3 +39,27 @@ Factory300-Scalp used Solana/Jupiter/Phantom with a nominal **10 USDC per positi
 - **Decision:** Investigate historical records first. Do not deploy capital or claim profitability from CI success, simulated trades, literature abstracts or NLI classifications.
 
 **Evidence discipline:** Bibliographic metadata is discovery only. Scientific conclusions require inspected source passages, exact citations, independent reasoning, and explicit human review.
+
+## Audit update — 2026-10-11
+
+### Access and verification
+Attempted to read `AMMARICA1791/Factory300-Scalp/executor.py` through the connected GitHub integration; the request returned **404**. A repository search for Factory300 under the owner returned no results. This is an **access/identity gap**, not proof that the repository was deleted or that no trades occurred. Historical transaction counts and realized P&L remain **unknown**.
+
+### Execution-cost distinction (official Jupiter documentation)
+Jupiter's quote `outAmount` reflects the quoted routed output (including AMM/platform fees as described by the API), while `otherAmountThreshold` is a minimum acceptable output under the specified slippage tolerance. **Tolerance is not incurred slippage.** The `priceImpactPct` quote is an estimate, not a historical fill. Quote, built transaction, submission, network confirmation, and realized token balance deltas must be separately reconciled. Official docs: https://developers.jup.ag/docs/guides/how-to-build-a-custom-swap-with-metis and https://developers.jup.ag/docs/api-reference/swap/v1/swap. Current docs describe newer endpoints; historical implementation must be assessed against its own API version.
+
+### Break-even sensitivity (illustrative, NOT historical Factory300 fees)
+
+For a 10 USDC position with a nominal 0.08 USDC gross winning move, if **total round-trip execution cost** is:
+
+| Assumed all-in cost | Net winning trade |
+| --- | --- |
+| 0.01 USDC | +0.07 USDC |
+| 0.04 USDC | +0.04 USDC |
+| 0.08 USDC | 0.00 USDC |
+| 0.10 USDC | −0.02 USDC |
+
+These scenarios isolate **cost feasibility**, not the probability of winning, loss magnitude, or expected value. With a +0.08 gross win and −0.12 gross loss, and a *fixed symmetric* round-trip cost C, the break-even win rate is `(0.12 + C) / 0.20`, provided fills and sizing match the assumptions: 60% at C=0, 65% at C=0.01, 80% at C=0.04, and 100% at C=0.08. No actual Factory300 win rate is established.
+
+### Next evidence gate
+Obtain the **correct historical repository identity or exported redacted transaction records**. Without this, stop at transparent cost arithmetic and source-methodology findings. Do not assert real-world strategy failure mechanisms as proven.
