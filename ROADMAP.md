@@ -25,7 +25,8 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 
 ## Next focus after baseline freeze — restore the research mission
 
-- [ ] **Research and exploration:** gather reproducible evidence from permissioned sources beyond code analysis.
+- [x] **First non-code exploration source:** retrieve bounded public Crossref bibliographic metadata with DOI links, source digest and UTC provenance; **not yet a literature review**.
+- [ ] **Research and exploration:** gather reproducible, independently reviewed evidence from multiple permissioned sources beyond code analysis.
 - [ ] **Actual specialist roles:** run measurable, clearly attributed model/tool contributions rather than rename deterministic stages as agents.
 - [ ] **Experiments and comparisons:** evaluate open models on identical disclosed tasks, including unsuccessful results.
 - [ ] **Cumulative knowledge:** store versioned, source-linked conclusions and uncertainty, not merely counts.
