@@ -66,4 +66,4 @@ Planned for future releases:
 
 ---
 
-**Version 0.1.0** | Production Ready | October 2026
+**Version 0.1.0** | Local MVP, not a production SaaS deployment | October 2026
