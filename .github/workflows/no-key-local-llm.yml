@@ -8,7 +8,11 @@ on:
       - '.github/workflows/no-key-local-llm.yml'
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: lab-knowledge-serialized
+  cancel-in-progress: false
 
 jobs:
   real-inference:
@@ -24,6 +28,17 @@ jobs:
           python-version: '3.11'
       - name: Install Python HTTP client
         run: python -m pip install requests==2.32.2
+      - name: Restore sanitized persistent research memory
+        run: |
+          set -euo pipefail
+          mkdir -p .data
+          git fetch --no-tags origin refs/heads/lab-memory:refs/remotes/origin/lab-memory
+          git show refs/remotes/origin/lab-memory:knowledge/state.json > .data/knowledge.json
+          python - <<'PY'
+          from lab.knowledge import load_state
+          state = load_state('.data/knowledge.json')
+          print("RESTORED KNOWLEDGE RUNS:", len(state["runs"]))
+          PY
       - name: Install local Ollama runtime (no API keys)
         run: |
           set -euo pipefail
@@ -51,6 +66,7 @@ jobs:
         run: |
           python -m lab.cli mission --repo . \
             --goal "Audit this open-source research lab and describe concrete software checks" \
+            --knowledge .data/knowledge.json \
             --output results/no-key-model-mission.json > /tmp/no-key-output.json
           python - <<'PY'
           import json
@@ -61,6 +77,16 @@ jobs:
           assert len(provider["reviews"]) == 2
           assert all(x["text"].strip() for x in provider["reviews"])
           assert data["report"]["validation"]["changes_applied"] is False
+          assert data["report"]["prior_knowledge"]["previous_runs"] >= 1
+          assert data["report"]["prior_knowledge"]["lessons"]
+          assert data["report"]["work_orders"]
+          from lab.knowledge import load_state
+          knowledge = load_state('.data/knowledge.json')
+          assert len(knowledge['runs']) == data["report"]["prior_knowledge"]["previous_runs"] + 1
+          assert knowledge['runs'][-1]['model_mode'] == 'local_model'
+          print("PRIOR_KNOWLEDGE_RUNS=" + str(data["report"]["prior_knowledge"]["previous_runs"]))
+          print("CURRENT_KNOWLEDGE_RUNS=" + str(len(knowledge['runs'])))
+          print("SELF_IMPROVEMENT_WORK_ORDERS=" + str(len(data["report"]["work_orders"])))
           print("LIVE_FREE_LOCAL_INFERENCE_CONFIRMED")
           print("MODEL=" + provider["model"])
           print("REAL_MODEL_REVIEWS=" + str(len(provider["reviews"])))
@@ -68,6 +94,21 @@ jobs:
           for item in provider["reviews"]:
               print("REVIEWER=" + item["role"] + " | " + item["text"][:350].replace("\n"," "))
           PY
+      - name: Persist only sanitized aggregate knowledge to dedicated branch
+        run: |
+          set -euo pipefail
+          git worktree add --detach "$RUNNER_TEMP/lab-memory" refs/remotes/origin/lab-memory
+          mkdir -p "$RUNNER_TEMP/lab-memory/knowledge"
+          cp .data/knowledge.json "$RUNNER_TEMP/lab-memory/knowledge/state.json"
+          git -C "$RUNNER_TEMP/lab-memory" config user.name "ai-research-lab[bot]"
+          git -C "$RUNNER_TEMP/lab-memory" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$RUNNER_TEMP/lab-memory" add knowledge/state.json
+          if git -C "$RUNNER_TEMP/lab-memory" diff --cached --quiet; then
+            echo "Knowledge journal unchanged."
+          else
+            git -C "$RUNNER_TEMP/lab-memory" commit -m "chore(memory): persist redacted research aggregates [skip ci]"
+            git -C "$RUNNER_TEMP/lab-memory" push origin HEAD:refs/heads/lab-memory
+          fi
       - name: Save research evidence
         if: always()
         uses: actions/upload-artifact@v4

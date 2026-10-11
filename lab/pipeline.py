@@ -14,6 +14,7 @@ from .knowledge import historical_context, load_state, record, save_state
 from .memory import LabMemory
 from .model import OptionalModel
 from .local_model import LocalOllamaModel
+from .improvement import propose_work_orders
 
 
 class LabOrchestrator:
@@ -101,12 +102,16 @@ class LabOrchestrator:
 
         # Language-model requests receive aggregate counts only. Never raw goals,
         # source text, filenames, secrets, memory or user prompts.
-        model_result = self.model.summarize(goal, findings)
+        model_result = (self.model.summarize(goal, findings, history=history)
+                        if isinstance(self.model, LocalOllamaModel)
+                        else self.model.summarize(goal, findings))
+        work_orders = propose_work_orders(findings, history)
         summary = {
             "goal": goal, "source": "local_read_only_scan", "scope": scan["root"],
             "discovery": discoveries, "risk_counts": risk_counts, "findings": findings,
             "dependencies": dependency_graph, "prior_knowledge": history,
-            "proposal_count": len(proposals), "validation": validation,
+            "proposal_count": len(proposals), "work_orders": work_orders,
+            "validation": validation,
             "model": model_result,
             "next_action": "Human review required before any source changes",
         }

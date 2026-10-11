@@ -62,3 +62,110 @@ def test_model_rejects_arbitrary_model_choice():
     import pytest
     with pytest.raises(ValueError):
         LocalOllamaModel(model="made-up")
+
+
+def test_legacy_knowledge_migrates_to_evidence_lessons(tmp_path):
+    from lab.knowledge import empty_state, record, historical_context, load_state, save_state
+    import json
+    p = tmp_path / "knowledge.json"
+    old = {"schema_version": 1, "runs": [
+        {"at": "2026-10-01T00:00:00+00:00", "files_scanned": 10, "python_parsed": 5,
+         "finding_count": 1, "risk_counts": {"high": 0, "medium": 1, "low": 0},
+         "rule_counts": {"silent_exception": 1}, "model_mode": "not_configured"}]}
+    p.write_text(json.dumps(old), encoding="utf-8")
+    state = load_state(p)
+    assert state["lessons"][0]["rule"] == "silent_exception"
+    assert state["lessons"][0]["consecutive_runs"] == 1
+    assert state["lessons"][0]["next_check"] == "test_exception_observability"
+    assert historical_context(state)["previous_runs"] == 1
+    # Work is still observed, do not claim it is repaired.
+    response = {"report": {
+        "discovery": {"files_scanned": 10, "python_files_parsed": 5},
+        "risk_counts": {"high": 0, "medium": 1, "low": 0},
+        "findings": [{"rule": "silent_exception", "evidence": "private.py:3"}],
+        "model": {"mode": "local_model"}
+    }}
+    record(state, response)
+    save_state(p, state)
+    reloaded = load_state(p)
+    assert len(reloaded["runs"]) == 2
+    assert reloaded["lessons"][0]["consecutive_runs"] == 2
+    text = p.read_text()
+    assert "private.py" not in text
+    assert "test_exception_observability" in text
+
+
+def test_public_lessons_reject_injected_free_text(tmp_path):
+    from lab.knowledge import load_state
+    import json
+    import pytest
+    p = tmp_path / "knowledge.json"
+    p.write_text(json.dumps({
+        "schema_version": 1, "runs": [],
+        "lessons": [{"rule": "secret leaked", "next_check": "run unsafe code"}]
+    }), encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_state(p)
+
+
+def test_previous_research_data_reaches_local_model_without_sensitive_text(monkeypatch):
+    import lab.local_model as module
+    requests_seen = []
+    class Reply:
+        def raise_for_status(self): pass
+        def json(self): return {"message": {"content": "Observe the recurrence before changing code."}}
+    def post(url, json, timeout, allow_redirects):
+        requests_seen.append(json)
+        return Reply()
+    monkeypatch.setattr(module.requests, "post", post)
+    model = LocalOllamaModel()
+    answer = model.summarize("PRIVATE GOAL", [
+        {"rule": "silent_exception", "evidence": "internal/private.py:5", "secret": "HIDDEN"},
+    ], history={
+        "previous_runs": 3,
+        "previous_rule_counts": {"silent_exception": 2, "SHOULD_NOT_LEAK": "PRIVATE_VALUE"},
+        "lessons": [
+            {"rule": "silent_exception", "consecutive_runs": 2, "malicious": "HIDDEN"},
+        ],
+        "raw_memory": "TOP_SECRET_JOURNAL",
+    })
+    assert answer["mode"] == "local_model"
+    assert len(requests_seen) == 2
+    for entry in requests_seen:
+        wire = str(entry)
+        assert "'previous_runs': 3" in wire
+        assert "'consecutive_runs': 2" in wire
+        assert "PRIVATE GOAL" not in wire
+        assert "SHOULD_NOT_LEAK" not in wire
+        assert "TOP_SECRET_JOURNAL" not in wire
+        assert "internal/private.py" not in wire
+        assert "HIDDEN" not in wire
+
+
+def test_laboratory_produces_self_improvement_work_order(tmp_path, monkeypatch):
+    import lab.local_model as model_api
+    monkeypatch.setenv("LAB_MODEL_BACKEND", "ollama")
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_basic.py").write_text("def test_sanity(): assert True\n")
+    (tmp_path / "bad.py").write_text(
+        "def foo():\n    try:\n        return 1\n    except Exception:\n        pass\n", encoding="utf-8")
+    class Reply:
+        def raise_for_status(self): pass
+        def json(self): return {"message": {"content": "Recommend testing this behavior."}}
+    monkeypatch.setattr(model_api.requests, "post", lambda *a, **kw: Reply())
+    kb = tmp_path / ".data" / "knowledge.json"
+    research = LabOrchestrator(LabMemory(tmp_path / ".data" / "audit.sqlite"),
+                               knowledge_path=kb)
+    first = research.run(tmp_path, "Identify self-improvement tasks in the laboratory")
+    second = research.run(tmp_path, "Compare with our previous research observations")
+    assert first["report"]["model"]["mode"] == "local_model"
+    orders = second["report"]["work_orders"]
+    assert orders
+    assert orders[0]["rule"] == "silent_exception"
+    assert orders[0]["evidence"] == "bad.py:4"
+    assert orders[0]["observed_in_prior_run"] is True
+    assert orders[0]["status"] == "proposed_not_executed"
+    assert orders[0]["approval"] == "required"
+    assert second["report"]["prior_knowledge"]["previous_runs"] == 1
+    assert load_state(kb)["lessons"][0]["consecutive_runs"] == 2
+    assert (tmp_path / "bad.py").read_text().endswith("        pass\n")

@@ -8,6 +8,8 @@ from __future__ import annotations
 from collections import Counter
 import requests
 
+from .knowledge import ALLOWED_RULES
+
 
 class LocalOllamaModel:
     """Two bounded critiques from an ungated open model, no API keys."""
@@ -25,18 +27,46 @@ class LocalOllamaModel:
         # Enabled intentionally; availability is checked by real HTTP responses.
         return True
 
-    def summarize(self, goal: str, evidence: list[dict]) -> dict:
-        rules = dict(sorted(Counter(str(x.get("rule", "unknown"))[:40]
+    def summarize(self, goal: str, evidence: list[dict], history: dict | None = None) -> dict:
+        rules = dict(sorted(Counter(x.get("rule") if x.get("rule") in ALLOWED_RULES else "unknown"
                                     for x in evidence[:100]).items()))
         # Do not transmit goal, source content, filenames, file paths, secrets
         # or prior research. The model sees aggregate counts only.
-        data = {"finding_count": min(len(evidence), 100), "rule_counts": rules}
+        # The continuity context is tightly allowlisted, even for untrusted
+        # callers. Never include raw history, model narratives or file paths.
+        h = history if isinstance(history, dict) else {}
+        past = h.get("previous_rule_counts", {})
+        past = past if isinstance(past, dict) else {}
+        old_counts = {
+            key: min(max(int(value), 0), 100)
+            for key, value in past.items()
+            if key in ALLOWED_RULES and type(value) is int
+        }
+        raw_lessons = h.get("lessons", [])
+        lessons = []
+        if isinstance(raw_lessons, list):
+            for item in raw_lessons[:7]:
+                if not isinstance(item, dict):
+                    continue
+                key = item.get("rule")
+                streak = item.get("consecutive_runs")
+                if key in ALLOWED_RULES and type(streak) is int:
+                    lessons.append({"rule": key, "consecutive_runs": min(max(streak, 0), 120)})
+        runs = h.get("previous_runs", 0)
+        runs = min(max(runs, 0), 120) if type(runs) is int else 0
+        data = {
+            "finding_count": min(len(evidence), 100),
+            "rule_counts": rules,
+            "previous_runs": runs,
+            "previous_rule_counts": dict(sorted(old_counts.items())),
+            "recurring_observations": lessons,
+        }
         roles = [
             ("research_analyst",
-             "You are a research analyst. Analyze observed rule counts only. "
+             "You are a research analyst. Compare current and previous rule counts only. "
              "Give a cautious, grounded insight in at most 70 words."),
             ("critical_reviewer",
-             "You are a skeptical peer reviewer. Explain uncertainty in the "
+             "You are a skeptical peer reviewer. Critique possible trends and uncertainty in the "
              "observed counts and suggest one check. At most 70 words."),
         ]
         reviews: list[dict] = []
