@@ -13,6 +13,14 @@ on:
         required: true
         default: 'HEAD'
         type: string
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lab/public_repo_audit.py'
+      - 'lab/inspector.py'
+      - 'lab/dependency.py'
+      - 'tests/test_public_repo_audit.py'
+      - '.github/workflows/public-repo-audit.yml'
   push:
     branches: [main]
     paths:
