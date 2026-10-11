@@ -44,9 +44,16 @@ jobs:
           d=json.load(open("results/paper-evidence.json"))
           assert d["scientific_truth_verified"] is False
           assert set(d["evidence"]) == {"hypothesis","methods","evidence","findings","limitations"}
-          print("PILOT_QUOTE_VALIDATION_COMPLETE")
+          verified = [k for k,v in d["evidence"].items()
+                      if v["status"] == "quote_matched_not_fact_verified"]
+          print("MATCHED_QUOTATIONS=" + str(len(verified)) + "/5", flush=True)
           for k,v in d["evidence"].items():
-              print(k, v["status"])
+              print(k, v["status"], flush=True)
+          assert len(verified) >= 4, (
+              "EVIDENCE_QUALITY_GATE_FAILED: fewer than 4/5 exact source quotes; "
+              "this is a model-output quality failure, not a successful analysis"
+          )
+          print("PILOT_QUOTE_QUALITY_GATE_PASSED", flush=True)
           PY
       - name: Publish evidence audit
         if: always()
