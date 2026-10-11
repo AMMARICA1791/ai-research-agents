@@ -63,3 +63,7 @@ These scenarios isolate **cost feasibility**, not the probability of winning, lo
 
 ### Next evidence gate
 Obtain the **correct historical repository identity or exported redacted transaction records**. Without this, stop at transparent cost arithmetic and source-methodology findings. Do not assert real-world strategy failure mechanisms as proven.
+
+## Research scope decision — 2026-10-11
+
+**Paused, not pursued for the first lab validation.** The original Factory300 repository and wallet were deleted; primary execution records have not been verified. No further time will be spent reconstructing the deleted system during the first laboratory test. The new independent public-data study is [Cryptocurrency Predictability Research 01](CRYPTO_PREDICTABILITY_RESEARCH_01.md). This pause is not a scientific finding that the strategy failed economically.
