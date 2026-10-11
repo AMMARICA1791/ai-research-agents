@@ -6,7 +6,9 @@ import pytest
 
 from research.integration_pipeline import integrate
 from research.persistent_memory import history, open_memory
-\n\ndef report():
+
+
+def report():
     title = "First title"
     stamp = "2026-10-11T12:00:00+00:00"
     return {
