@@ -1,0 +1,28 @@
+name: Reproducible research proposal
+description: Suggest a benchmark or experiment with a measurable result
+title: "[Research] "
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: "Use public, permissioned data only. The repository's software license has not yet been selected."
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis or problem
+      description: State the behavior you want to test.
+    validations:
+      required: true
+  - type: textarea
+    id: measurement
+    attributes:
+      label: Measurement and success criteria
+      description: Explain how outsiders could reproduce the result.
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: Cost, safety, and known limitations
+    validations:
+      required: false

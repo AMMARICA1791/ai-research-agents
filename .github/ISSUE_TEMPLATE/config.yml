@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Sensitive vulnerability reporting
+    url: https://github.com/AMMARICA1791/ai-research-agents/security
+    about: Never publish exploit details in a public issue; use private reporting if available.
