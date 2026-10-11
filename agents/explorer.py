@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from uuid import uuid4
 
 
@@ -91,10 +91,10 @@ class BaseAgent(ABC):
         }
 
     def save_memory(self, filepath: str) -> None:
-        """Persist memory to JSON-like output."""
+        """Persist memory to a simple JSON-like file."""
         with open(filepath, "w", encoding="utf-8") as handle:
             handle.write("[\n")
-            for index, message in enumerate(self.memory):
-                suffix = "," if index < len(self.memory) - 1 else ""
-                handle.write(f"  {message.to_dict()} {suffix}\n")
+            for idx, msg in enumerate(self.memory):
+                suffix = "," if idx < len(self.memory) - 1 else ""
+                handle.write(f"  {msg.to_dict()} {suffix}\n")
             handle.write("]\n")
