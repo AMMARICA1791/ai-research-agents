@@ -1,144 +1,17 @@
-# Quick Start Guide
+# Research Lab Quick Start
 
-## Installation & Setup
+GitHub: Actions → Research Lab - Manual Mission → Run workflow.
+Enter a goal and download the resulting report artifact.
+No language-model API key is required for deterministic source analysis.
 
-### Prerequisites
-- Python 3.9+
-- pip or conda
-- Git
+Locally:
+    pip install -r requirements.txt
+    python main.py
+    python -m lab.cli mission --repo . --goal "Review this laboratory"
+    python -m pytest -q tests/test_mvp.py tests/test_lab.py
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/AMMARICA1791/ai-research-agents.git
-cd ai-research-agents
-```
-
-### 2. Create Virtual Environment
-```bash
-python -m venv venv
-```
-
-### 3. Activate Virtual Environment
-
-**On macOS/Linux:**
-```bash
-source venv/bin/activate
-```
-
-**On Windows:**
-```bash
-venv\Scripts\activate
-```
-
-### 4. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Run the Server
-```bash
-python main.py
-```
-
-Or use uvicorn directly:
-```bash
-uvicorn web.app:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### 6. Access the Web Interface
-Open your browser and navigate to:
-```
-http://localhost:8000
-```
-
-## Using the MVP
-
-### Analyze a Repository
-1. **Default Analysis**: Click "Analyze" with "." to analyze the current project
-2. **Custom Path**: Enter a path inside the current project directory to analyze
-3. **Results**: View comprehensive analysis in JSON format
-
-### What the Analysis Shows
-- **Repository Summary**: Files, modules, languages used
-- **File Structure**: Complete directory and file listing
-- **Python Modules**: Classes, functions, imports extracted
-- **Relationship Graph**: Connections between files and components
-- **Statistics**: Line counts, file types, complexity metrics
-
-## API Endpoints
-
-### GET /
-Web interface homepage
-
-### GET /health
-Health check endpoint
-```bash
-curl http://localhost:8000/health
-```
-
-### GET /api/demo
-Demo analysis (analyzes current project)
-```bash
-curl http://localhost:8000/api/demo
-```
-
-### POST /api/analyze
-Analyze a specific repository
-```bash
-curl -X POST http://localhost:8000/api/analyze \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "repo_path=/path/to/repo"
-```
-
-## Example Output
-
-```json
-{
-  "status": "ok",
-  "summary": {
-    "repo_name": "ai-research-agents",
-    "total_files": 45,
-    "python_files": 28,
-    "total_lines": 8923,
-    "top_level_directories": ["agents", "research", "web", "docs"]
-  },
-  "files": [...],
-  "modules": [...],
-  "graph": {"nodes": [...], "edges": [...]}
-}
-```
-
-## Troubleshooting
-
-### Port Already in Use
-```bash
-uvicorn web.app:app --host 0.0.0.0 --port 8001
-```
-
-### Permission Denied
-```bash
-chmod +x main.py
-```
-
-### Module Not Found
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-## Next Steps
-
-- Explore the analysis results
-- Analyze different repositories
-- Integrate with your workflow
-- Contribute improvements
-
-## Support
-
-For issues or questions:
-- GitHub Issues: https://github.com/AMMARICA1791/ai-research-agents/issues
-- Email: enterprise@ai-research-agents.io
-
----
-
-**After starting the server locally, open http://127.0.0.1:8000. Commercial deployment requires further security review.**
+Dashboard: http://127.0.0.1:8000
+History: .data/lab.sqlite on that machine. GitHub Actions uses
+independent per-run memory until a shared store is provided.
+Optional model commentary requires explicitly configured LAB_LLM_ENDPOINT,
+LAB_LLM_MODEL, and LAB_LLM_API_KEY. Never commit credentials.
