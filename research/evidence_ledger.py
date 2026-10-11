@@ -9,6 +9,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote
 
 SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 DOI = re.compile(r"10\.[0-9]{4,9}/[^\s]{1,160}\Z")
@@ -51,8 +52,11 @@ def build_ledger(report: dict) -> dict:
         url = record.get("doi_url")
         if (not isinstance(doi, str) or not DOI.fullmatch(doi)
                 or not isinstance(title, str) or not title.strip()
-                or not isinstance(url, str) or not url.startswith("https://doi.org/")):
+                or not isinstance(url, str) or url != "https://doi.org/" + quote(doi, safe="/-._~")):
             raise ValueError("Incomplete record")
+        year = record.get("year")
+        if year is not None and (type(year) is not int or not 1600 <= year <= 2200):
+            raise ValueError("Invalid publication year")
         if doi in seen:
             raise ValueError("Duplicate DOI in ledger")
         seen.add(doi)
