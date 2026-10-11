@@ -1,0 +1,70 @@
+name: Public One-Click Proof Tour
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lab/public_demo.py'
+      - 'tests/test_public_demo.py'
+      - '.github/workflows/public-demo.yml'
+      - 'web/app.py'
+  push:
+    branches: [main]
+    paths:
+      - 'lab/public_demo.py'
+      - 'tests/test_public_demo.py'
+      - '.github/workflows/public-demo.yml'
+      - 'web/app.py'
+
+permissions:
+  contents: read
+
+jobs:
+  proof-tour:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact repository revision
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproduce bounded code-scanner and repair evidence
+        run: |
+          set -euo pipefail
+          python -m lab.public_demo --out results/public-demo
+      - name: Check machine-readable evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("results/public-demo/evidence.json").read_text())
+          assert data["status"] == "verified_bounded_experiments"
+          assert data["experiments"]["static_scanner"]["cases_passed"] == 8
+          assert data["experiments"]["synthetic_repair"]["test_before"] == "FAIL"
+          assert data["experiments"]["synthetic_repair"]["test_after"] == "PASS"
+          assert data["experiments"]["real_repository_regression"]["test_before"] == "FAIL"
+          assert data["experiments"]["real_repository_regression"]["test_after"] == "PASS"
+          assert data["model_inference_this_run"] is False
+          assert data["external_user_code_executed"] is False
+          assert data["repository_files_changed"] is False
+          print("PUBLIC_DEMO_BOUNDARIES_AND_EVIDENCE_VERIFIED")
+          PY
+      - name: Publish accessible run summary
+        if: always()
+        run: |
+          if test -f results/public-demo/SUMMARY.md; then
+            cat results/public-demo/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Public demo did not finish; inspect the failed job steps." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Downloadable JSON and Markdown proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-proof-${{ github.run_id }}
+          path: results/public-demo/
+          if-no-files-found: warn
+          retention-days: 14
