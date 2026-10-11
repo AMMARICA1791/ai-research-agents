@@ -2,6 +2,13 @@ name: Source-Grounded Paper Excerpt Pilot
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/paper_evidence.py'
+      - 'tests/test_paper_evidence.py'
+      - 'tests/fixtures/iron_synthetic_excerpt.txt'
+      - '.github/workflows/paper-evidence-pilot.yml'
 
 permissions:
   contents: read
