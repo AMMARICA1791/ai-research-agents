@@ -42,3 +42,14 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 Evaluate private project integrations, managed execution and support once users prove the tool saves them time. No pricing or income claims before product-market evidence.
 
 **North star:** a developer can reproduce what was changed, why the change passed, and what remains uncertain.
+
+## Next research pillars — evidence-gated development
+
+1. **Research discovery:** extend the bounded Crossref source inventory only after testing missing DOI, duplicate records, rate limits, malformed metadata and offline failures. Do not turn metadata into scientific conclusions.
+2. **Specialist agent attribution:** record which model or deterministic tool performed each operation, with version, input scope and human approval; do not rename orchestration stages as independent agents.
+3. **Comparable experiments:** define a frozen task set, identical budgets and failure-inclusive reporting before comparing open-weight models. Synthetic scores must remain clearly labeled.
+4. **Versioned knowledge:** store source URL/DOI, retrieval UTC, digest, confidence and invalidation conditions; do not silently overwrite historical evidence.
+5. **Engineering and safety:** retain read-only external inspection, no arbitrary third-party code execution, minimal permissions, bounded downloads and mandatory review for proposed patches.
+6. **Independent verification:** test exact candidate SHAs in CI, preserve negative findings and publish a failure-aware evidence ledger before any release claim.
+
+**Promotion rule:** each pillar advances only with a reproducible test, recorded limitations, and a reviewed change. These are planned work items, not claims of completed implementation.
