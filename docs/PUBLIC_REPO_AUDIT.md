@@ -10,7 +10,7 @@ Open [Read-Only Public Repository Audit](https://github.com/AMMARICA1791/ai-rese
 
 Public sample: https://github.com/pallets/itsdangerous
 
-The finished run's Summary identifies scanned files, finding counts and exact commit SHA. Download the JSON artifact for finding details. **Public visitors can view existing runs but need repository write permission to start a run in our repository.** They can fork the public project and run their own copies if GitHub Actions is enabled.
+The finished run's Summary identifies scanned files, finding counts, the exact commit SHA, and up to five **ordered human review candidates** with fixed explanations and GitHub source links. Download the JSON artifact for the full bounded review queue and findings. See [review ordering and limits](REVIEW_QUEUE.md). **Public visitors can view existing runs but need repository write permission to start a run in our repository.** They can fork the public project and run their own copies if GitHub Actions is enabled.
 
 ## Local Python 3.11+ example
 
