@@ -45,3 +45,19 @@ Protocol registered; no workflow has been run for this question, and no paper's 
 **Assessment:** Discovery and provenance gate passed; source relevance mixed. No abstracts, full texts, isotopic measurements, models, or claims were checked by the workflow. The query returned no Quranic exegesis; classical tafsir must be evaluated in a separate textual track. Two GitHub annotations concern Node.js 20 deprecation and future ubuntu-latest migration; they did not prevent this run. **Do not present these five titles as verified evidence of any cosmological or theological claim.**
 
 **Next gate:** Manually examine original research sources (especially stellar nucleosynthesis and isotope constraints), document methods and limitations, and keep the tafsir comparison separate. No new workflow or code changes needed.
+
+## Evidence-analysis acceptance test 01 — 2026-10-11
+
+**Test goal:** Can the existing GitHub scholarly-discovery workflow extract a scientific hypothesis, methods, evidence, limitations, and a bounded conclusion from one original paper?
+
+**Code inspection:** `research/scholarly_discovery.py` requests only Crossref fields `DOI,title,published,type,container-title`; `.github/workflows/scholarly-discovery.yml` runs that metadata fetch and asserts `scientific_claims_verified == False`, `full_papers_reviewed == False`, and `model_inference == False`. **Outcome: NOT IMPLEMENTED in this workflow.** Re-running discovery cannot test full-text analysis; no workflow was re-run or changed.
+
+**Manual control test, external to lab:** S. E. Woosley and T. A. Weaver (1995), *The Evolution and Explosion of Massive Stars. II. Explosive Hydrodynamics and Nucleosynthesis*, *The Astrophysical Journal Supplement Series* 101, 181–235, primary full text: https://articles.adsabs.harvard.edu/pdf/1995ApJS..101..181W . This is an independent primary source, **not one of the five titles returned by run #7**.
+
+- Research objective: Model nucleosynthetic isotope yields from evolving and exploding massive stars across stellar masses and metallicities (paper pp. 181–182, abstract and §1).
+- Methods: 78 model explosions, a 200-isotope reaction network, different initial stellar masses and metallicities; explosion initiated with a modeled piston and a specified energy (§2).
+- Findings: Heavy-element ejection and fallback vary with progenitor properties and explosion parameters; some massive stars retain much of their heavy-element yield (abstract and §1).
+- Caveats: Results depend on explosion mechanism, convective/nuclear inputs, energy and mass cut, and a one-dimensional approximation (§1–2). The work is simulation-based rather than direct measurement of Earth's iron.
+- Bounded conclusion: Supports plausible physical mechanisms for stellar production and dispersal of iron-group matter; does not independently reconstruct the provenance of every terrestrial iron atom, quantify all iron sources, or establish an interpretation of Quran 57:25.
+
+**Test verdict:** Human-assisted original-paper evidence extraction: **demonstrated on one study**. Automated laboratory evidence extraction: **NOT PASSED / capability absent in inspected scholarly workflow**. Do not report this manual extraction as an autonomous GitHub pipeline success. No new model, workflow, or experimental run was created.
