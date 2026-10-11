@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List
 import io
 import json
+import logging
 import os
 import re
 import stat
@@ -12,6 +13,8 @@ import tempfile
 import zipfile
 
 import requests
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="AI Research Agents",
@@ -92,6 +95,7 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
     graph_nodes: List[Dict[str, Any]] = []
     graph_edges: List[Dict[str, Any]] = []
     file_count = 0
+    skipped_files: List[Dict[str, str]] = []
 
     for path in sorted(repo_root.rglob("*")):
         if file_count >= max_files:
@@ -104,37 +108,44 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
         if _is_ignored(path):
             continue
 
+        rel = path.relative_to(repo_root).as_posix()
+        lang = _language_for(path)
         try:
-            rel = path.relative_to(repo_root).as_posix()
-            lang = _language_for(path)
-            if path.stat().st_size > 1024 * 1024:
-                continue  # Do not read huge or potentially sensitive binary files
-            content = path.read_text(encoding="utf-8", errors="ignore")
-            line_count = len(content.splitlines())
+            size_bytes = path.stat().st_size
+            if size_bytes > 1024 * 1024:
+                continue  # Avoid processing oversized files.
+            # Strict decoding makes bad source files visible instead of silently losing bytes.
+            content = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            # Read failures are expected on some trees, but must never be invisible.
+            # Do not expose exception messages: they can contain sensitive host paths.
+            error_type = type(exc).__name__
+            logger.warning("Repository scan skipped %s: %s", rel, error_type)
+            skipped_files.append({"path": rel, "error_type": error_type})
+            continue
 
-            files.append({
+        line_count = len(content.splitlines())
+        # Only publish a file and its graph node once its read/parse succeeds.
+        # Unexpected programming bugs must propagate, not masquerade as a success.
+        stats = _extract_python_stats(content) if path.suffix.lower() == ".py" else None
+        files.append({
+            "path": rel,
+            "language": lang,
+            "size_bytes": size_bytes,
+            "lines": line_count,
+            "is_readme": path.name.lower().startswith("readme"),
+        })
+        graph_nodes.append({"id": rel, "label": path.name, "type": "file", "language": lang})
+        parent = path.parent.relative_to(repo_root).as_posix()
+        if parent and parent != ".":
+            graph_edges.append({"source": parent, "target": rel, "label": "contains"})
+        if stats is not None:
+            modules.append({
                 "path": rel,
-                "language": lang,
-                "size_bytes": path.stat().st_size,
-                "lines": line_count,
-                "is_readme": path.name.lower().startswith("readme"),
+                "name": rel.replace("/", ".")[:-3],
+                **stats,
             })
-
-            graph_nodes.append({"id": rel, "label": path.name, "type": "file", "language": lang})
-            parent = path.parent.relative_to(repo_root).as_posix()
-            if parent and parent != ".":
-                graph_edges.append({"source": parent, "target": rel, "label": "contains"})
-
-            if path.suffix.lower() == ".py":
-                stats = _extract_python_stats(content)
-                modules.append({
-                    "path": rel,
-                    "name": rel.replace("/", ".")[:-3],
-                    **stats,
-                })
-            file_count += 1
-        except Exception:
-            pass
+        file_count += 1
 
     language_dist: Dict[str, int] = {}
     for item in files:
@@ -150,12 +161,14 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
         "python_files": sum(1 for f in files if f["language"] == "Python"),
         "total_lines": total_lines,
         "languages": language_dist,
+        "skipped_file_count": len(skipped_files),
     }
 
     return {
         "status": "ok",
         "summary": summary,
         "files": files,
+        "skipped_files": skipped_files[:100],
         "modules": modules,
         "graph": {"nodes": graph_nodes[:500], "edges": graph_edges[:1000]},
         "report": {
