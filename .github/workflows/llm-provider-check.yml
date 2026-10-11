@@ -1,0 +1,53 @@
+name: Verify Real LLM Provider
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/llm-provider-check.yml'
+      - 'lab/model.py'
+
+permissions:
+  contents: read
+
+jobs:
+  provider-activation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      LAB_LLM_ENDPOINT: ${{ vars.LAB_LLM_ENDPOINT }}
+      LAB_LLM_MODEL: ${{ vars.LAB_LLM_MODEL }}
+      LAB_LLM_API_KEY: ${{ secrets.LAB_LLM_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install HTTPS client
+        run: python -m pip install requests==2.32.2
+      - name: Check settings and verify genuine provider response if available
+        run: |
+          python - <<'PY'
+          import os
+          from lab.model import OptionalModel
+          names = ["LAB_LLM_ENDPOINT", "LAB_LLM_MODEL", "LAB_LLM_API_KEY"]
+          missing = [key for key in names if not os.environ.get(key, "").strip()]
+          if missing:
+              print("MODEL_ACTIVATION_STATUS=CONFIG_REQUIRED")
+              print("MISSING_SETTINGS=" + ",".join(missing))
+              print("No external provider was contacted. No API charges.")
+          else:
+              # Synthetic aggregate finding counts only. No repository code,
+              # filenames, user goals or secret values enter the model prompt.
+              provider = OptionalModel()
+              result = provider.summarize(
+                  "Synthetic connectivity check",
+                  [{"rule": "syntax_error", "severity": "high", "evidence": "not-transmitted"}],
+              )
+              print("MODEL_ACTIVATION_STATUS=" + result["mode"].upper())
+              print("REVIEWER_RESPONSES=" + str(len(result.get("reviews", []))))
+              if result["mode"] != "remote_model" or len(result.get("reviews", [])) != 2:
+                  raise SystemExit("Provider did not pass the real-response verification")
+              print("LIVE_LLM_RESPONSE_CONFIRMED")
+          PY
