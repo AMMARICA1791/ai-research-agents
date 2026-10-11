@@ -2,6 +2,11 @@
 
 This file records demonstrated experimental milestones. Historical draft marketing materials do not describe present capabilities.
 
+## Unreleased — research explorer after the experimental baseline
+
+- Started the **non-code** research-and-exploration pillar with bounded public Crossref scholarly metadata discovery and source provenance.
+- The collector returns bibliographic **candidates**, not verified scientific claims, complete paper reviews, AI reasoning, or model benchmarks. The published `v0.1.0-experimental` tag remains unchanged.
+
 ## [0.1.0-experimental] — 2026-10-11
 
 **Experimental research baseline; not production-ready.** The [full scope and evidence](docs/RELEASE_0.1.0_EXPERIMENTAL.md) document verified behavior, limitations, and the reproducibility process. A release exists only once the corresponding GitHub release and tag are actually published.

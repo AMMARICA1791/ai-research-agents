@@ -1,0 +1,82 @@
+name: Public Scholarly Research Discovery
+
+on:
+  workflow_dispatch:
+    inputs:
+      question:
+        description: 'PUBLIC research topic only (no credentials, personal data or private prompts)'
+        required: true
+        default: 'small language model evaluation'
+        type: string
+      max_results:
+        description: 'Maximum metadata candidates, 1 to 8'
+        required: true
+        default: '5'
+        type: string
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/scholarly_discovery.py'
+      - 'tests/test_scholarly_discovery.py'
+      - '.github/workflows/scholarly-discovery.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/scholarly_discovery.py'
+      - 'tests/test_scholarly_discovery.py'
+      - '.github/workflows/scholarly-discovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  discover-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      RESEARCH_QUESTION: ${{ github.event_name == 'workflow_dispatch' && inputs.question || 'small language model evaluation' }}
+      MAX_RESULTS: ${{ github.event_name == 'workflow_dispatch' && inputs.max_results || '5' }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Retrieve bounded Crossref bibliographic metadata only
+        run: |
+          set -euo pipefail
+          python -m research.scholarly_discovery \
+            --question "$RESEARCH_QUESTION" \
+            --max-results "$MAX_RESULTS" \
+            --output results/scholarly-discovery/records.json \
+            --summary results/scholarly-discovery/SUMMARY.md
+      - name: Verify evidence and publish public run summary
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path("results/scholarly-discovery/records.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          assert data["source"]["provider"] == "Crossref"
+          assert data["source"]["endpoint"].startswith("https://api.crossref.org/works?")
+          assert len(data["source"]["response_sha256"]) == 64
+          assert data["candidate_count"] == len(data["records"])
+          assert data["scientific_claims_verified"] is False
+          assert data["full_papers_reviewed"] is False
+          assert data["model_inference"] is False
+          assert all(item["evidence_status"] == "bibliographic_metadata_only"
+                     and item["doi_url"].startswith("https://doi.org/")
+                     for item in data["records"])
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+              f.write(Path("results/scholarly-discovery/SUMMARY.md").read_text())
+          print("PUBLIC_RESEARCH_DISCOVERY_METADATA_VERIFIED", data["candidate_count"])
+          PY
+      - name: Preserve public provenance and uncertainty
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-research-metadata
+          path: results/scholarly-discovery/
+          if-no-files-found: warn
+          retention-days: 14

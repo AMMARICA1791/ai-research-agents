@@ -25,6 +25,10 @@ We are building a reproducible Python research lab that inspects source, records
 
 The demo independently rechecks 8 synthetic scanner cases, a synthetic red/green fix, and the historical real-source GitHub URL regression corrected in **[PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17)**. **It does not rerun Qwen or discover new bugs**: the original model-authored patch is preserved in PR #17. See [the one-minute guide](docs/PUBLIC_DEMO.md) and [GitHub discovery setup](docs/GITHUB_DISCOVERY_SETUP.md).
 
+## First research-and-exploration experiment beyond code analysis
+
+The **[Public Scholarly Research Discovery](.github/workflows/scholarly-discovery.yml)** workflow retrieves a bounded set of **real Crossref bibliographic metadata** for a public research topic, records DOI links, a UTC retrieval timestamp, a response digest and explicit uncertainty. It **does not read or judge papers, rank scientific quality, use an LLM, or invent conclusions**. The result is a source inventory—the first step toward the wider research center, not a fully independent research agent. [Evidence protocol and limitations](docs/SCHOLARLY_DISCOVERY.md).
+
 ## Inspect a public Python repository without executing it
 
 **Experimental capability:** enter a canonical public GitHub URL and receive bounded static Python AST findings, plus an **evidence-linked human review queue** with fixed P1–P3 order, proposed validation steps, and links to the exact inspected commit. No outside source is executed; no paid model API is needed.
