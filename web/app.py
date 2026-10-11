@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Any, Dict, List
+import io
 import json
 import os
 import re
@@ -12,9 +13,9 @@ import zipfile
 import requests
 
 app = FastAPI(
-    title="AI Research Agents MVP",
-    version="0.2.0",
-    description="AI-powered repository intelligence, graph analysis, and reverse engineering platform"
+    title="AI Research Agents",
+    version="0.3.0",
+    description="AI-powered repository intelligence, graph analysis, reverse engineering, and enterprise-grade digital system analysis"
 )
 
 
@@ -33,7 +34,7 @@ def _is_ignored(path: Path) -> bool:
     ignore = {
         ".git", ".venv", "venv", "__pycache__", "node_modules", ".pytest_cache",
         ".mypy_cache", ".idea", ".vscode", "dist", "build", ".env", ".next",
-        "coverage", "site-packages"
+        "coverage", "site-packages", ".DS_Store", "__init__.pyc"
     }
     return bool(parts & ignore)
 
@@ -63,6 +64,8 @@ def _language_for(path: Path) -> str:
         ".c": "C",
         ".sql": "SQL",
         ".sh": "Shell",
+        ".rb": "Ruby",
+        ".php": "PHP",
     }
     return mapping.get(ext, "Other")
 
@@ -111,7 +114,6 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
             })
 
             graph_nodes.append({"id": rel, "label": path.name, "type": "file", "language": lang})
-
             parent = path.parent.relative_to(repo_root).as_posix()
             if parent and parent != ".":
                 graph_edges.append({"source": parent, "target": rel, "label": "contains"})
@@ -132,13 +134,14 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
         lang = item["language"]
         language_dist[lang] = language_dist.get(lang, 0) + 1
 
+    total_lines = sum(item["lines"] for item in files)
     summary = {
         "repo_name": repo_root.name,
         "repo_path": str(repo_root),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "total_files": len(files),
         "python_files": sum(1 for f in files if f["language"] == "Python"),
-        "total_lines": sum(f["lines"] for f in files),
+        "total_lines": total_lines,
         "languages": language_dist,
     }
 
@@ -148,6 +151,10 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
         "files": files,
         "modules": modules,
         "graph": {"nodes": graph_nodes[:500], "edges": graph_edges[:1000]},
+        "report": {
+            "recommendation": "Repository structure analyzed successfully. Use this output to build better architecture understanding and digital intelligence",
+            "focus": ["AI research", "reverse engineering", "identity analysis", "dependency mapping"]
+        }
     }
 
 
@@ -159,8 +166,7 @@ def _parse_github_url(url: str) -> Dict[str, str]:
     if not match:
         raise ValueError("Invalid GitHub URL")
     owner, repo = match.group(1), match.group(2)
-    repo = repo.rstrip("/")
-    repo = repo.split("#", 1)[0].split("?", 1)[0]
+    repo = repo.rstrip("/").split("?", 1)[0].split("#", 1)[0]
     if repo.endswith(".git"):
         repo = repo[:-4]
     return {"owner": owner, "repo": repo}
@@ -181,10 +187,11 @@ def analyze_github_repository(url: str) -> Dict[str, Any]:
     if tree_resp.status_code != 200:
         raise HTTPException(status_code=400, detail="Unable to retrieve repository tree")
     tree = tree_resp.json().get("tree", [])
-    files = []
-    graph_nodes = []
-    graph_edges = []
-    modules = []
+    files: List[Dict[str, Any]] = []
+    graph_nodes: List[Dict[str, Any]] = []
+    graph_edges: List[Dict[str, Any]] = []
+    modules: List[Dict[str, Any]] = []
+
     for item in tree:
         path = item.get("path")
         if not path or item.get("type") != "blob":
@@ -206,7 +213,7 @@ def analyze_github_repository(url: str) -> Dict[str, Any]:
         if path.endswith(".py"):
             modules.append({"path": rel, "name": rel.replace("/", ".")[:-3], "classes": 0, "functions": 0, "imports": 0})
 
-    language_dist = {}
+    language_dist: Dict[str, int] = {}
     for item in files:
         lang = item["language"]
         language_dist[lang] = language_dist.get(lang, 0) + 1
@@ -227,44 +234,65 @@ def analyze_github_repository(url: str) -> Dict[str, Any]:
         "files": files,
         "modules": modules,
         "graph": {"nodes": graph_nodes[:500], "edges": graph_edges[:1000]},
+        "report": {
+            "recommendation": "Repository imported successfully. Use the platform to analyze architecture, risk areas, and evolution opportunities.",
+            "focus": ["reverse engineering", "dependency mapping", "AI research", "digital identity intelligence"]
+        }
     }
 
 
-HTML_INTERFACE = """
+HTML_LANDING = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Research Agents</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Research Agents | Reverse Engineering & Intelligence Platform</title>
   <style>
-    body { margin:0; font-family: Inter, Arial, sans-serif; background: linear-gradient(135deg,#061421,#0c2033,#112f47); color:#edf6ff; }
-    .container { max-width:1200px; margin:0 auto; padding:32px 20px 80px; }
-    .nav { display:flex; justify-content:space-between; align-items:center; padding:12px 0 20px; border-bottom:1px solid rgba(255,255,255,.1); }
-    .brand { font-weight:800; font-size:1.3rem; background:linear-gradient(135deg,#5da8ff,#82d9ff); -webkit-background-clip:text; color:transparent; }
-    a { color:#5da8ff; text-decoration:none; }
-    .hero { padding:52px 0 32px; text-align:center; }
-    .tag { display:inline-block; padding:8px 14px; background:rgba(93,168,255,.14); border:1px solid rgba(93,168,255,.35); border-radius:999px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
-    h1 { font-size:clamp(2.4rem,6vw,4rem); margin:18px 0 18px; }
-    .subtitle { max-width:760px; margin:0 auto; color:#d8ebff; font-size:1.15rem; line-height:1.7; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px; margin-top:40px; }
-    .card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:22px; }
-    .card h3 { margin:0 0 10px; }
-    .card p { color:#bfd5ed; margin:0; }
-    form { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
-    input, select { flex:1 1 380px; padding:15px 17px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(7,17,27,.7); color:#fff; font-size:1rem; }
-    button { padding:15px 22px; border:none; border-radius:12px; background:linear-gradient(135deg,#4da3ff,#82d9ff); color:#061421; font-weight:800; cursor:pointer; }
-    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin:42px 0 22px; }
-    .stat { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:20px; text-align:center; }
-    .stat strong { display:block; font-size:2rem; color:#82d9ff; }
-    .section-title { margin:48px 0 24px; font-size:2.1rem; }
-    .pricing { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px; }
-    .price-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.09); border-radius:16px; padding:28px; }
-    .price-card.featured { border-color:rgba(93,168,255,.4); background:rgba(93,168,255,.08); }
-    .price { font-size:2rem; font-weight:800; }
-    .result-box { margin-top:22px; background:rgba(2,11,18,.75); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:18px; white-space:pre-wrap; overflow:auto; }
-    footer { margin-top:50px; padding-top:30px; border-top:1px solid rgba(255,255,255,.1); text-align:center; color:#9bb2c8; }
-    @media (max-width: 760px) { .nav { flex-direction:column; gap:12px; } form { display:block; } input, button { width:100%; display:block; margin-bottom:10px; } }
+    :root {
+      --bg1: #061421;
+      --bg2: #0c2033;
+      --bg3: #112f47;
+      --text: #edf6ff;
+      --muted: #adc7db;
+      --accent: #5da8ff;
+      --accent-2: #82d9ff;
+      --card: rgba(255,255,255,0.03);
+      --line: rgba(255,255,255,0.08);
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:linear-gradient(135deg,var(--bg1),var(--bg2) 38%,var(--bg3)); color:var(--text); font-family: Inter, Segoe UI, Arial, sans-serif; }
+    .container { max-width:1200px; margin:0 auto; padding:18px 20px 80px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding:14px 0 18px; border-bottom:1px solid var(--line); }
+    .brand { font-weight:900; font-size:1.3rem; letter-spacing:-.04em; background:linear-gradient(135deg,#5da8ff,#82d9ff); -webkit-background-clip:text; color:transparent; }
+    .nav a { color:#dfeeff; text-decoration:none; margin-left:18px; font-size:.96rem; }
+    .hero { padding:78px 0 32px; text-align:center; }
+    .tag { display:inline-block; padding:9px 16px; background:rgba(93,168,255,.14); border:1px solid rgba(93,168,255,.4); border-radius:999px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+    h1 { margin:18px 0 12px; font-size:clamp(2.6rem,6vw,4.5rem); line-height:1.1; }
+    .subtitle { max-width:760px; margin:0 auto; line-height:1.8; font-size:1.14rem; color:var(--muted); }
+    .cta-row { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin:30px 0 40px; }
+    .btn { display:inline-block; padding:16px 24px; border-radius:12px; font-weight:800; text-decoration:none; }
+    .btn.primary { background:linear-gradient(135deg,#4da3ff,#82d9ff); color:#061421; }
+    .btn.secondary { background:transparent; border:1px solid rgba(93,168,255,.4); color:#8dc7ff; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; margin-top:16px; }
+    .stat { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; }
+    .stat strong { display:block; color:#82d9ff; font-size:1.9rem; margin-bottom:6px; }
+    .stat span { color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:22px; margin-top:38px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px; }
+    .card h3 { margin:0 0 12px; }
+    .card p { color:var(--muted); line-height:1.7; margin:0; }
+    .section { margin-top:52px; }
+    .section h2 { margin:0 0 18px; font-size:2.2rem; }
+    .price-box { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
+    .price-card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px; }
+    .price-card.featured { background:rgba(93,168,255,.08); border-color:rgba(93,168,255,.4); }
+    .price { font-size:2.1rem; font-weight:800; }
+    ul { color:var(--muted); padding-left:18px; line-height:1.8; }
+    .cta-panel { margin-top:54px; text-align:center; padding:52px 24px; background:rgba(93,168,255,.08); border:1px solid rgba(93,168,255,.2); border-radius:18px; }
+    footer { margin-top:52px; border-top:1px solid var(--line); padding-top:26px; text-align:center; color:#9bb2c8; }
+    a.link { color:#5da8ff; text-decoration:none; }
+    @media (max-width:760px){ .nav{flex-direction:column; gap:10px;} .nav a{margin:0 8px;} .cta-row{display:block;} .btn{display:block; margin-bottom:10px;} }
   </style>
 </head>
 <body>
@@ -272,123 +300,205 @@ HTML_INTERFACE = """
     <div class="nav">
       <div class="brand">AI Research Agents</div>
       <div>
-        <a href="#features">Features</a> ·
-        <a href="#pricing">Pricing</a> ·
-        <a href="#demo">Demo</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="/pricing">Plans</a>
+        <a href="mailto:enterprise@ai-research-agents.io">Contact</a>
       </div>
     </div>
 
     <section class="hero">
-      <div class="tag">v0.2.0 • Active MVP</div>
-      <h1>Reveal the hidden architecture of digital systems.</h1>
-      <div class="subtitle">
-        AI-powered repository intelligence for reverse engineering, graph mapping, digital identity analysis,
-        and system-level knowledge discovery.
+      <div class="tag">v0.3.0 • Active Platform</div>
+      <h1>Reveal the hidden structure of digital systems.</h1>
+      <p class="subtitle">
+        AI-driven platform for repository intelligence, graph analysis, dependency discovery, reverse engineering,
+        and identity-aware digital system understanding.
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="/">Launch analysis</a>
+        <a class="btn secondary" href="/pricing">View plans</a>
       </div>
-      <form id="repo-form">
-        <input id="repo_path" value="." placeholder="Enter local path or GitHub URL" />
-        <button type="submit">Analyze</button>
-      </form>
       <div class="stats">
         <div class="stat"><strong>100x</strong><span>Faster than manual review</span></div>
         <div class="stat"><strong>90%</strong><span>Lower cost than consulting</span></div>
-        <div class="stat"><strong>95%+</strong><span>Visibility into system structure</span></div>
+        <div class="stat"><strong>95%+</strong><span>System visibility</span></div>
         <div class="stat"><strong>24/7</strong><span>Continuous intelligence</span></div>
       </div>
     </section>
 
-    <section id="features">
-      <h2 class="section-title">Core capabilities</h2>
+    <section id="features" class="section">
+      <h2>Core capabilities</h2>
       <div class="grid">
-        <div class="card"><h3>🧠 AI Discovery</h3><p>Identify code, modules, patterns and architecture without manual inspection.</p></div>
-        <div class="card"><h3>🕸️ Graph Mapping</h3><p>Connect directories, files and modules into a relationship model for system understanding.</p></div>
-        <div class="card"><h3>🔎 Reverse Engineering</h3><p>Reveal internal dependencies, structure and hidden system logic.</p></div>
-        <div class="card"><h3>🎯 Identity Intelligence</h3><p>Model digital identities and trust relationships across entities and systems.</p></div>
-        <div class="card"><h3>📊 Analytics</h3><p>Measure file counts, language mix, complexity and architecture signals.</p></div>
-        <div class="card"><h3>📦 GitHub Support</h3><p>Analyze public GitHub repositories directly with a URL and inspect the structure instantly.</p></div>
+        <div class="card"><h3>🔍 Repository Discovery</h3><p>Scan any project or GitHub repository and identify every major structure, file group, and dependency.</p></div>
+        <div class="card"><h3>🕸️ Graph Intelligence</h3><p>Map relationships between directories, files, modules, and code objects with a structure-first model.</p></div>
+        <div class="card"><h3>⚙️ Reverse Engineering</h3><p>Surface architecture patterns, hidden connections, and logical system structure for deeper understanding.</p></div>
+        <div class="card"><h3>🎯 Identity Mapping</h3><p>Model digital identities, entities, and trust relationships as connected intelligence.</p></div>
+        <div class="card"><h3>📊 Analytics Engine</h3><p>Measure file counts, languages, module stats, and system complexity from the repository itself.</p></div>
+        <div class="card"><h3>📦 GitHub & ZIP Input</h3><p>Analyze directly from a GitHub URL or from a compressed project archive.</p></div>
       </div>
     </section>
 
-    <section id="demo">
-      <h2 class="section-title">Live result</h2>
-      <div id="result" class="result-box">Waiting for analysis...</div>
-    </section>
-
-    <section id="pricing">
-      <h2 class="section-title">Pricing</h2>
-      <div class="pricing">
+    <section id="pricing" class="section">
+      <h2>Pricing</h2>
+      <div class="price-box">
         <div class="price-card">
           <h3>Starter</h3>
           <div class="price">$29<span style="font-size:1rem;">/mo</span></div>
-          <p>For developers and small teams.</p>
+          <ul>
+            <li>Basic repo analysis</li>
+            <li>Single-project usage</li>
+            <li>JSON output</li>
+            <li>Email support</li>
+          </ul>
+          <p style="margin-top:20px;"><a class="btn secondary" href="/">Start now</a></p>
         </div>
         <div class="price-card featured">
           <h3>Professional</h3>
           <div class="price">$149<span style="font-size:1rem;">/mo</span></div>
-          <p>For teams needing repository intelligence and analysis.</p>
+          <ul>
+            <li>Unlimited repo analysis</li>
+            <li>GitHub URL support</li>
+            <li>Advanced reporting</li>
+            <li>Priority support</li>
+          </ul>
+          <p style="margin-top:20px;"><a class="btn primary" href="/">Launch analysis</a></p>
         </div>
         <div class="price-card">
           <h3>Enterprise</h3>
           <div class="price">Custom</div>
-          <p>For compliance, transformation and enterprise systems.</p>
+          <ul>
+            <li>Custom integrations</li>
+            <li>Private deployment</li>
+            <li>Compliance guidance</li>
+            <li>Dedicated support</li>
+          </ul>
+          <p style="margin-top:20px;"><a class="btn secondary" href="mailto:enterprise@ai-research-agents.io">Contact sales</a></p>
         </div>
       </div>
     </section>
 
+    <section class="cta-panel">
+      <h2>Ready to see the hidden architecture of your systems?</h2>
+      <p style="color:var(--muted); margin:12px 0 24px;">Try the platform or book a product walkthrough.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="/">Start free analysis</a>
+        <a class="btn secondary" href="mailto:enterprise@ai-research-agents.io">Book demo</a>
+      </div>
+    </section>
+
     <footer>
-      <p>Built with AI, graph intelligence, and reverse engineering.</p>
-      <p><a href="https://github.com/AMMARICA1791/ai-research-agents">GitHub</a> · <a href="mailto:enterprise@ai-research-agents.io">Contact</a></p>
+      <p>Built for AI research, graph intelligence, reverse engineering, and system understanding.</p>
+      <p><a class="link" href="https://github.com/AMMARICA1791/ai-research-agents">GitHub</a> · <a class="link" href="mailto:enterprise@ai-research-agents.io">Contact</a></p>
     </footer>
   </div>
-
-  <script>
-    const form = document.getElementById('repo-form');
-    const resultBox = document.getElementById('result');
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const raw = document.getElementById('repo_path').value.trim() || '.';
-      resultBox.textContent = 'Analyzing repository...';
-
-      try {
-        let endpoint = '/api/analyze';
-        const isGithubUrl = raw.includes('github.com') || raw.includes('http://') || raw.includes('https://');
-        if (isGithubUrl) {
-          endpoint = '/api/analyze/url';
-        }
-
-        const data = new URLSearchParams();
-        if (isGithubUrl) {
-          data.append('url', raw);
-        } else {
-          data.append('repo_path', raw);
-        }
-
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: data.toString(),
-        });
-
-        const payload = await res.json();
-        if (!res.ok) {
-          throw new Error(payload.detail || 'Error analyzing repository');
-        }
-
-        resultBox.textContent = JSON.stringify(payload, null, 2);
-      } catch (error) {
-        resultBox.textContent = 'Error: ' + error.message;
-      }
-    });
-  </script>
 </body>
 </html>
 """
 
 
+HTML_PRICING = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Research Agents | Pricing</title>
+  <style>
+    body { margin:0; background:linear-gradient(135deg,#061421,#0c2033,#112f47); color:#edf6ff; font-family:Inter,Segoe UI,Arial,sans-serif; }
+    .wrap { max-width:1100px; margin:0 auto; padding:40px 20px 80px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding-bottom:18px; border-bottom:1px solid rgba(255,255,255,.1); }
+    .brand { font-weight:900; background:linear-gradient(135deg,#5da8ff,#82d9ff); -webkit-background-clip:text; color:transparent; }
+    .pricing { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:22px; margin-top:36px; }
+    .card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:26px; }
+    .featured { background:rgba(93,168,255,.08); border-color:rgba(93,168,255,.4); }
+    .price { font-size:2.2rem; font-weight:800; }
+    .btn { display:inline-block; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:800; }
+    .btn-primary { background:linear-gradient(135deg,#4da3ff,#82d9ff); color:#071821; }
+    .btn-secondary { border:1px solid rgba(93,168,255,.4); color:#8dc7ff; background:transparent; }
+    ul { color:#bfd5ed; line-height:1.9; padding-left:18px; }
+    .hero { margin:38px 0 22px; }
+    footer { text-align:center; color:#9bb2c8; margin-top:48px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">AI Research Agents</div>
+      <div><a href="/" style="text-decoration:none; color:#8dc7ff;">Back to platform</a></div>
+    </div>
+
+    <div class="hero">
+      <h1 style="font-size:clamp(2.2rem,5vw,3.6rem); margin:0 0 14px;">Simple, transparent pricing.</h1>
+      <p style="color:#d8ebff; line-height:1.7; max-width:760px;">From individual analysis to enterprise-grade digital system intelligence, choose the level that matches your work.</p>
+    </div>
+
+    <div class="pricing">
+      <div class="card">
+        <h2>Starter</h2>
+        <div class="price">$29<span style="font-size:1rem;">/mo</span></div>
+        <p style="color:#bfd5ed;">For developers and researchers.</p>
+        <ul>
+          <li>Repository analysis</li>
+          <li>Basic graph output</li>
+          <li>1 active project</li>
+          <li>Email support</li>
+        </ul>
+        <p style="margin-top:20px;"><a class="btn btn-primary" href="/">Start now</a></p>
+      </div>
+
+      <div class="card featured">
+        <h2>Professional</h2>
+        <div class="price">$149<span style="font-size:1rem;">/mo</span></div>
+        <p style="color:#bfd5ed;">For product, engineering, and security teams.</p>
+        <ul>
+          <li>Unlimited repository analysis</li>
+          <li>GitHub URL integration</li>
+          <li>Report generation</li>
+          <li>Priority support</li>
+        </ul>
+        <p style="margin-top:20px;"><a class="btn btn-primary" href="/">Launch analysis</a></p>
+      </div>
+
+      <div class="card">
+        <h2>Enterprise</h2>
+        <div class="price">Custom</div>
+        <p style="color:#bfd5ed;">For digital transformation and enterprise intelligence.</p>
+        <ul>
+          <li>Private deployment</li>
+          <li>Security review support</li>
+          <li>Custom.dashboard</li>
+          <li>Dedicated onboarding</li>
+        </ul>
+        <p style="margin-top:20px;"><a class="btn btn-secondary" href="mailto:enterprise@ai-research-agents.io">Contact sales</a></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>AI Research Agents • Reverse engineering • Identity intelligence • Graph analysis</p>
+    </footer>
+  </div>
+</body>
+</html>
+"""
+
+
+def _render_json_report(payload: Dict[str, Any]) -> str:
+    return json.dumps(payload, indent=2, ensure_ascii=False)
+
+
 @app.get("/", response_class=HTMLResponse)
-def root() -> str:
-    return HTML_INTERFACE
+def landing() -> str:
+    return HTML_LANDING
+
+
+@app.get("/pricing", response_class=HTMLResponse)
+def pricing() -> str:
+    return HTML_PRICING
+
+
+@app.get("/health")
+def health() -> Dict[str, str]:
+    return {"status": "ok", "service": "ai-research-agents", "version": "0.3.0"}
 
 
 @app.get("/api/demo")
@@ -426,9 +536,10 @@ async def api_analyze_upload(file: UploadFile = File(...)) -> JSONResponse:
         raise HTTPException(status_code=400, detail=str(exc))
 
 
-@app.get("/health")
-def health() -> Dict[str, str]:
-    return {"status": "ok", "service": "ai-research-agents-mvp", "version": "0.2.0"}
+@app.get("/api/report")
+def api_report() -> JSONResponse:
+    report = analyze_repository(Path.cwd())
+    return JSONResponse(content={"report": _render_json_report(report)})
 
 
 if __name__ == "__main__":
