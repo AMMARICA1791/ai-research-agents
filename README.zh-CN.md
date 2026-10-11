@@ -23,3 +23,11 @@
 **原则：**只有经过独立验证并有可复现证据的结果，才作为已证实的 AI 能力发布。
 
 其他语言：[English](README.md) · [العربية](README.ar.md) · [Português](README.pt-BR.md) · [Español](README.es.md)。
+
+## 当前统一状态 — 2026 年 10 月
+
+- 本项目是实验性研究实验室，并非成熟 SaaS 或自主软件开发者。七个阶段是协调流程，不是七个独立推理智能体。
+- [三个命令的演示](DEMO.md)：Python 3.11+，无需 API 密钥或本地模型；包含八个人工合成案例、确定性的合成修复，以及对 [PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17) 历史回归测试的重测。**不会重新运行 Qwen**。
+- [公开 Python 仓库审查](docs/PUBLIC_REPO_AUDIT.md)：有限静态分析，不执行外部代码；结果仅供人工复核，并非安全认证。
+- [学术文献发现](docs/SCHOLARLY_DISCOVERY.md)：采集 Crossref 书目元数据，记录来源、时间和不确定性；不阅读全文、不评价科学质量、不使用大语言模型。
+- [版本证据](VERIFIED_RELEASE.md) 区分历史记录和新测试；[贡献范围](CONTRIBUTING.md) 当前有限。不提供生产保证。
