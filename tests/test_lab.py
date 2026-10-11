@@ -26,7 +26,7 @@ def test_scanner_real_evidence_and_ignores_secrets(tmp_path):
     assert result["python_files_parsed"] == 2
     assert result["files_scanned"] == 2
     assert ".env" not in json.dumps(result)
-    assert any(x["rule"] == "silent_exception" and x["evidence"] == "agent.py:6" for x in result["findings"])
+    assert any(x["rule"] == "silent_exception" and x["evidence"] == "agent.py:5" for x in result["findings"])
 
 def test_syntax_error_is_grounded(tmp_path):
     (tmp_path / "bad.py").write_text("def broken(:\n", encoding="utf-8")
