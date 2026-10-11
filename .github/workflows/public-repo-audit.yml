@@ -1,0 +1,92 @@
+name: Read-Only Public Repository Audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_url:
+        description: 'PUBLIC GitHub repository URL (no secrets or private sources)'
+        required: true
+        default: 'https://github.com/pallets/itsdangerous'
+        type: string
+      ref:
+        description: 'Public branch, tag, commit SHA, or HEAD for default branch'
+        required: true
+        default: 'HEAD'
+        type: string
+  push:
+    branches: [main]
+    paths:
+      - 'lab/public_repo_audit.py'
+      - 'lab/inspector.py'
+      - 'lab/dependency.py'
+      - 'tests/test_public_repo_audit.py'
+      - '.github/workflows/public-repo-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  static-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    env:
+      INPUT_REPOSITORY_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.repository_url || 'https://github.com/pallets/itsdangerous' }}
+      INPUT_REF: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || 'HEAD' }}
+    steps:
+      - name: Check out trusted auditor
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install HTTP client only
+        run: python -m pip install requests==2.32.2
+      - name: Audit public repository WITHOUT executing its code
+        run: |
+          set -euo pipefail
+          python -m lab.public_repo_audit \
+            --repo-url "$INPUT_REPOSITORY_URL" \
+            --ref "$INPUT_REF" \
+            --output results/public-repo-audit.json
+      - name: Validate disclosure and generate run summary
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path("results/public-repo-audit.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          assert data["untrusted_code_executed"] is False
+          assert data["source_modified"] is False
+          assert data["model_inference"] is False
+          assert len(data["resolved_commit"]) == 40
+          c = data["scan_coverage"]
+          risks = data["risk_counts"]
+          lines = [
+              "# Read-only public GitHub repository audit",
+              "",
+              "**Static code inspection only. No repository code was executed.**",
+              "",
+              "| Field | Observed |", "|---|---|",
+              f"| Public repo | {data['repository']} |",
+              f"| Commit SHA | {data['resolved_commit']} |",
+              f"| Python files parsed | {c['python_files_parsed']} |",
+              f"| Total selected files scanned | {c['files_scanned']} |",
+              f"| Incomplete / truncated | {c['truncated']} |",
+              f"| High / medium / low findings | {risks['high']} / {risks['medium']} / {risks['low']} |",
+              "",
+              "Download the JSON report artifact to inspect file:line evidence.",
+              "Findings are limited heuristic review pointers, not proof of a security flaw.",
+              "No LLM was run, no code was patched, and no paid AI key was required.",
+          ]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+              f.write("\n".join(lines) + "\n")
+          print("EXTERNAL_PUBLIC_REPO_STATIC_AUDIT_VERIFIED")
+          PY
+      - name: Save sanitized evidence (public repository only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-repo-audit
+          path: results/public-repo-audit.json
+          if-no-files-found: warn
+          retention-days: 7

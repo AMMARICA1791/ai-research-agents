@@ -13,7 +13,8 @@ A direction of work, not a delivery schedule or promise of global uniqueness.
 
 ## Earn community trust (next)
 - [x] One-click evidence tour on GitHub Actions, with independent synthetic and historical real-source regression tests.
-- [ ] Public interactive demo that accepts safe, permissioned external inputs; the one-click proof tour is not that service.
+- [x] Bounded read-only audit of another public GitHub Python repository, without running its code or needing a paid model API.
+- [ ] Public interactive hosted demo; GitHub Actions audit is currently maintainer-triggered and is not a hosted service.
 - [ ] Independent external user reproduces one research result.
 - [ ] An unseen-task benchmark with successes *and* failures.
 - [ ] Confine any third-party code execution to an isolated environment without write permissions.
