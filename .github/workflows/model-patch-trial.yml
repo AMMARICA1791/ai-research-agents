@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/model-patch-trial.yml'
+      - 'lab/model_patch.py'
 
 permissions:
   contents: read
@@ -55,6 +56,19 @@ jobs:
           print('MODEL=' + report['model'])
           print('REPOSITORY_MODIFIED=false')
           print('HUMAN_REVIEW_REQUIRED=true')
+          PY
+      - name: Report failure category without exposing model output
+        if: failure()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('results/model-patch-trial.json')
+          if p.exists():
+              data = json.loads(p.read_text())
+              print('MODEL_PATCH_STATUS=' + data.get('status', 'unknown'))
+              print('MODEL_PATCH_REJECTION_REASONS=' + ','.join(data.get('rejection_reasons', [])))
+              print('UNTRUSTED_OUTPUT_NOT_PUBLISHED=true')
           PY
       - name: Publish actual evidence report
         if: always()
