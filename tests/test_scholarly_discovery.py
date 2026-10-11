@@ -153,3 +153,25 @@ def test_missing_publication_info_not_fabricated():
     assert item["year"] is None
     assert item["venue"] is None
     assert item["abstract_or_full_text_reviewed"] is False
+
+
+@pytest.mark.parametrize("payload", [
+    b'null', b'{"message": null}', b'{"message": []}',
+    b'{"message": {"items": null}}',
+])
+def test_invalid_provider_envelopes_fail_closed(payload):
+    with pytest.raises(ValueError):
+        normalize(payload)
+
+
+def test_provider_cannot_exceed_requested_result_cap():
+    payload = provider_bytes([paper(f"10.1234/item{i}") for i in range(4)])
+    with pytest.raises(ValueError, match="bounded entry limits"):
+        normalize(payload, max_results=3)
+
+
+def test_exact_cap_accepted_without_fabricating_candidates():
+    payload = provider_bytes([paper(f"10.1234/item{i}") for i in range(3)])
+    report = normalize(payload, max_results=3)
+    assert report["candidate_count"] == 3
+    assert len(report["records"]) == 3
