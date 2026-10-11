@@ -44,6 +44,8 @@ def test_wrong_model_patch_is_rejected_without_execution(monkeypatch):
     assert answer["candidate_rejected"] is True
     assert answer["repository_modified"] is False
     assert "candidate" not in answer
+    assert answer["attempts"] == 2
+    assert answer["rejection_reasons"] == ["candidate_ast_outside_allowlist"] * 2
 
 
 def test_model_cannot_return_only_rhetorical_claim(monkeypatch):
