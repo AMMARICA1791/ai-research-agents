@@ -41,6 +41,14 @@ jobs:
           assert all(p['status'] == 'pending_review' for p in result['proposals'])
           print('SELF RESEARCH COMPLETED:', result['id'])
           PY
+      - name: Upload self-research evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-self-audit
+          path: |
+            results/ci-mission.json
+            .data/lab.sqlite
+          retention-days: 7
       - name: Smoke test live localhost HTTP server
         run: |
           set -euo pipefail
