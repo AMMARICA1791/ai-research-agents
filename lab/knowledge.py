@@ -36,6 +36,21 @@ def load_state(path: str | Path) -> dict:
             "risk_counts", "rule_counts", "model_mode"
         }:
             raise ValueError("Unexpected fields in knowledge state")
+    allowed_modes = {"not_configured", "remote_model", "provider_error", "invalid_endpoint", "unknown"}
+    for entry in data["runs"]:
+        counts = entry.get("risk_counts")
+        categories = entry.get("rule_counts")
+        if not isinstance(counts, dict) or set(counts) != {"high", "medium", "low"}:
+            raise ValueError("Invalid risk counts in knowledge journal")
+        if not isinstance(categories, dict) or not set(categories).issubset(ALLOWED_RULES):
+            raise ValueError("Invalid rule categories in knowledge journal")
+        if any(type(x) is not int or x < 0 or x > 400
+               for x in (entry.get("files_scanned"), entry.get("python_parsed"), entry.get("finding_count"))):
+            raise ValueError("Invalid numeric counters in knowledge journal")
+        if any(type(x) is not int or x < 0 or x > 100 for x in list(counts.values()) + list(categories.values())):
+            raise ValueError("Invalid counters in knowledge journal")
+        if entry.get("model_mode") not in allowed_modes or not isinstance(entry.get("at"), str):
+            raise ValueError("Invalid model mode or timestamp in knowledge journal")
     return data
 
 def historical_context(state: dict) -> dict:
