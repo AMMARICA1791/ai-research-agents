@@ -173,7 +173,9 @@ def generate(repo: Path, output: Path) -> int:
         "'github.com' anywhere in an input string. Change ONLY the assignment "
         "to variable match. Use re.match and a regex anchored at the BEGINNING "
         "to literal https://github.com/; preserve the two capture groups "
-        "for owner and repository. Keep every other source line unchanged.\n"
+        "for owner and repository. Keep every other source line unchanged. "
+        "Use EXACTLY this regex pattern literal: "
+        "r'^https://github\\.com/([^/]+)/([^/]+)' with re.match and value.\n"
         "Real existing function:\n" + fragment + "\n"
         "Return JSON with ONE field 'line': the single replacement Python "
         "assignment statement (match = ...). No explanations."
@@ -219,9 +221,24 @@ def generate(repo: Path, output: Path) -> int:
             })
             _write_report(report, output)
             return 0
-        except (requests.RequestException, ValueError, KeyError, TypeError,
-                SyntaxError, json.JSONDecodeError):
-            report["rejection_reasons"].append("provider_or_gate_rejected")
+        except requests.RequestException:
+            report["rejection_reasons"].append("local_model_http_error")
+        except json.JSONDecodeError:
+            report["rejection_reasons"].append("model_json_invalid")
+        except KeyError:
+            report["rejection_reasons"].append("model_json_missing_line")
+        except (ValueError, SyntaxError, TypeError) as exc:
+            # Emit fixed diagnostic codes only. Do not retain untrusted text.
+            reason = str(exc)
+            if reason == "Unsafe or incorrect regex patch":
+                reason = "regex_outside_exact_allowlist"
+            elif reason == "Model changed additional code":
+                reason = "unexpected_additional_ast_edit"
+            elif reason == "Only an assignment is allowed":
+                reason = "not_a_single_assignment"
+            else:
+                reason = "invalid_candidate_structure_or_test"
+            report["rejection_reasons"].append(reason)
     _write_report(report, output)
     return 2
 
