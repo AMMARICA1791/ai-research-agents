@@ -1,32 +1,47 @@
-"""Project definition for AI research initiatives."""
+"""Knowledge graph for tracking tool relationships and insights."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Set
 from uuid import uuid4
 
 
 @dataclass
-class ResearchProject:
-    title: str
-    description: str
-    owner: str
+class KnowledgeNode:
     id: str = field(default_factory=lambda: str(uuid4()))
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    status: str = "planning"
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    name: str = ""
+    node_type: str = "unknown"
+    properties: Dict[str, Any] = field(default_factory=dict)
+    created_at: str = field(default_factory=lambda: "")
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "id": self.id,
-            "title": self.title,
-            "description": self.description,
-            "owner": self.owner,
-            "created_at": self.created_at.isoformat(),
-            "status": self.status,
-            "tags": self.tags,
-            "metadata": self.metadata,
-        }
+
+@dataclass
+class KnowledgeEdge:
+    source_id: str
+    target_id: str
+    edge_type: str
+    weight: float = 1.0
+    properties: Dict[str, Any] = field(default_factory=dict)
+
+
+class KnowledgeGraph:
+    def __init__(self):
+        self.nodes: Dict[str, KnowledgeNode] = {}
+        self.edges: List[KnowledgeEdge] = []
+
+    def add_node(self, node: KnowledgeNode) -> None:
+        self.nodes[node.id] = node
+
+    def add_edge(self, edge: KnowledgeEdge) -> None:
+        if edge.source_id in self.nodes and edge.target_id in self.nodes:
+            self.edges.append(edge)
+
+    def get_neighbors(self, node_id: str) -> List[KnowledgeNode]:
+        neighbor_ids: Set[str] = set()
+        for edge in self.edges:
+            if edge.source_id == node_id:
+                neighbor_ids.add(edge.target_id)
+            elif edge.target_id == node_id:
+                neighbor_ids.add(edge.source_id)
+        return [self.nodes[nid] for nid in neighbor_ids if nid in self.nodes]

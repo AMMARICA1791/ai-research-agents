@@ -1,4 +1,4 @@
-"""Analyst agent: examines findings and extracts technical insight."""
+"""Benchmarker agent: evaluates AI tools and reports performance metrics."""
 
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class AnalystAgent(BaseAgent):
+class BenchmarkerAgent(BaseAgent):
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="Analyst",
-                role=AgentRole.ANALYST,
-                description="Analyzes AI tools and extracts actionable insight.",
-                temperature=0.5,
+                name="Benchmarker",
+                role=AgentRole.BENCHMARKER,
+                description="Runs benchmark tests and compares AI tool performance.",
+                temperature=0.3,
             )
         )
 
@@ -22,23 +22,24 @@ class AnalystAgent(BaseAgent):
         self.state["status"] = "running"
         self.state["current_task"] = task
 
-        results = {
+        result = {
             "task": task,
-            "key_findings": [
-                "A strong open-source ecosystem is emerging.",
-                "Benchmarking remains a major challenge in AI research.",
-                "Comparative evaluation improves decision quality.",
-            ],
-            "insight_score": 0.85,
+            "benchmark_name": "ai_tool_comparison",
+            "metrics": {
+                "latency_ms": 420,
+                "throughput": 180,
+                "accuracy": 0.87,
+                "cost_efficiency": 0.81,
+            },
+            "result": "Tool meets baseline expectations for exploratory research.",
             "context": context,
         }
 
         self.state["status"] = "completed"
-        return results
+        return result
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "analysis_type": "technical_review",
-            "summary": "High-level synthesis created.",
+            "benchmark_summary": "Performance evaluation is healthy.",
             "data": data,
         }

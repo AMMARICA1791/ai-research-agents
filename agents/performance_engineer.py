@@ -1,4 +1,4 @@
-"""Vision Specialist Agent: expertise in computer vision and image processing."""
+"""Performance Engineer Agent: specialized in optimization and efficiency metrics."""
 
 from __future__ import annotations
 
@@ -7,16 +7,16 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class VisionSpecialistAgent(BaseAgent):
-    """Expert in vision models, image recognition, and visual understanding."""
+class PerformanceEngineerAgent(BaseAgent):
+    """Expert in model optimization, inference speed, memory efficiency, and cost analysis."""
 
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="Vision Specialist",
-                role=AgentRole.ANALYST,
-                description="Deep expertise in computer vision, image classification, object detection, and visual language models.",
-                temperature=0.4,
+                name="Performance Engineer",
+                role=AgentRole.BENCHMARKER,
+                description="Specializes in benchmarking efficiency, inference optimization, and cost-performance trade-offs.",
+                temperature=0.3,
             )
         )
 
@@ -24,52 +24,46 @@ class VisionSpecialistAgent(BaseAgent):
         self.state["status"] = "running"
         self.state["current_task"] = task
 
-        analysis = {
+        benchmark = {
             "task": task,
-            "specialization": "Computer Vision",
-            "capabilities_analyzed": [
-                "image classification accuracy",
-                "object detection precision",
-                "semantic segmentation",
-                "visual question answering",
-                "multi-modal integration",
+            "specialization": "Performance & Optimization",
+            "optimization_techniques": [
+                "quantization (int8, fp16)",
+                "pruning",
+                "knowledge distillation",
+                "batching strategies",
+                "hardware acceleration (GPU/TPU)",
             ],
-            "metrics": {
-                "imagenet_top1_accuracy": 0.89,
-                "mAP_detection": 0.85,
-                "segmentation_miou": 0.82,
-                "inference_fps": 45,
-                "model_size_mb": 250,
+            "performance_metrics": {
+                "latency_p50_ms": 42,
+                "latency_p99_ms": 156,
+                "throughput_requests_per_sec": 850,
+                "memory_peak_gb": 8.2,
+                "gpu_utilization_percent": 78,
             },
-            "architectures_evaluated": [
-                "Vision Transformers (ViT)",
-                "ConvNets (ResNet, EfficientNet)",
-                "CLIP (vision-language)",
-                "YOLO (real-time detection)",
-                "Segment Anything Model (SAM)",
-            ],
-            "recommendations": [
-                "Vision Transformers excel at fine-grained classification",
-                "CLIP models bridge vision and language effectively",
-                "Real-time applications require efficient architectures",
-                "Multi-task learning improves generalization",
+            "cost_analysis": {
+                "inference_cost_per_1m_tokens": 0.08,
+                "training_cost_per_hour_gpu": 3.25,
+                "deployment_breakeven_months": 2.1,
+            },
+            "optimization_recommendations": [
+                "Quantize model to reduce memory by 4x",
+                "Implement batch processing for 3x throughput gain",
+                "Use LoRA for efficient fine-tuning (10% memory overhead)",
+                "Deploy on A100 GPUs for optimal price-performance",
             ],
         }
 
         self.state["status"] = "completed"
-        return analysis
+        return benchmark
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "analysis_focus": "Vision-specific architectures and evaluation metrics",
-            "key_insights": [
-                "Self-supervised pretraining improves downstream performance",
-                "Vision-language models outperform single-modality approaches",
-                "Efficient models enable edge deployment",
+            "analysis_focus": "Efficiency and cost optimization",
+            "efficiency_score": 0.87,
+            "bottlenecks": [
+                "Memory bandwidth (identified)",
+                "Attention mechanism complexity (manageable)",
             ],
-            "emerging_trends": [
-                "Foundation models in vision",
-                "Video understanding advances",
-                "3D vision and neural radiance fields",
-            ],
+            "optimization_potential": "35% improvement possible with advanced techniques",
         }

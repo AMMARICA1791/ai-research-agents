@@ -1,4 +1,4 @@
-"""Performance Engineer Agent: specialized in optimization and efficiency metrics."""
+"""Data Engineer Agent: specializes in dataset creation, validation, and management."""
 
 from __future__ import annotations
 
@@ -7,15 +7,15 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class PerformanceEngineerAgent(BaseAgent):
-    """Expert in model optimization, inference speed, memory efficiency, and cost analysis."""
+class DataEngineerAgent(BaseAgent):
+    """Expert in dataset engineering, benchmarking data creation, and quality assurance."""
 
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="Performance Engineer",
-                role=AgentRole.BENCHMARKER,
-                description="Specializes in benchmarking efficiency, inference optimization, and cost-performance trade-offs.",
+                name="Data Engineer",
+                role=AgentRole.VALIDATOR,
+                description="Creates, validates, and manages benchmark datasets for AI research.",
                 temperature=0.3,
             )
         )
@@ -24,46 +24,47 @@ class PerformanceEngineerAgent(BaseAgent):
         self.state["status"] = "running"
         self.state["current_task"] = task
 
-        benchmark = {
+        dataset_info = {
             "task": task,
-            "specialization": "Performance & Optimization",
-            "optimization_techniques": [
-                "quantization (int8, fp16)",
-                "pruning",
-                "knowledge distillation",
-                "batching strategies",
-                "hardware acceleration (GPU/TPU)",
-            ],
-            "performance_metrics": {
-                "latency_p50_ms": 42,
-                "latency_p99_ms": 156,
-                "throughput_requests_per_sec": 850,
-                "memory_peak_gb": 8.2,
-                "gpu_utilization_percent": 78,
+            "specialization": "Data Engineering & Validation",
+            "dataset_management": {
+                "total_samples": 125000,
+                "train_split": 0.7,
+                "validation_split": 0.15,
+                "test_split": 0.15,
+                "balance_ratio": 0.98,
             },
-            "cost_analysis": {
-                "inference_cost_per_1m_tokens": 0.08,
-                "training_cost_per_hour_gpu": 3.25,
-                "deployment_breakeven_months": 2.1,
+            "quality_metrics": {
+                "data_completeness": 0.99,
+                "duplicate_rate": 0.001,
+                "annotation_agreement_kappa": 0.91,
+                "outlier_detection_passed": True,
             },
-            "optimization_recommendations": [
-                "Quantize model to reduce memory by 4x",
-                "Implement batch processing for 3x throughput gain",
-                "Use LoRA for efficient fine-tuning (10% memory overhead)",
-                "Deploy on A100 GPUs for optimal price-performance",
+            "versioning": {
+                "current_version": "1.2.3",
+                "changelog": [
+                    "v1.2.3: Added 10k new samples",
+                    "v1.2.2: Fixed annotation inconsistencies",
+                    "v1.2.1: Improved data augmentation",
+                ],
+            },
+            "available_datasets": [
+                "ImageNet-1K (classification)",
+                "COCO (detection/segmentation)",
+                "SQuAD (QA)",
+                "GLUE (NLU)",
             ],
         }
 
         self.state["status"] = "completed"
-        return benchmark
+        return dataset_info
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "analysis_focus": "Efficiency and cost optimization",
-            "efficiency_score": 0.87,
-            "bottlenecks": [
-                "Memory bandwidth (identified)",
-                "Attention mechanism complexity (manageable)",
+            "validation_report": "Dataset meets publication standards",
+            "data_quality_score": 0.94,
+            "recommendations": [
+                "Dataset is production-ready",
+                "Consider augmentation for minority classes",
             ],
-            "optimization_potential": "35% improvement possible with advanced techniques",
         }
