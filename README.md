@@ -1,31 +1,49 @@
-# AI Research Agents — Internal Research & Development Laboratory
+# AI Research Agents
 
-An owner-directed multi-role R&D environment, currently for internal experimentation — not a commercial offering.
+**Evidence-first experiments for free-first AI coding agents.**
 
-## Phase 2: implemented foundations
-- Seven coordinated research roles: Explorer, Analyst, Dependency Mapper, Engineer, Critic, Validator, Synthesizer.
-- Read-only Python AST source analysis and conservative internal import-cycle mapping with file evidence.
-- SQLite mission reports and human-gated proposed actions. Approving proposals never changes source code.
-- Durable **sanitized** cross-run research summaries on a separate lab-memory branch. No raw goals, source or private SQLite history is committed there.
-- Optional two-pass language-model critique using an explicitly configured OpenAI-compatible HTTPS provider. Unconfigured by default; no claims of live model execution without evidence.
-- Manual and initial main-branch GitHub Actions workflow that executes a research mission and uploads its report.
+We are building a reproducible Python research lab that inspects source, records bounded findings, proposes narrowly scoped changes with open-weight models, and tests those changes before human review.
 
-## Tablet workflow
-Open **Actions → Research Lab - Persistent Missions → Run workflow**. Enter a non-sensitive goal. Review the logs and mission artifact. Future runs restore aggregate prior findings from lab-memory.
+> **Experimental research software, not a commercial service or fully autonomous developer.** We demonstrated one AI-generated fix to a pre-scoped real repository bug. This does not establish general bug discovery or repair ability.
 
-## Locally
-Python 3.11+:
+## See the evidence
+- [AI-written change merged by owner — PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17): an actual GitHub URL host-spoofing bug fixed by Qwen2.5-Coder 1.5B.
+- [AI generation and testing run](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/38120082970). Its generation and test jobs passed, while automated PR creation was blocked by GitHub permissions; the review PR was opened separately from the AI-written branch.
+- [Bounded synthetic benchmark](.github/workflows/research-evidence.yml): 8 artificial labeled cases; scores do not imply production accuracy.
+- [Live local model research](.github/workflows/no-key-local-llm.yml): Ollama/Qwen without a paid API key.
+- [Scope and limitations](docs/PROJECT_SCOPE.md).
 
-    pip install -r requirements.txt
-    python main.py
-    python -m lab.cli mission --repo . --goal "Review our laboratory" --knowledge .data/knowledge.json
-    python -m pytest -q tests/test_mvp.py tests/test_lab.py
+## Run the scanner
 
-Local dashboard: http://127.0.0.1:8000.
+Python 3.11+ and internet for package installation:
 
-## Optional real AI reasoning
-In repository Settings → Secrets and variables → Actions, explicitly add variables LAB_LLM_ENDPOINT, LAB_LLM_MODEL, plus a repository secret LAB_LLM_API_KEY. Then opt in using enable_model=true on manual runs. May incur provider charges. GitHub Models was retired in July 2026 and is not used. The model is given only aggregate finding counts, no source/goal text.
+```sh
+git clone https://github.com/AMMARICA1791/ai-research-agents.git
+cd ai-research-agents
+python -m pip install -r requirements.txt
+python -m pytest -q tests/
+python -m lab.cli mission --repo . --goal "Inspect our laboratory for evidence-backed improvements"
+python main.py
+```
 
-Public repository safety: GitHub Actions artifacts may reveal report details. Do not use private or sensitive mission goals. No automatic source edits or public web deployment.
+Local UI: http://127.0.0.1:8000. Windows users can use their normal Python environment. The basic scanner does not need an LLM key.
 
-Read [Phase 2 guide](docs/PHASE2_GUIDE.md) and [Arabic instructions](README.ar.md). Historical commercial materials remain archived.
+**Tablet without a laptop:** Open GitHub **Actions → Research Lab - Persistent Missions → Run workflow**. Use non-sensitive goals only: public Actions artifacts can contain report details. See [QUICKSTART.md](QUICKSTART.md).
+
+## What is implemented?
+- AST inspection and conservative dependency mapping.
+- Seven **pipeline stages**, not seven separate thinking AI agents.
+- Sanitized aggregate memory on the `lab-memory` branch.
+- Optional real Qwen review of aggregate counts, plus strictly bounded patch trials.
+- Human-reviewed candidate changes, full `tests/` CI suite, and experiment artifacts.
+
+**Not implemented:** generic autonomous software repair, secure execution of arbitrary external code, a hosted commercial product, or a public contributor service.
+
+## Help shape the project
+Read [Roadmap](ROADMAP.md), [Contributing](CONTRIBUTING.md), [Governance](GOVERNANCE.md), [Security](SECURITY.md), and [Code of conduct](CODE_OF_CONDUCT.md).
+
+**Licensing decision pending:** This public repository has not yet adopted an explicit software license. Public visibility alone does not grant permission to redistribute the code. See [license decision](docs/LICENSING_DECISION.md). For now, share reproducible bug reports, benchmark ideas, and documentation feedback; code contributions must await clear licensing terms.
+
+Languages: [Arabic](README.ar.md) · [Portuguese](README.pt-BR.md) · [Spanish](README.es.md) · [Chinese](README.zh-CN.md). Some translations cover older phases; this page is the up-to-date capability summary.
+
+**North star:** every claim about AI coding should be backed by inspectable source changes, reproducible tests, and honest failure reports.

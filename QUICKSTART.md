@@ -1,17 +1,25 @@
-# Research Lab Quick Start
+# Quick start
 
-GitHub: Actions → Research Lab - Manual Mission → Run workflow.
-Enter a goal and download the resulting report artifact.
-No language-model API key is required for deterministic source analysis.
+## On an Android tablet
 
-Locally:
-    pip install -r requirements.txt
-    python main.py
-    python -m lab.cli mission --repo . --goal "Review this laboratory"
-    python -m pytest -q tests/test_mvp.py tests/test_lab.py
+1. Open [GitHub Actions](https://github.com/AMMARICA1791/ai-research-agents/actions).
+2. Choose **Research Lab - Persistent Missions** → **Run workflow**.
+3. Enter a non-sensitive goal, for example: "Audit our research laboratory".
+4. Read the results and download the report artifact.
 
-Dashboard: http://127.0.0.1:8000
-History: .data/lab.sqlite on that machine. GitHub Actions uses
-independent per-run memory until a shared store is provided.
-Optional model commentary requires explicitly configured LAB_LLM_ENDPOINT,
-LAB_LLM_MODEL, and LAB_LLM_API_KEY. Never commit credentials.
+This runs static analysis, **not** automatic code repair. For genuine local open-weight Qwen review, choose **Zero-Key Local Qwen Research**. No paid LLM API key is required for either default workflow, but runner resources have limits.
+
+## On a computer with Python 3.11+
+
+```sh
+git clone https://github.com/AMMARICA1791/ai-research-agents.git
+cd ai-research-agents
+python -m pip install -r requirements.txt
+python -m pytest -q tests/
+python -m lab.cli mission --repo . --goal "Inspect this research lab"
+python main.py
+```
+
+Open http://127.0.0.1:8000 locally.
+
+**Results:** `not_configured` means no model was used. The `lab-memory` branch stores allowlisted summary counts, not private research content. Public workflow reports may expose details, so do not enter secrets, passwords, or private source. See [scope](docs/PROJECT_SCOPE.md).
