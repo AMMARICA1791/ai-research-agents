@@ -22,3 +22,9 @@ We value reproducible bug reports, test cases and honest results, including fail
 - Human review is mandatory before merging to `main`.
 
 Do not disclose exploitable vulnerabilities publicly. See [security policy](SECURITY.md), [roadmap](ROADMAP.md), and [governance](GOVERNANCE.md).
+
+## Current maintenance and support scope
+
+This project is an experimental research laboratory, not a general-purpose repair service. At this stage, maintainers prioritize the eight documented synthetic test cases and the historical GitHub host-validation regression documented in PR #17. General bug-fix requests for unrelated external repositories are currently out of scope and may be closed without investigation.
+
+Reports within scope should include a minimal, reproducible, non-sensitive example and a regression test. Acceptance of an issue or pull request is not a commitment to provide individual support, turnaround times, or production guarantees. Broader support may be reconsidered after the documented release and demonstration have been independently checked.
