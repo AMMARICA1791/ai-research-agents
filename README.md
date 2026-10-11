@@ -72,6 +72,12 @@ Read [Roadmap](ROADMAP.md), [Contributing](CONTRIBUTING.md), [Governance](GOVERN
 
 **License:** [Apache License, Version 2.0](LICENSE). The owner approved it for this repository on 11 October 2026. Original copyright remains with the respective authors; see the [attribution notice](NOTICE), [trademark guidance](TRADEMARKS.md) and [rights explained](docs/LICENSING_DECISION.md). The license permits commercial reuse and derivatives subject to its conditions, **not** exclusive control of the public code. Contributors can now submit original or lawfully authorized changes under the documented contribution policy.
 
-Languages: [Arabic](README.ar.md) · [Portuguese](README.pt-BR.md) · [Spanish](README.es.md) · [Chinese](README.zh-CN.md). Some translations cover older phases; this page is the up-to-date capability summary.
+Languages: [Arabic](README.ar.md) · [Portuguese](README.pt-BR.md) · [Spanish](README.es.md) · [Chinese](README.zh-CN.md). All four translations include an October 2026 current-scope update; consult this English page for the full capability inventory.
 
 **North star:** every claim about AI coding should be backed by inspectable source changes, reproducible tests, and honest failure reports.
+
+## Honest demo recording status
+
+A screen recording has **not yet been captured or independently reviewed**. Do not represent a scripted or simulated clip as a live execution. To record one, check out a named commit, capture a continuous terminal session running the three commands in [DEMO.md](DEMO.md), and preserve any failures on screen. Check the resulting files and video before linking the real recording here. The public [proof workflow](.github/workflows/public-demo.yml) provides inspectable run evidence in the meantime.
+
+The [historical baseline record](VERIFIED_RELEASE.md) identifies its exact source commit and separates previously reported tests from unverified checks on newer commits.
