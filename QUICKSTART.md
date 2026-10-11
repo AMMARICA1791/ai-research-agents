@@ -55,7 +55,7 @@ http://localhost:8000
 
 ### Analyze a Repository
 1. **Default Analysis**: Click "Analyze" with "." to analyze the current project
-2. **Custom Path**: Enter any local path to analyze
+2. **Custom Path**: Enter a path inside the current project directory to analyze
 3. **Results**: View comprehensive analysis in JSON format
 
 ### What the Analysis Shows
@@ -141,4 +141,4 @@ For issues or questions:
 
 ---
 
-**The platform is now running. Start analyzing.**
+**After starting the server locally, open http://127.0.0.1:8000. Commercial deployment requires further security review.**
