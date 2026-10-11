@@ -1,5 +1,7 @@
 # Quick start
 
+**No laptop or setup required for the public proof:** open [Public One-Click Proof Tour](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml) → **Run workflow** → **Summary**. It rechecks known test evidence; it does not generate new AI patches. See [public demo guide](docs/PUBLIC_DEMO.md).
+
 ## On an Android tablet
 
 1. Open [GitHub Actions](https://github.com/AMMARICA1791/ai-research-agents/actions).

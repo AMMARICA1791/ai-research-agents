@@ -6,6 +6,12 @@ We are building a reproducible Python research lab that inspects source, records
 
 > **Experimental research software, not a commercial service or fully autonomous developer.** We demonstrated one AI-generated fix to a pre-scoped real repository bug. This does not establish general bug discovery or repair ability.
 
+## Try the verified demo in one minute
+
+**[Run the Public One-Click Proof Tour on GitHub](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml)** — choose **Run workflow**, select **main**, then read the run's **Summary**. No paid AI API key, local installation or private repository access needed.
+
+The demo independently rechecks 8 synthetic scanner cases, a synthetic red/green fix, and the historical real-source GitHub URL regression corrected in **[PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17)**. **It does not rerun Qwen or discover new bugs**: the original model-authored patch is preserved in PR #17. See [the one-minute guide](docs/PUBLIC_DEMO.md) and [GitHub discovery setup](docs/GITHUB_DISCOVERY_SETUP.md).
+
 ## See the evidence
 - [AI-written change merged by owner — PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17): an actual GitHub URL host-spoofing bug fixed by Qwen2.5-Coder 1.5B.
 - [AI generation and testing run](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/38120082970). Its generation and test jobs passed, while automated PR creation was blocked by GitHub permissions; the review PR was opened separately from the AI-written branch.
