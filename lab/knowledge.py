@@ -36,7 +36,7 @@ def load_state(path: str | Path) -> dict:
             "risk_counts", "rule_counts", "model_mode"
         }:
             raise ValueError("Unexpected fields in knowledge state")
-    allowed_modes = {"not_configured", "remote_model", "provider_error", "invalid_endpoint", "unknown"}
+    allowed_modes = {"not_configured", "remote_model", "provider_error", "invalid_endpoint", "local_model", "local_model_unavailable", "unknown"}
     for entry in data["runs"]:
         counts = entry.get("risk_counts")
         categories = entry.get("rule_counts")
@@ -79,7 +79,7 @@ def record(state: dict, result: dict) -> dict:
         "risk_counts": {v: min(max(0, int(counts.get(v, 0))), 100) for v in ("high", "medium", "low")},
         "rule_counts": dict(sorted(rule_counts.items())),
         "model_mode": report.get("model", {}).get("mode", "not_configured") if report.get("model", {}).get("mode") in {
-            "not_configured", "remote_model", "provider_error", "invalid_endpoint"} else "unknown",
+            "not_configured", "remote_model", "provider_error", "invalid_endpoint", "local_model", "local_model_unavailable"} else "unknown",
     })
     state["runs"] = state["runs"][-MAX_ENTRIES:]
     return state
