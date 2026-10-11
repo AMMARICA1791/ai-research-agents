@@ -1,0 +1,37 @@
+name: SciFact Real NLI Experiment
+
+on:
+  pull_request:
+    paths:
+      - 'research/run_scifact_nli.py'
+      - '.github/workflows/scifact-real-nli.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU inference dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'transformers>=4.40,<5' sentencepiece
+      - name: Run real pretrained model on 40 annotated SciFact rationales
+        run: python -m research.run_scifact_nli --output-dir scifact-evaluation --limit 40
+      - name: Upload evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scifact-real-nli-results
+          path: |
+            scifact-evaluation/report.json
+            scifact-evaluation/predictions.json
+          if-no-files-found: warn
