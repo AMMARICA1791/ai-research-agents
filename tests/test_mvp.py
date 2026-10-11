@@ -67,7 +67,9 @@ def test_github_url_metadata(monkeypatch):
             return FakeResponse({"tree": [{"path": "a.py", "type": "blob", "size": 12}, {"path": "README.md", "type": "blob", "size": 100}]})
         raise AssertionError("unexpected URL: " + url)
 
-    monkeypatch.setattr("web.app.requests.get", fake_get)
+    import importlib
+    app_module = importlib.import_module("web.app")
+    monkeypatch.setattr(app_module.requests, "get", fake_get)
     response = client.post("/api/analyze/url", data={"url": "https://github.com/demo/sample"})
     assert response.status_code == 200, response.text
     assert response.json()["summary"]["total_files"] == 2
