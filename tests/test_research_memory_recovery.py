@@ -1,12 +1,27 @@
 """Recovery and integrity tests for the existing research evidence SQLite store."""
-import json
+import hashlib
 import sqlite3
 
 import pytest
 
 from research.integration_pipeline import integrate
 from research.persistent_memory import history, open_memory
-from tests.test_research_integration import report
+\n\ndef report():
+    title = "First title"
+    stamp = "2026-10-11T12:00:00+00:00"
+    return {
+        "status": "public_scholarly_metadata_candidates",
+        "research_question": "open weight model evaluation",
+        "candidate_count": 1,
+        "source": {
+            "provider": "Crossref",
+            "endpoint": "https://api.crossref.org/works?rows=1",
+            "retrieved_at_utc": stamp,
+            "response_sha256": hashlib.sha256((title + stamp).encode()).hexdigest(),
+        },
+        "records": [{"doi": "10.1234/example", "doi_url": "https://doi.org/10.1234/example",
+                     "title": title, "year": 2026}],
+    }
 
 
 def test_reopen_after_successful_commit(tmp_path):
