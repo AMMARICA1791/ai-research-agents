@@ -248,246 +248,70 @@ def analyze_github_repository(url: str) -> Dict[str, Any]:
     }
 
 
+from lab.memory import LabMemory
+from lab.pipeline import LabOrchestrator
+from lab.model import OptionalModel
+from pydantic import BaseModel
+
 HTML_LANDING = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Research Agents | Reverse Engineering & Intelligence Platform</title>
-  <style>
-    :root {
-      --bg1: #061421;
-      --bg2: #0c2033;
-      --bg3: #112f47;
-      --text: #edf6ff;
-      --muted: #adc7db;
-      --accent: #5da8ff;
-      --accent-2: #82d9ff;
-      --card: rgba(255,255,255,0.03);
-      --line: rgba(255,255,255,0.08);
-    }
-    * { box-sizing:border-box; }
-    body { margin:0; background:linear-gradient(135deg,var(--bg1),var(--bg2) 38%,var(--bg3)); color:var(--text); font-family: Inter, Segoe UI, Arial, sans-serif; }
-    .container { max-width:1200px; margin:0 auto; padding:18px 20px 80px; }
-    .nav { display:flex; justify-content:space-between; align-items:center; padding:14px 0 18px; border-bottom:1px solid var(--line); }
-    .brand { font-weight:900; font-size:1.3rem; letter-spacing:-.04em; background:linear-gradient(135deg,#5da8ff,#82d9ff); -webkit-background-clip:text; color:transparent; }
-    .nav a { color:#dfeeff; text-decoration:none; margin-left:18px; font-size:.96rem; }
-    .hero { padding:78px 0 32px; text-align:center; }
-    .tag { display:inline-block; padding:9px 16px; background:rgba(93,168,255,.14); border:1px solid rgba(93,168,255,.4); border-radius:999px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
-    h1 { margin:18px 0 12px; font-size:clamp(2.6rem,6vw,4.5rem); line-height:1.1; }
-    .subtitle { max-width:760px; margin:0 auto; line-height:1.8; font-size:1.14rem; color:var(--muted); }
-    .cta-row { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin:30px 0 40px; }
-    .btn { display:inline-block; padding:16px 24px; border-radius:12px; font-weight:800; text-decoration:none; }
-    .btn.primary { background:linear-gradient(135deg,#4da3ff,#82d9ff); color:#061421; }
-    .btn.secondary { background:transparent; border:1px solid rgba(93,168,255,.4); color:#8dc7ff; }
-    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; margin-top:16px; }
-    .stat { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; }
-    .stat strong { display:block; color:#82d9ff; font-size:1.9rem; margin-bottom:6px; }
-    .stat span { color:var(--muted); }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:22px; margin-top:38px; }
-    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px; }
-    .card h3 { margin:0 0 12px; }
-    .card p { color:var(--muted); line-height:1.7; margin:0; }
-    .section { margin-top:52px; }
-    .section h2 { margin:0 0 18px; font-size:2.2rem; }
-    .price-box { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
-    .price-card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px; }
-    .price-card.featured { background:rgba(93,168,255,.08); border-color:rgba(93,168,255,.4); }
-    .price { font-size:2.1rem; font-weight:800; }
-    ul { color:var(--muted); padding-left:18px; line-height:1.8; }
-    .cta-panel { margin-top:54px; text-align:center; padding:52px 24px; background:rgba(93,168,255,.08); border:1px solid rgba(93,168,255,.2); border-radius:18px; }
-    footer { margin-top:52px; border-top:1px solid var(--line); padding-top:26px; text-align:center; color:#9bb2c8; }
-    a.link { color:#5da8ff; text-decoration:none; }
-    @media (max-width:760px){ .nav{flex-direction:column; gap:10px;} .nav a{margin:0 8px;} .cta-row{display:block;} .btn{display:block; margin-bottom:10px;} }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="nav">
-      <div class="brand">AI Research Agents</div>
-      <div>
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="/pricing">Plans</a>
-        <a href="mailto:enterprise@ai-research-agents.io">Contact</a>
-      </div>
-    </div>
-
-    <section class="hero">
-      <div class="tag">v0.3.0 • Active Platform</div>
-      <h1>Reveal the hidden structure of digital systems.</h1>
-      <p class="subtitle">
-        AI-driven platform for repository intelligence, graph analysis, dependency discovery, reverse engineering,
-        and identity-aware digital system understanding.
-      </p>
-      <div class="cta-row">
-        <a class="btn primary" href="/">Launch analysis</a>
-        <a class="btn secondary" href="/pricing">View plans</a>
-      </div>
-      <div class="stats">
-        <div class="stat"><strong>100x</strong><span>Faster than manual review</span></div>
-        <div class="stat"><strong>90%</strong><span>Lower cost than consulting</span></div>
-        <div class="stat"><strong>95%+</strong><span>System visibility</span></div>
-        <div class="stat"><strong>24/7</strong><span>Continuous intelligence</span></div>
-      </div>
-    </section>
-
-    <section id="features" class="section">
-      <h2>Core capabilities</h2>
-      <div class="grid">
-        <div class="card"><h3>🔍 Repository Discovery</h3><p>Scan any project or GitHub repository and identify every major structure, file group, and dependency.</p></div>
-        <div class="card"><h3>🕸️ Graph Intelligence</h3><p>Map relationships between directories, files, modules, and code objects with a structure-first model.</p></div>
-        <div class="card"><h3>⚙️ Reverse Engineering</h3><p>Surface architecture patterns, hidden connections, and logical system structure for deeper understanding.</p></div>
-        <div class="card"><h3>🎯 Identity Mapping</h3><p>Model digital identities, entities, and trust relationships as connected intelligence.</p></div>
-        <div class="card"><h3>📊 Analytics Engine</h3><p>Measure file counts, languages, module stats, and system complexity from the repository itself.</p></div>
-        <div class="card"><h3>📦 GitHub & ZIP Input</h3><p>Analyze directly from a GitHub URL or from a compressed project archive.</p></div>
-      </div>
-    </section>
-
-    <section id="pricing" class="section">
-      <h2>Pricing</h2>
-      <div class="price-box">
-        <div class="price-card">
-          <h3>Starter</h3>
-          <div class="price">$29<span style="font-size:1rem;">/mo</span></div>
-          <ul>
-            <li>Basic repo analysis</li>
-            <li>Single-project usage</li>
-            <li>JSON output</li>
-            <li>Email support</li>
-          </ul>
-          <p style="margin-top:20px;"><a class="btn secondary" href="/">Start now</a></p>
-        </div>
-        <div class="price-card featured">
-          <h3>Professional</h3>
-          <div class="price">$149<span style="font-size:1rem;">/mo</span></div>
-          <ul>
-            <li>Unlimited repo analysis</li>
-            <li>GitHub URL support</li>
-            <li>Advanced reporting</li>
-            <li>Priority support</li>
-          </ul>
-          <p style="margin-top:20px;"><a class="btn primary" href="/">Launch analysis</a></p>
-        </div>
-        <div class="price-card">
-          <h3>Enterprise</h3>
-          <div class="price">Custom</div>
-          <ul>
-            <li>Custom integrations</li>
-            <li>Private deployment</li>
-            <li>Compliance guidance</li>
-            <li>Dedicated support</li>
-          </ul>
-          <p style="margin-top:20px;"><a class="btn secondary" href="mailto:enterprise@ai-research-agents.io">Contact sales</a></p>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta-panel">
-      <h2>Ready to see the hidden architecture of your systems?</h2>
-      <p style="color:var(--muted); margin:12px 0 24px;">Try the platform or book a product walkthrough.</p>
-      <div class="cta-row">
-        <a class="btn primary" href="/">Start free analysis</a>
-        <a class="btn secondary" href="mailto:enterprise@ai-research-agents.io">Book demo</a>
-      </div>
-    </section>
-
-    <footer>
-      <p>Built for AI research, graph intelligence, reverse engineering, and system understanding.</p>
-      <p><a class="link" href="https://github.com/AMMARICA1791/ai-research-agents">GitHub</a> · <a class="link" href="mailto:enterprise@ai-research-agents.io">Contact</a></p>
-    </footer>
-  </div>
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Research Agents | Internal Research Laboratory</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0a1524;color:#e8f0fa;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+main{max-width:1010px;margin:0 auto;padding:42px 20px 70px}
+.small{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#91bded}h1{font-size:clamp(30px,5vw,52px);margin:15px 0}p{line-height:1.65;color:#bcccdc}
+.card{background:#12243a;border:1px solid #29415d;border-radius:16px;padding:21px;margin:18px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.role{background:#1a304b;padding:16px;border-radius:12px}
+input,button{font:inherit;padding:13px;border-radius:9px}
+input{width:100%;border:1px solid #527094;background:#0b1b30;color:#fff}
+button{margin-top:12px;background:#78c0ff;border:0;font-weight:700;color:#061725;cursor:pointer}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#061120;border:1px solid #29415d;padding:16px;border-radius:10px;font-size:12px;max-height:420px;overflow:auto}
+a{color:#a8d8ff}.status{color:#88e7ba}.muted{font-size:13px;color:#a9bdce}
+</style></head>
+<body><main>
+<div class="small">INDEPENDENT RESEARCH & DEVELOPMENT LAB</div>
+<h1>AI Research Agents</h1>
+<p>Private research workspace. Five evidence-based agents collaborate on read-only repository analysis, propose improvements and record a reviewable mission journal. No commerce or autonomous code changes.</p>
+<section class="grid">
+<div class="role"><b>01 — Explorer</b><p>Source inventory</p></div>
+<div class="role"><b>02 — Analyst</b><p>Actual Python AST findings</p></div>
+<div class="role"><b>03 — Engineer</b><p>Grounded improvement proposals</p></div>
+<div class="role"><b>04 — Validator</b><p>Evidence and safety checks</p></div>
+<div class="role"><b>05 — Synthesizer</b><p>Mission reports and memory</p></div>
+</section>
+<section class="card"><h2>Launch a research mission</h2>
+<p class="muted">Run on this local checkout; source code is never changed. Proposals stay pending review. For GitHub Actions use the manual workflow on the repository.</p>
+<label for="goal">Research goal</label>
+<input id="goal" maxlength="500" value="Inspect this research laboratory and suggest evidence-based improvements">
+<button id="run" type="button">Run five-stage research</button>
+<p id="state" class="status">Ready</p>
+<pre id="output" aria-live="polite">Mission results will appear here.</pre></section>
+<section class="card"><h2>Research memory</h2>
+<button id="history" type="button">Load recent missions</button><pre id="log">History stored in local SQLite.</pre>
+<p class="muted">External language-model reasoning is optional and disabled until explicitly configured. Approval never runs or merges code.</p>
+</section>
+<footer class="muted">AI Research Agents • Internal laboratory • <a href="/docs">API documentation</a></footer>
+</main>
+<script>
+const out=document.getElementById('output'), state=document.getElementById('state');
+document.getElementById('run').addEventListener('click',async()=>{
+  const goal=document.getElementById('goal').value.trim();
+  state.textContent='Running read-only analysis...';
+  try{
+    const res=await fetch('/api/lab/missions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:goal})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(JSON.stringify(data));
+    out.textContent=JSON.stringify(data,null,2);state.textContent='Mission recorded; proposals require review';
+  }catch(err){state.textContent='Mission failed';out.textContent=String(err);}
+});
+document.getElementById('history').addEventListener('click',async()=>{
+  try{const res=await fetch('/api/lab/missions');document.getElementById('log').textContent=JSON.stringify(await res.json(),null,2)}
+  catch(err){document.getElementById('log').textContent=String(err);}
+});
+</script></body></html>
 """
-
-
-HTML_PRICING = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Research Agents | Pricing</title>
-  <style>
-    body { margin:0; background:linear-gradient(135deg,#061421,#0c2033,#112f47); color:#edf6ff; font-family:Inter,Segoe UI,Arial,sans-serif; }
-    .wrap { max-width:1100px; margin:0 auto; padding:40px 20px 80px; }
-    .nav { display:flex; justify-content:space-between; align-items:center; padding-bottom:18px; border-bottom:1px solid rgba(255,255,255,.1); }
-    .brand { font-weight:900; background:linear-gradient(135deg,#5da8ff,#82d9ff); -webkit-background-clip:text; color:transparent; }
-    .pricing { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:22px; margin-top:36px; }
-    .card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:26px; }
-    .featured { background:rgba(93,168,255,.08); border-color:rgba(93,168,255,.4); }
-    .price { font-size:2.2rem; font-weight:800; }
-    .btn { display:inline-block; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:800; }
-    .btn-primary { background:linear-gradient(135deg,#4da3ff,#82d9ff); color:#071821; }
-    .btn-secondary { border:1px solid rgba(93,168,255,.4); color:#8dc7ff; background:transparent; }
-    ul { color:#bfd5ed; line-height:1.9; padding-left:18px; }
-    .hero { margin:38px 0 22px; }
-    footer { text-align:center; color:#9bb2c8; margin-top:48px; }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="nav">
-      <div class="brand">AI Research Agents</div>
-      <div><a href="/" style="text-decoration:none; color:#8dc7ff;">Back to platform</a></div>
-    </div>
-
-    <div class="hero">
-      <h1 style="font-size:clamp(2.2rem,5vw,3.6rem); margin:0 0 14px;">Simple, transparent pricing.</h1>
-      <p style="color:#d8ebff; line-height:1.7; max-width:760px;">From individual analysis to enterprise-grade digital system intelligence, choose the level that matches your work.</p>
-    </div>
-
-    <div class="pricing">
-      <div class="card">
-        <h2>Starter</h2>
-        <div class="price">$29<span style="font-size:1rem;">/mo</span></div>
-        <p style="color:#bfd5ed;">For developers and researchers.</p>
-        <ul>
-          <li>Repository analysis</li>
-          <li>Basic graph output</li>
-          <li>1 active project</li>
-          <li>Email support</li>
-        </ul>
-        <p style="margin-top:20px;"><a class="btn btn-primary" href="/">Start now</a></p>
-      </div>
-
-      <div class="card featured">
-        <h2>Professional</h2>
-        <div class="price">$149<span style="font-size:1rem;">/mo</span></div>
-        <p style="color:#bfd5ed;">For product, engineering, and security teams.</p>
-        <ul>
-          <li>Unlimited repository analysis</li>
-          <li>GitHub URL integration</li>
-          <li>Report generation</li>
-          <li>Priority support</li>
-        </ul>
-        <p style="margin-top:20px;"><a class="btn btn-primary" href="/">Launch analysis</a></p>
-      </div>
-
-      <div class="card">
-        <h2>Enterprise</h2>
-        <div class="price">Custom</div>
-        <p style="color:#bfd5ed;">For digital transformation and enterprise intelligence.</p>
-        <ul>
-          <li>Private deployment</li>
-          <li>Security review support</li>
-          <li>Custom.dashboard</li>
-          <li>Dedicated onboarding</li>
-        </ul>
-        <p style="margin-top:20px;"><a class="btn btn-secondary" href="mailto:enterprise@ai-research-agents.io">Contact sales</a></p>
-      </div>
-    </div>
-
-    <footer>
-      <p>AI Research Agents • Reverse engineering • Identity intelligence • Graph analysis</p>
-    </footer>
-  </div>
-</body>
-</html>
-"""
-
 
 def _render_json_report(payload: Dict[str, Any]) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False)
@@ -497,10 +321,6 @@ def _render_json_report(payload: Dict[str, Any]) -> str:
 def landing() -> str:
     return HTML_LANDING
 
-
-@app.get("/pricing", response_class=HTMLResponse)
-def pricing() -> str:
-    return HTML_PRICING
 
 
 @app.get("/health")
@@ -564,3 +384,43 @@ def api_report() -> JSONResponse:
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
+class LabMissionRequest(BaseModel):
+    goal: str
+
+
+def _lab_memory() -> LabMemory:
+    return LabMemory(Path.cwd() / ".data" / "lab.sqlite")
+
+
+@app.get("/api/lab/status")
+def lab_status() -> Dict[str, Any]:
+    return {
+        "purpose": "internal_research",
+        "roles": list(LabOrchestrator.stages),
+        "model_enabled": OptionalModel().configured,
+        "autonomous_code_changes": False,
+        "history_scope": "local_sqlite",
+    }
+
+
+@app.get("/api/lab/missions")
+def lab_missions() -> Dict[str, Any]:
+    return {"missions": _lab_memory().list_missions()}
+
+
+@app.get("/api/lab/missions/{mission_id}")
+def lab_mission_detail(mission_id: str) -> Dict[str, Any]:
+    report = _lab_memory().get_mission(mission_id)
+    if report is None:
+        raise HTTPException(status_code=404, detail="Mission not found")
+    return report
+
+
+@app.post("/api/lab/missions")
+def lab_execute_mission(request: LabMissionRequest) -> Dict[str, Any]:
+    try:
+        return LabOrchestrator(_lab_memory()).run(Path.cwd(), request.goal)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc

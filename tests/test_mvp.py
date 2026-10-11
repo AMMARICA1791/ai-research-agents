@@ -15,7 +15,7 @@ def test_health_and_pages():
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
     assert client.get("/").status_code == 200
-    assert client.get("/pricing").status_code == 200
+    assert client.get("/pricing").status_code == 404
 
 def test_local_analysis(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)

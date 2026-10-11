@@ -1,33 +1,11 @@
-# Specialist Agents Documentation
+# Multi-agent Research Laboratory
 
-## NLP Specialist
+Owner goal → Explorer (source inventory) → Analyst (Python AST findings)
+→ Engineer (review proposals) → Validator (evidence check)
+→ Synthesizer (report; optional external LLM commentary)
+→ SQLite (mission and review history) → Human decision.
 
-- language models
-- transformer evaluation
-- multilingual analysis
-- semantic similarity checks
-
-## Vision Specialist
-
-- image classification
-- object detection
-- segmentation analysis
-- vision-language models
-
-## Performance Engineer
-
-- optimization and cost analysis
-- hardware efficiency
-- latency and throughput review
-
-## Data Engineer
-
-- dataset validation
-- benchmark preparation
-- data quality tools
-
-## Research Synthesizer
-
-- academic reporting
-- report generation
-- publication-oriented document creation
+All stages read source without altering it. Approval records a decision
+but never executes code changes. The legacy agents/ directory remains
+for compatibility, with its demonstration examples clearly separated.
+The research workflow is manually dispatched, not autonomous background work.
