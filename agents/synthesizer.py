@@ -1,4 +1,4 @@
-"""Benchmarker agent: evaluates AI tools and reports performance metrics."""
+"""Synthesizer agent: transforms findings into coherent reports and summaries."""
 
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class BenchmarkerAgent(BaseAgent):
+class SynthesizerAgent(BaseAgent):
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="Benchmarker",
-                role=AgentRole.BENCHMARKER,
-                description="Runs benchmark tests and compares AI tool performance.",
-                temperature=0.3,
+                name="Synthesizer",
+                role=AgentRole.SYNTHESIZER,
+                description="Produces research reports and summaries from collected findings.",
+                temperature=0.6,
             )
         )
 
@@ -22,24 +22,24 @@ class BenchmarkerAgent(BaseAgent):
         self.state["status"] = "running"
         self.state["current_task"] = task
 
-        result = {
+        report = {
             "task": task,
-            "benchmark_name": "ai_tool_comparison",
-            "metrics": {
-                "latency_ms": 420,
-                "throughput": 180,
-                "accuracy": 0.87,
-                "cost_efficiency": 0.81,
-            },
-            "result": "Tool meets baseline expectations for exploratory research.",
+            "title": f"Research Brief: {task}",
+            "sections": [
+                "Executive Summary",
+                "Key Findings",
+                "Performance Overview",
+                "Recommendations",
+            ],
             "context": context,
         }
 
         self.state["status"] = "completed"
-        return result
+        return report
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "benchmark_summary": "Performance evaluation is healthy.",
+            "report_status": "Generated",
+            "summary": "Narrative output synthesized successfully.",
             "data": data,
         }

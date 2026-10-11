@@ -1,4 +1,4 @@
-"""NLP Specialist Agent: deep expertise in natural language processing tools."""
+"""Vision Specialist Agent: expertise in computer vision and image processing."""
 
 from __future__ import annotations
 
@@ -7,15 +7,15 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class NLPSpecialistAgent(BaseAgent):
-    """Expert in NLP models, transformers, and language understanding."""
+class VisionSpecialistAgent(BaseAgent):
+    """Expert in vision models, image recognition, and visual understanding."""
 
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="NLP Specialist",
+                name="Vision Specialist",
                 role=AgentRole.ANALYST,
-                description="Deep expertise in language models, transformers, and NLP evaluation metrics.",
+                description="Deep expertise in computer vision, image classification, object detection, and visual language models.",
                 temperature=0.4,
             )
         )
@@ -26,32 +26,33 @@ class NLPSpecialistAgent(BaseAgent):
 
         analysis = {
             "task": task,
-            "specialization": "Natural Language Processing",
+            "specialization": "Computer Vision",
             "capabilities_analyzed": [
-                "tokenization quality",
-                "semantic understanding",
-                "multilingual support",
-                "context window size",
-                "fine-tuning flexibility",
+                "image classification accuracy",
+                "object detection precision",
+                "semantic segmentation",
+                "visual question answering",
+                "multi-modal integration",
             ],
             "metrics": {
-                "bleu_score": 0.92,
-                "rouge_score": 0.88,
-                "semantic_similarity": 0.89,
-                "inference_speed": "250ms/sample",
-                "memory_footprint_mb": 450,
+                "imagenet_top1_accuracy": 0.89,
+                "mAP_detection": 0.85,
+                "segmentation_miou": 0.82,
+                "inference_fps": 45,
+                "model_size_mb": 250,
             },
-            "frameworks_evaluated": [
-                "Hugging Face Transformers",
-                "spaCy",
-                "NLTK",
-                "fastText",
-                "GPT-family models",
+            "architectures_evaluated": [
+                "Vision Transformers (ViT)",
+                "ConvNets (ResNet, EfficientNet)",
+                "CLIP (vision-language)",
+                "YOLO (real-time detection)",
+                "Segment Anything Model (SAM)",
             ],
             "recommendations": [
-                "Use transformer-based models for context-dependent tasks",
-                "Consider lightweight models (distilBERT) for production",
-                "Multilingual models recommended for global applications",
+                "Vision Transformers excel at fine-grained classification",
+                "CLIP models bridge vision and language effectively",
+                "Real-time applications require efficient architectures",
+                "Multi-task learning improves generalization",
             ],
         }
 
@@ -60,15 +61,15 @@ class NLPSpecialistAgent(BaseAgent):
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "analysis_focus": "NLP-specific metrics and architectural patterns",
+            "analysis_focus": "Vision-specific architectures and evaluation metrics",
             "key_insights": [
-                "Attention mechanisms drive performance",
-                "Pre-training datasets significantly impact downstream task performance",
-                "Parameter efficiency becoming increasingly important",
+                "Self-supervised pretraining improves downstream performance",
+                "Vision-language models outperform single-modality approaches",
+                "Efficient models enable edge deployment",
             ],
-            "research_directions": [
-                "Few-shot learning",
-                "Prompt engineering optimization",
-                "Efficient fine-tuning (LoRA, QLoRA)",
+            "emerging_trends": [
+                "Foundation models in vision",
+                "Video understanding advances",
+                "3D vision and neural radiance fields",
             ],
         }

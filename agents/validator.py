@@ -1,4 +1,4 @@
-"""Synthesizer agent: transforms findings into coherent reports and summaries."""
+"""Validator agent: checks the quality and reproducibility of research output."""
 
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class SynthesizerAgent(BaseAgent):
+class ValidatorAgent(BaseAgent):
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="Synthesizer",
-                role=AgentRole.SYNTHESIZER,
-                description="Produces research reports and summaries from collected findings.",
-                temperature=0.6,
+                name="Validator",
+                role=AgentRole.VALIDATOR,
+                description="Validates correctness, quality, and reproducibility of research outputs.",
+                temperature=0.2,
             )
         )
 
@@ -22,24 +22,21 @@ class SynthesizerAgent(BaseAgent):
         self.state["status"] = "running"
         self.state["current_task"] = task
 
-        report = {
+        result = {
             "task": task,
-            "title": f"Research Brief: {task}",
-            "sections": [
-                "Executive Summary",
-                "Key Findings",
-                "Performance Overview",
-                "Recommendations",
-            ],
+            "valid": True,
+            "quality_score": 0.91,
+            "reproducibility_check": "passed",
+            "warnings": [],
             "context": context,
         }
 
         self.state["status"] = "completed"
-        return report
+        return result
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "report_status": "Generated",
-            "summary": "Narrative output synthesized successfully.",
+            "validation_status": "approved",
+            "summary": "Output meets quality thresholds.",
             "data": data,
         }

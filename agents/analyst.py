@@ -1,4 +1,4 @@
-"""Explorer agent: discovers AI entities and research opportunities."""
+"""Analyst agent: examines findings and extracts technical insight."""
 
 from __future__ import annotations
 
@@ -7,13 +7,14 @@ from typing import Any, Dict
 from .base import AgentConfig, AgentRole, BaseAgent
 
 
-class ExplorerAgent(BaseAgent):
+class AnalystAgent(BaseAgent):
     def __init__(self, config: AgentConfig | None = None):
         super().__init__(
             config or AgentConfig(
-                name="Explorer",
-                role=AgentRole.EXPLORER,
-                description="Discovers AI tools and research opportunities.",
+                name="Analyst",
+                role=AgentRole.ANALYST,
+                description="Analyzes AI tools and extracts actionable insight.",
+                temperature=0.5,
             )
         )
 
@@ -21,28 +22,23 @@ class ExplorerAgent(BaseAgent):
         self.state["status"] = "running"
         self.state["current_task"] = task
 
-        result = {
+        results = {
             "task": task,
-            "domain": context.get("domain", "unknown"),
-            "scope": context.get("scope", "general"),
-            "discovered_entities": [
-                "open-source model hub",
-                "benchmark dataset",
-                "tool comparison framework",
+            "key_findings": [
+                "A strong open-source ecosystem is emerging.",
+                "Benchmarking remains a major challenge in AI research.",
+                "Comparative evaluation improves decision quality.",
             ],
-            "opportunities": [
-                "tool comparison",
-                "performance benchmarking",
-                "research synthesis",
-            ],
+            "insight_score": 0.85,
+            "context": context,
         }
 
         self.state["status"] = "completed"
-        return result
+        return results
 
     async def analyze(self, data: Any) -> Dict[str, Any]:
         return {
-            "summary": "Entity discovery complete.",
-            "trends": ["open-source tools", "benchmarking", "AI evaluation"],
+            "analysis_type": "technical_review",
+            "summary": "High-level synthesis created.",
             "data": data,
         }

@@ -7,6 +7,7 @@ import io
 import json
 import os
 import re
+import stat
 import tempfile
 import zipfile
 
@@ -23,9 +24,13 @@ def _safe_repo_path(value: str) -> Path:
     raw = (value or ".").strip()
     if raw in {"", ".", "./"}:
         return Path.cwd().resolve()
+    root = Path.cwd().resolve()
     candidate = Path(raw).expanduser()
     if not candidate.is_absolute():
-        candidate = (Path.cwd() / candidate).resolve()
+        candidate = root / candidate
+    candidate = candidate.resolve()
+    if not candidate.is_relative_to(root):
+        raise HTTPException(status_code=403, detail="Local analysis is restricted to the project directory")
     return candidate
 
 
@@ -102,6 +107,8 @@ def analyze_repository(repo_root: Path, max_files: int = 1000) -> Dict[str, Any]
         try:
             rel = path.relative_to(repo_root).as_posix()
             lang = _language_for(path)
+            if path.stat().st_size > 1024 * 1024:
+                continue  # Do not read huge or potentially sensitive binary files
             content = path.read_text(encoding="utf-8", errors="ignore")
             line_count = len(content.splitlines())
 
@@ -524,11 +531,23 @@ async def api_analyze_upload(file: UploadFile = File(...)) -> JSONResponse:
     try:
         with tempfile.TemporaryDirectory() as tmpdir:
             zip_path = Path(tmpdir) / "uploaded.zip"
-            content = await file.read()
+            content = await file.read(10 * 1024 * 1024 + 1)
+            if len(content) > 10 * 1024 * 1024:
+                raise HTTPException(status_code=413, detail="Archive exceeds 10 MB upload limit")
             zip_path.write_bytes(content)
             extract_dir = Path(tmpdir) / "extracted"
             extract_dir.mkdir()
             with zipfile.ZipFile(zip_path, 'r') as z:
+                members = z.infolist()
+                if len(members) > 1000 or sum(m.file_size for m in members) > 50 * 1024 * 1024:
+                    raise HTTPException(status_code=413, detail="Archive exceeds extraction limits")
+                for item in members:
+                    target = (extract_dir / item.filename).resolve()
+                    if (not target.is_relative_to(extract_dir)
+                        or item.filename.startswith(("/", "\\"))
+                        or "\\" in item.filename
+                        or stat.S_ISLNK(item.external_attr >> 16)):
+                        raise HTTPException(status_code=400, detail="Unsafe archive entry")
                 z.extractall(extract_dir)
             report = analyze_repository(extract_dir)
             return JSONResponse(content=report)
