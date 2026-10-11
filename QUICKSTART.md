@@ -1,8 +1,8 @@
 # Quick start
 
-**No laptop or setup required for the public proof:** open [Public One-Click Proof Tour](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml) → **Run workflow** → **Summary**. It rechecks known test evidence; it does not generate new AI patches. See [public demo guide](docs/PUBLIC_DEMO.md).
+**Public visitor: view the results without any installation:** open [Public Proof Tour](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml) → open the most recent **successful run** → **Summary**. Manual **Run workflow** is available only with repository write access. Visitors can clone/fork to rerun locally; no paid key is needed. See [public demo guide](docs/PUBLIC_DEMO.md).
 
-## On an Android tablet
+## For the owner or a collaborator with write access, on an Android tablet
 
 1. Open [GitHub Actions](https://github.com/AMMARICA1791/ai-research-agents/actions).
 2. Choose **Research Lab - Persistent Missions** → **Run workflow**.

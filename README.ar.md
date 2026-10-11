@@ -6,7 +6,7 @@
 
 ## جرّب مشروعنا خلال دقيقة
 
-افتح [العرض التجريبي الموثق على GitHub](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml)، ثم اختر **Run workflow**، وحدد **main**، وافتح **Summary** لقراءة النتائج. لا يلزم مفتاح ذكاء اصطناعي مدفوع أو كمبيوتر شخصي.
+افتح [العرض التجريبي الموثق على GitHub](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml)، واختر **آخر تشغيل ناجح** لقراءة صفحة **Summary**؛ مشاهدة النتائج متاحة للزوار. زر **Run workflow** مخصص لمن لديهم صلاحية الكتابة في المستودع، أما المطور الخارجي فيستطيع نسخ المشروع وتشغيل التجربة على نسخته. يحتاج تنزيل ملف النتائج من واجهة GitHub إلى تسجيل الدخول. لا يلزم اشتراك ذكاء اصطناعي مدفوع أو كمبيوتر لمشاهدة التقرير.
 
 يعيد العرض اختبار 8 أمثلة اصطناعية، وإصلاح اصطناعي قبل/بعد، والمشكلة البرمجية الحقيقية التي أصلحها Qwen سابقاً في [PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17). **العرض لا يشغّل Qwen مجدداً ولا يكتشف عيوباً جديدة من تلقاء نفسه.** راجع [دليل التجربة](docs/PUBLIC_DEMO.md).
 
@@ -18,7 +18,7 @@
 - تجارب اصطناعية قابلة لإعادة الاختبار؛ لا تثبت نجاحاً عاماً على كل المشاريع.
 
 ## كيف أجرّبه؟
-من GitHub افتح Actions ثم Research Lab - Persistent Missions ثم Run workflow، ولا تضع معلومات سرية في الهدف. لتجربة نموذج مجاني اختر Zero-Key Local Qwen Research. راجع [البدء السريع](QUICKSTART.md).
+إذا كنت مالك المستودع، فمن GitHub افتح Actions ثم Research Lab - Persistent Missions ثم Run workflow، ولا تضع معلومات سرية في الهدف. لتجربة نموذج مجاني اختر Zero-Key Local Qwen Research. راجع [البدء السريع](QUICKSTART.md).
 
 ## مجتمع المشروع
 [المساهمة](CONTRIBUTING.md) | [خريطة الطريق](ROADMAP.md) | [الحوكمة](GOVERNANCE.md) | [الأمن](SECURITY.md) | [حدود العمل](docs/PROJECT_SCOPE.md)

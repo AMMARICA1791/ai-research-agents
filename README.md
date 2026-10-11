@@ -8,7 +8,7 @@ We are building a reproducible Python research lab that inspects source, records
 
 ## Try the verified demo in one minute
 
-**[Run the Public One-Click Proof Tour on GitHub](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml)** — choose **Run workflow**, select **main**, then read the run's **Summary**. No paid AI API key, local installation or private repository access needed.
+**[View the Public Proof Tour on GitHub](https://github.com/AMMARICA1791/ai-research-agents/actions/workflows/public-demo.yml)** — open the latest **successful run** and read its **Summary**. Anyone can inspect the public run without installing software. Only maintainers with repository write access can use **Run workflow**; outside developers can clone or fork the repository to rerun it. Downloading an artifact through the GitHub website requires signing in. No paid AI API key is needed.
 
 The demo independently rechecks 8 synthetic scanner cases, a synthetic red/green fix, and the historical real-source GitHub URL regression corrected in **[PR #17](https://github.com/AMMARICA1791/ai-research-agents/pull/17)**. **It does not rerun Qwen or discover new bugs**: the original model-authored patch is preserved in PR #17. See [the one-minute guide](docs/PUBLIC_DEMO.md) and [GitHub discovery setup](docs/GITHUB_DISCOVERY_SETUP.md).
 
@@ -34,7 +34,7 @@ python main.py
 
 Local UI: http://127.0.0.1:8000. Windows users can use their normal Python environment. The basic scanner does not need an LLM key.
 
-**Tablet without a laptop:** Open GitHub **Actions → Research Lab - Persistent Missions → Run workflow**. Use non-sensitive goals only: public Actions artifacts can contain report details. See [QUICKSTART.md](QUICKSTART.md).
+**Repository maintainers on a tablet:** Open GitHub **Actions → Research Lab - Persistent Missions → Run workflow**. Use non-sensitive goals only: public Actions artifacts can contain report details. See [QUICKSTART.md](QUICKSTART.md).
 
 ## What is implemented?
 - AST inspection and conservative dependency mapping.

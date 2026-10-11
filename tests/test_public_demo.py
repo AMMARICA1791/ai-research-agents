@@ -57,3 +57,13 @@ def test_fixture_line_patterns_remain_exact():
     source = (ROOT / TARGET).read_text(encoding="utf-8")
     assert source.count(SAFE_LINE) == 1
     assert HISTORICAL_LINE not in source
+
+
+def test_public_instructions_distinguish_viewers_from_workflow_operators():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    guide = (ROOT / "docs/PUBLIC_DEMO.md").read_text(encoding="utf-8")
+    quick = (ROOT / "QUICKSTART.md").read_text(encoding="utf-8")
+    for text in (readme, guide, quick):
+        assert "successful run" in text
+        assert "write access" in text
+    assert "Sign in to GitHub" in guide
