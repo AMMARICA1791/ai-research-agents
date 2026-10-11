@@ -21,6 +21,7 @@ import requests
 
 from .dependency import analyze_internal_dependencies
 from .inspector import ALLOWED, IGNORED, MAX_FILES, MAX_SOURCE_BYTES, PRIVATE, inspect_repository
+from .triage import build_work_orders
 
 MAX_ZIP_BYTES = 10_000_000
 MAX_UNPACKED_BYTES = 30_000_000
@@ -215,6 +216,7 @@ def audit_public_repository(repository_url: str, ref: str = "HEAD") -> dict:
             for level in ("high", "medium", "low")
         },
         "findings": findings,
+        "review_queue": build_work_orders(f"https://github.com/{owner}/{name}", sha, findings),
         "dependencies": {"module_count": deps["module_count"],
                          "edge_count": deps["edge_count"],
                          "cycles": deps["cycles"]},
