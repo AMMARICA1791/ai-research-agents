@@ -10,6 +10,9 @@ on:
       - 'research/two_paper_gate.py'
       - 'research/scientific_acceptance.py'
       - 'research/scientific_comparison_engine.py'
+      - 'research/bounded_entailment.py'
+      - 'tests/test_bounded_entailment.py'
+      - 'tests/fixtures/bounded_entailment_cases.json'
       - 'tests/test_scientific_comparison_engine.py'
       - 'tests/test_scientific_acceptance.py'
       - 'tests/test_two_paper_gate.py'
@@ -34,7 +37,7 @@ jobs:
           python-version: '3.11'
       - run: |
           python -m pip install pytest==8.3.2
-          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py tests/test_primary_pdf_audit.py tests/test_independent_evidence_review.py tests/test_claim_scope_review.py tests/test_two_paper_gate.py tests/test_scientific_acceptance.py tests/test_scientific_comparison_engine.py
+          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py tests/test_primary_pdf_audit.py tests/test_independent_evidence_review.py tests/test_claim_scope_review.py tests/test_two_paper_gate.py tests/test_scientific_acceptance.py tests/test_scientific_comparison_engine.py tests/test_bounded_entailment.py
 
   primary-source:
     needs: offline-provenance
@@ -53,6 +56,7 @@ jobs:
           curl --fail --location --retry 3 --retry-all-errors --max-time 120 'https://arxiv.org/pdf/astro-ph/0002337' -o results/type-ia.pdf
           pdftotext -layout results/type-ia.pdf results/type-ia.txt
           python -m research.two_paper_gate --core-collapse results/primary.txt --type-ia results/type-ia.txt --output results/two-paper-comparison.json
+          python -m research.bounded_entailment --cases tests/fixtures/bounded_entailment_cases.json --output results/bounded-entailment-benchmark.json
           python -m research.scientific_comparison_engine --core-collapse results/primary.txt --type-ia results/type-ia.txt --output results/scientific-comparison.json
           python -m research.scientific_acceptance --comparison results/two-paper-comparison.json --output results/scientific-acceptance.json
           sha256sum results/primary.pdf results/primary.txt | tee results/source-digests.txt
@@ -71,5 +75,6 @@ jobs:
             results/two-paper-comparison.json
             results/scientific-acceptance.json
             results/scientific-comparison.json
+            results/bounded-entailment-benchmark.json
             results/source-digests.txt
           if-no-files-found: warn
