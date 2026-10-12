@@ -44,7 +44,11 @@ def sentences(text):
 def analyze(text):
     if len(text.strip())<10000: raise ValueError("original full-text source required")
     items={axis:[] for axis in AXES}
-    seen=set()\n    for page,chunk in sentences(text):\n        fingerprint=re.sub(r"\\W+","",chunk).lower()\n        if fingerprint in seen: continue\n        seen.add(fingerprint)
+    seen=set()
+    for page,chunk in sentences(text):
+        fingerprint=re.sub(r"\W+","",chunk).lower()
+        if fingerprint in seen: continue
+        seen.add(fingerprint)
         if not SUBJECT.search(chunk): continue
         for axis,pattern in AXES.items():
             if re.search(pattern,chunk,re.I) and len(items[axis])<5:
