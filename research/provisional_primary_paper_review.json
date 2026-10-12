@@ -5,15 +5,284 @@
   "source_artifact_id": 11778856375,
   "review_basis": "Verbatim excerpts and PDF page anchors from CI artifact; provisional assistant text review, not an independent domain-expert gold standard.",
   "cases": [
-    {"case_index": 7, "source": "massive_star_core_collapse", "pdf_page": 1, "role": "LIMITATION", "claim": "Uncertain explosion mechanism limits predicted abundances of certain isotopes.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
-    {"case_index": 15, "source": "type_ia", "pdf_page": 1, "role": "FRONT_MATTER", "claim": "Publication metadata and article title establish a scientific conclusion.", "judgment": "NOT_EVIDENCE", "review_status": "PROVISIONAL"},
-    {"case_index": 16, "source": "type_ia", "pdf_page": 1, "role": "METHOD", "claim": "Authors calculate explosive nucleosynthesis for differing deflagration speeds and ignition densities.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
-    {"case_index": 19, "source": "type_ia", "pdf_page": 2, "role": "METHOD", "claim": "Authors performed calculations involving slow deflagration and delayed detonation or fast deflagration.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
-    {"case_index": 20, "source": "type_ia", "pdf_page": 1, "role": "RESULT", "claim": "Some neutron-rich iron-group isotope abundances are sensitive to electron capture in central layers.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
-    {"case_index": 23, "source": "type_ia", "pdf_page": 1, "role": "RESULT", "claim": "The models favor transition densities slightly below 2.2e7 g/cm3.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
-    {"case_index": 27, "source": "type_ia", "pdf_page": 3, "role": "RATIONALE", "claim": "Flame speed is identified as relevant to nucleosynthesis outcome.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
-    {"case_index": 29, "source": "type_ia", "pdf_page": 6, "role": "RESULT_WITH_UNCERTAINTY", "claim": "Some isotope ratios fall within a factor of two to three of solar ratios in the discussed model context.", "judgment": "CONTEXT_REQUIRED", "review_status": "PROVISIONAL"}
+    {
+      "case_index": 0,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "METHOD",
+      "claim": "Paper models 78 supernova explosions.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 1,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "SCOPE",
+      "claim": "Isotope synthesis and parameter sensitivity are discussed.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 2,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 2,
+      "role": "METHOD",
+      "claim": "Light curves are calculated for the models.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 3,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 2,
+      "role": "METHOD",
+      "claim": "Extended isotope network is used for model calibration.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 4,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 2,
+      "role": "METHOD_WITH_UNCERTAINTY",
+      "claim": "Model-network comparison reports agreement for lighter isotopes with an exception.",
+      "judgment": "CONTEXT_REQUIRED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 5,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "SCOPE",
+      "claim": "Isotope synthesis and parameter sensitivity are discussed.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 6,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "RESULT_WITH_UNCERTAINTY",
+      "claim": "Some explosions can produce reduced heavy-element yields and black-hole remnants.",
+      "judgment": "CONTEXT_REQUIRED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 7,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "LIMITATION",
+      "claim": "Explosion mechanism uncertainty affects predictions of some isotopic abundances.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 8,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 2,
+      "role": "RESULT_SCOPE",
+      "claim": "Yields for stable isotopes below germanium are presented across metallicities.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 9,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 2,
+      "role": "SCOPE",
+      "claim": "Metallicity dependence is discussed, with broader comparison deferred.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 10,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "METHOD",
+      "claim": "Nucleosynthesis includes time-dependent convection in model zones.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 11,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "SCOPE",
+      "claim": "Isotope synthesis and parameter sensitivity are discussed.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 12,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 1,
+      "role": "LIMITATION",
+      "claim": "Explosion mechanism uncertainty affects predictions of some isotopic abundances.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 13,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 2,
+      "role": "SCOPE",
+      "claim": "Metallicity dependence is discussed, with broader comparison deferred.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 14,
+      "source": "massive_star_core_collapse",
+      "pdf_page": 16,
+      "role": "CONDITIONAL_DISCUSSION",
+      "claim": "Certain nitrogen/oxygen ratios may depend on high stellar metallicity.",
+      "judgment": "CONTEXT_REQUIRED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 15,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "FRONT_MATTER",
+      "claim": "Publication metadata and article title establish a scientific conclusion.",
+      "judgment": "NOT_EVIDENCE",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 16,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "METHOD",
+      "claim": "Authors calculate nucleosynthesis across deflagration speeds and ignition densities.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 17,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "METHOD",
+      "claim": "Yields from different combustion scenarios are compared with solar isotope abundances.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 18,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "RESULT",
+      "claim": "Nickel production and elemental ratios depend on transition density in the models.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 19,
+      "source": "type_ia",
+      "pdf_page": 2,
+      "role": "METHOD",
+      "claim": "Authors perform nucleosynthesis calculations for alternative deflagration/detonation scenarios.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 20,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "RESULT",
+      "claim": "Some neutron-rich iron-group isotopes are sensitive to electron capture.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 21,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "METHOD",
+      "claim": "Yields from different combustion scenarios are compared with solar isotope abundances.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 22,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "RESULT",
+      "claim": "Nickel production and elemental ratios depend on transition density in the models.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 23,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "RESULT",
+      "claim": "Models favor transition densities slightly below a reported numerical threshold.",
+      "judgment": "CONTEXT_REQUIRED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 24,
+      "source": "type_ia",
+      "pdf_page": 3,
+      "role": "SECTION_OVERVIEW",
+      "claim": "Text previews organization of calculations and results, not a result itself.",
+      "judgment": "NOT_EVIDENCE",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 25,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "RESULT",
+      "claim": "Some neutron-rich iron-group isotopes are sensitive to electron capture.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 26,
+      "source": "type_ia",
+      "pdf_page": 1,
+      "role": "RESULT",
+      "claim": "Nickel production and elemental ratios depend on transition density in the models.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 27,
+      "source": "type_ia",
+      "pdf_page": 3,
+      "role": "RATIONALE",
+      "claim": "Flame speed is identified as relevant to nucleosynthesis outcomes.",
+      "judgment": "DIRECTLY_STATED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 28,
+      "source": "type_ia",
+      "pdf_page": 6,
+      "role": "CONDITIONAL_DISCUSSION",
+      "claim": "A conditional assumption is made about solar proportions from supernova sources.",
+      "judgment": "CONTEXT_REQUIRED",
+      "review_status": "PROVISIONAL"
+    },
+    {
+      "case_index": 29,
+      "source": "type_ia",
+      "pdf_page": 6,
+      "role": "RESULT_WITH_UNCERTAINTY",
+      "claim": "Certain isotope ratios are reported within a factor of two to three of solar in model context.",
+      "judgment": "CONTEXT_REQUIRED",
+      "review_status": "PROVISIONAL"
+    }
   ],
   "scientific_acceptance": "NOT_PASSED",
-  "limitations": ["Subset of 8 out of 30 cases; no independently adjudicated semantic accuracy", "Case indices refer to a specific CI artifact, not stable universal identifiers", "PDF page numbers are physical extracted pages, not necessarily journal pagination", "No quantitative attribution of Earth's iron to stellar source classes"]
+  "limitations": [
+    "Subset of 8 out of 30 cases; no independently adjudicated semantic accuracy",
+    "Case indices refer to a specific CI artifact, not stable universal identifiers",
+    "PDF page numbers are physical extracted pages, not necessarily journal pagination",
+    "No quantitative attribution of Earth's iron to stellar source classes",
+    "Some verbatim passages recur across extraction axes and must not be counted as independent evidence.",
+    "Judgments are provisional textual interpretations, not independently verified expert ground truth."
+  ]
 }
