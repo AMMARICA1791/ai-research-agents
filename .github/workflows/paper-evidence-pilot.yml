@@ -7,6 +7,8 @@ on:
     paths:
       - 'research/paper_evidence.py'
       - 'tests/test_paper_evidence.py'
+      - 'tests/test_primary_paper_provenance.py'
+      - 'tests/fixtures/woosley_weaver_1995_primary_excerpt.txt'
       - 'tests/fixtures/iron_synthetic_excerpt.txt'
       - '.github/workflows/paper-evidence-pilot.yml'
 
@@ -25,7 +27,7 @@ jobs:
       - name: Verify quote matching (offline)
         run: |
           python -m pip install pytest==8.3.2
-          python -m pytest -q tests/test_paper_evidence.py
+          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py
       - name: Install local model runtime
         run: |
           curl -fsSL https://ollama.com/install.sh -o /tmp/ollama-install.sh
