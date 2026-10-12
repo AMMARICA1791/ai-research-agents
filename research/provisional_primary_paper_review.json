@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "PROVISIONAL_NOT_INDEPENDENTLY_ADJUDICATED",
+  "source_run": 38320191188,
+  "source_artifact_id": 11778856375,
+  "review_basis": "Verbatim excerpts and PDF page anchors from CI artifact; provisional assistant text review, not an independent domain-expert gold standard.",
+  "cases": [
+    {"case_index": 7, "source": "massive_star_core_collapse", "pdf_page": 1, "role": "LIMITATION", "claim": "Uncertain explosion mechanism limits predicted abundances of certain isotopes.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
+    {"case_index": 15, "source": "type_ia", "pdf_page": 1, "role": "FRONT_MATTER", "claim": "Publication metadata and article title establish a scientific conclusion.", "judgment": "NOT_EVIDENCE", "review_status": "PROVISIONAL"},
+    {"case_index": 16, "source": "type_ia", "pdf_page": 1, "role": "METHOD", "claim": "Authors calculate explosive nucleosynthesis for differing deflagration speeds and ignition densities.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
+    {"case_index": 19, "source": "type_ia", "pdf_page": 2, "role": "METHOD", "claim": "Authors performed calculations involving slow deflagration and delayed detonation or fast deflagration.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
+    {"case_index": 20, "source": "type_ia", "pdf_page": 1, "role": "RESULT", "claim": "Some neutron-rich iron-group isotope abundances are sensitive to electron capture in central layers.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
+    {"case_index": 23, "source": "type_ia", "pdf_page": 1, "role": "RESULT", "claim": "The models favor transition densities slightly below 2.2e7 g/cm3.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
+    {"case_index": 27, "source": "type_ia", "pdf_page": 3, "role": "RATIONALE", "claim": "Flame speed is identified as relevant to nucleosynthesis outcome.", "judgment": "DIRECTLY_STATED", "review_status": "PROVISIONAL"},
+    {"case_index": 29, "source": "type_ia", "pdf_page": 6, "role": "RESULT_WITH_UNCERTAINTY", "claim": "Some isotope ratios fall within a factor of two to three of solar ratios in the discussed model context.", "judgment": "CONTEXT_REQUIRED", "review_status": "PROVISIONAL"}
+  ],
+  "scientific_acceptance": "NOT_PASSED",
+  "limitations": ["Subset of 8 out of 30 cases; no independently adjudicated semantic accuracy", "Case indices refer to a specific CI artifact, not stable universal identifiers", "PDF page numbers are physical extracted pages, not necessarily journal pagination", "No quantitative attribution of Earth's iron to stellar source classes"]
+}
