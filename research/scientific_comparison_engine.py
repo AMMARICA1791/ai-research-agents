@@ -11,7 +11,7 @@ from pathlib import Path
 
 AXES = {
  "methods":r"\b(?:method|model|simulation|calculation|hydrodynamic|deflagration|detonation)\b",
- "results":r"\b(?:yield|abundance|production|result|synthesi[sz])\b",
+ "results":r"\b(?:yields?|abundances?|production|results?|synthesi[sz])\b",
  "limitations":r"\b(?:uncertaint\w*|sensitive|sensitivity|depend\w*|assum\w*|limitation|mass cut)\b",
 }
 SUBJECT = re.compile(r"\b(?:iron[ -]group|nucleosynthesis|nickel|isotop\w*|\bFe\b|supernova)\b",re.I)
