@@ -38,6 +38,36 @@ jobs:
             sleep 1
           done
           timeout 300 ollama pull qwen2.5:0.5b
+      - name: Extract and analyze real primary paper PDF
+        shell: bash
+        run: |
+          mkdir -p results
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl --fail --location --retry 2 --max-time 90 'https://articles.adsabs.harvard.edu/pdf/1995ApJS..101..181W' -o results/woosley-weaver-1995.pdf
+          file results/woosley-weaver-1995.pdf
+          pdfinfo results/woosley-weaver-1995.pdf | head -n 16
+          pdftotext -layout results/woosley-weaver-1995.pdf results/woosley-weaver-1995.txt
+          sha256sum results/woosley-weaver-1995.pdf results/woosley-weaver-1995.txt | tee results/source-digests.txt
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('results/woosley-weaver-1995.txt').read_text(errors='replace')
+          # Actual PDF text; no prefabricated answer, no synthetic fixture.
+          excerpt = text[:12000]
+          if len(excerpt.strip()) < 500:
+              raise SystemExit('PDF_TEXT_EXTRACTION_FAILED: too little text; scanned PDF may require OCR')
+          Path('results/real-paper-excerpt.txt').write_text(excerpt)
+          print('PDF_TEXT_EXTRACTED_CHARS', len(text), flush=True)
+          PY
+          python -m research.paper_evidence --source results/real-paper-excerpt.txt --output results/real-paper-evidence.json
+          python - <<'PY'
+          import json
+          from research.paper_evidence import quote_quality_gate
+          data = json.load(open('results/real-paper-evidence.json'))
+          gate = quote_quality_gate(data['evidence'])
+          print('REAL_PAPER_QUOTE_GATE', gate, flush=True)
+          assert gate['passed'], 'REAL_PAPER_EVIDENCE_GATE_FAILED: automated real-source extraction below threshold'
+          PY
       - name: Analyze clearly labeled synthetic excerpt
         run: |
           python -m research.paper_evidence --source tests/fixtures/iron_synthetic_excerpt.txt --output results/paper-evidence.json
@@ -62,5 +92,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: source-grounded-excerpt-pilot
-          path: results/paper-evidence.json
+          path: |
+            results/paper-evidence.json
+            results/real-paper-evidence.json
+            results/source-digests.txt
+            results/real-paper-excerpt.txt
           if-no-files-found: warn
