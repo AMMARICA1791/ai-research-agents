@@ -1,100 +1,54 @@
-name: Source-Grounded Paper Excerpt Pilot
+name: Primary Paper Evidence Audit
 
 on:
   workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
-      - 'research/paper_evidence.py'
+      - 'research/primary_pdf_audit.py'
+      - 'tests/test_primary_pdf_audit.py'
       - 'tests/test_paper_evidence.py'
       - 'tests/test_primary_paper_provenance.py'
-      - 'tests/fixtures/woosley_weaver_1995_primary_excerpt.txt'
-      - 'tests/fixtures/iron_synthetic_excerpt.txt'
       - '.github/workflows/paper-evidence-pilot.yml'
 
 permissions:
   contents: read
 
 jobs:
-  excerpt-pilot:
+  offline-provenance:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Verify quote matching (offline)
-        run: |
+      - run: |
           python -m pip install pytest==8.3.2
-          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py
-      - name: Install local model runtime
-        run: |
-          curl -fsSL https://ollama.com/install.sh -o /tmp/ollama-install.sh
-          sh /tmp/ollama-install.sh
-          OLLAMA_HOST=127.0.0.1:11434 ollama serve > /tmp/ollama.log 2>&1 &
-          for i in $(seq 1 40); do
-            curl -fsS http://127.0.0.1:11434/api/tags >/dev/null && break
-            sleep 1
-          done
-          timeout 300 ollama pull qwen2.5:0.5b
-      - name: Extract and analyze real primary paper PDF
-        shell: bash
+          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py tests/test_primary_pdf_audit.py
+
+  primary-source:
+    if: github.event_name == 'workflow_dispatch'
+    needs: offline-provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and extract primary PDF text
         run: |
           mkdir -p results
           sudo apt-get update -qq
           sudo apt-get install -y -qq poppler-utils
-          curl --fail --location --retry 2 --max-time 90 'https://articles.adsabs.harvard.edu/pdf/1995ApJS..101..181W' -o results/woosley-weaver-1995.pdf
-          file results/woosley-weaver-1995.pdf
-          pdfinfo results/woosley-weaver-1995.pdf | head -n 16
-          pdftotext -layout results/woosley-weaver-1995.pdf results/woosley-weaver-1995.txt
-          sha256sum results/woosley-weaver-1995.pdf results/woosley-weaver-1995.txt | tee results/source-digests.txt
-          python - <<'PY'
-          from pathlib import Path
-          text = Path('results/woosley-weaver-1995.txt').read_text(errors='replace')
-          # Actual PDF text; no prefabricated answer, no synthetic fixture.
-          excerpt = text[:12000]
-          if len(excerpt.strip()) < 500:
-              raise SystemExit('PDF_TEXT_EXTRACTION_FAILED: too little text; scanned PDF may require OCR')
-          Path('results/real-paper-excerpt.txt').write_text(excerpt)
-          print('PDF_TEXT_EXTRACTED_CHARS', len(text), flush=True)
-          PY
-          python -m research.paper_evidence --source results/real-paper-excerpt.txt --output results/real-paper-evidence.json
-          python - <<'PY'
-          import json
-          from research.paper_evidence import quote_quality_gate
-          data = json.load(open('results/real-paper-evidence.json'))
-          gate = quote_quality_gate(data['evidence'])
-          print('REAL_PAPER_QUOTE_GATE', gate, flush=True)
-          assert gate['passed'], 'REAL_PAPER_EVIDENCE_GATE_FAILED: automated real-source extraction below threshold'
-          PY
-      - name: Analyze clearly labeled synthetic excerpt
-        run: |
-          python -m research.paper_evidence --source tests/fixtures/iron_synthetic_excerpt.txt --output results/paper-evidence.json
-          python - <<'PY'
-          import json
-          d=json.load(open("results/paper-evidence.json"))
-          assert d["scientific_truth_verified"] is False
-          assert set(d["evidence"]) == {"hypothesis","methods","evidence","findings","limitations"}
-          from research.paper_evidence import quote_quality_gate
-          gate = quote_quality_gate(d["evidence"])
-          print("MATCHED_QUOTATIONS=" + str(gate["matched"]) + "/5", flush=True)
-          for k,v in d["evidence"].items():
-              print(k, v["status"], flush=True)
-          assert gate["passed"], (
-              "EVIDENCE_QUALITY_GATE_FAILED: fewer than 4/5 exact source quotes; "
-              "this is a model-output quality failure, not a successful analysis"
-          )
-          print("PILOT_QUOTE_QUALITY_GATE_PASSED", flush=True)
-          PY
-      - name: Publish evidence audit
+          curl --fail --location --retry 3 --retry-all-errors --max-time 120 'https://articles.adsabs.harvard.edu/pdf/1995ApJS..101..181W' -o results/primary.pdf
+          pdfinfo results/primary.pdf | head -n 16
+          pdftotext -layout results/primary.pdf results/primary.txt
+          sha256sum results/primary.pdf results/primary.txt | tee results/source-digests.txt
+          python -m research.primary_pdf_audit --source results/primary.txt --output results/primary-evidence-audit.json
+      - name: Publish primary-source audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: source-grounded-excerpt-pilot
+          name: primary-paper-evidence-audit
           path: |
-            results/paper-evidence.json
-            results/real-paper-evidence.json
+            results/primary-evidence-audit.json
             results/source-digests.txt
-            results/real-paper-excerpt.txt
           if-no-files-found: warn
