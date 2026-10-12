@@ -6,7 +6,7 @@ This produces observable predictions for review, with source and page.
 import argparse
 import json
 from pathlib import Path
-from research.bounded_entailment import classify
+from research.bounded_entailment import classify\nfrom research.scientific_comparison_engine import is_front_matter
 
 def matched_claims(quote):
     from research.bounded_entailment import CLAIMS
@@ -21,7 +21,7 @@ def evaluate(report):
         for axis,items in record["axes"].items():
             for item in items[:5]:
                 quote=item["verbatim_text"]
-                claims=matched_claims(quote)
+                excluded=is_front_matter(quote)\n                claims=[] if excluded else matched_claims(quote)
                 rows.append({"source":source,"axis":axis,"pdf_page":item["pdf_page"],
                              "verbatim_text":quote,"candidate_claims":claims,
                              "classifications":[{"claim_id":claim,
@@ -29,7 +29,7 @@ def evaluate(report):
                                                 for claim in claims],
                              "ground_truth":"UNLABELED",
                              "semantic_correctness":"NOT_ASSESSED",
-                             "claim_alignment":"LEXICAL_CANDIDATE" if claims else "NO_MATCHING_CLAIM"})
+                             "claim_alignment":"EXCLUDED_FRONT_MATTER" if excluded else ("LEXICAL_CANDIDATE" if claims else "NO_MATCHING_CLAIM"),\n                             "evidence_role":"UNDETERMINED_PENDING_EXPERT_REVIEW"})
     return {"test":"real_primary_paper_claim_evidence_probe",
             "total_verbatim_cases":len(rows),"cases":rows,
             "scientific_semantic_accuracy":"NOT_MEASURABLE_WITHOUT_EXPERT_LABELS",
