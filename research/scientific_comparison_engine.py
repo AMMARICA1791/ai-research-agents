@@ -10,24 +10,41 @@ import re
 from pathlib import Path
 
 AXES = {
- "methods":r"\b(?:method|model|simulation|calculation|hydrodynamic|deflagration|detonation)\b",
+ "methods":r"\b(?:methods?|models?|simulations?|calculations?|hydrodynamic|deflagration|detonation)\b",
  "results":r"\b(?:yields?|abundances?|production|results?|synthesi[sz])\b",
- "limitations":r"\b(?:uncertaint\w*|sensitive|sensitivity|depend\w*|assum\w*|limitation|mass cut)\b",
+ "limitations":r"\b(?:uncertain(?:ty|ties)?|sensitive|sensitivity|depend\w*|assum\w*|limitations?|mass cut)\b",
 }
 SUBJECT = re.compile(r"\b(?:iron[ -]group|nucleosynthesis|nickel|isotop\w*|\bFe\b|supernova)\b",re.I)
 
 def sentences(text):
-    # PDF page boundaries retained; collapse PDF line breaks for traceability.
+    """Keep page references; reject likely two-column row interleaving.
+
+    The source should be extracted with pdftotext -raw, which follows PDF
+    content-stream order rather than merging horizontal rows (-layout).
+    """
     for page_no,page in enumerate(text.split("\f"),1):
-        cleaned=re.sub(r"\s+"," ",page).strip()
-        for chunk in re.split(r"(?<=[.!?])\s+(?=[A-Z(])",cleaned):
-            if 40<=len(chunk)<=850:
-                yield page_no,chunk
+        # Never flatten multiple text columns from the same physical line.
+        lines=[line.strip() for line in page.splitlines() if line.strip()]
+        paragraph=[]
+        for line in lines+[""]:
+            # Layout-style gaps indicate multiple columns or tables.
+            bad=(bool(re.search(r"\S {5,}\S",line)) or
+                 bool(re.search(r"\.{5,}",line)))
+            if not line or bad:
+                if paragraph:
+                    cleaned=re.sub(r"\s+"," "," ".join(paragraph)).strip()
+                    for chunk in re.split(r"(?<=[.!?])\s+(?=[A-Z(])",cleaned):
+                        if 40<=len(chunk)<=850 and not re.search(r"\.{5,}",chunk):
+                            yield page_no,chunk
+                paragraph=[]
+                continue
+            paragraph.append(line)
+
 
 def analyze(text):
     if len(text.strip())<10000: raise ValueError("original full-text source required")
     items={axis:[] for axis in AXES}
-    for page,chunk in sentences(text):
+    seen=set()\n    for page,chunk in sentences(text):\n        fingerprint=re.sub(r"\\W+","",chunk).lower()\n        if fingerprint in seen: continue\n        seen.add(fingerprint)
         if not SUBJECT.search(chunk): continue
         for axis,pattern in AXES.items():
             if re.search(pattern,chunk,re.I) and len(items[axis])<5:
