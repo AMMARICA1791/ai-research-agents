@@ -14,3 +14,22 @@ def test_exact_line_quote_required():
 def test_rejects_fabricated_quote_and_bool_line():
     raw = {"evidence": {"claim": "proof", "quote": "iron came from Mars", "line": True}}
     assert validate(raw, "iron came from Mars")["evidence"]["status"] == "unverified"
+
+
+def test_quality_gate_fails_for_one_of_five():
+    from research.paper_evidence import quote_quality_gate
+    evidence = {k: {"status": "unverified"} for k in FIELDS}
+    evidence["limitations"]["status"] = "quote_matched_not_fact_verified"
+    gate = quote_quality_gate(evidence)
+    assert gate["matched"] == 1
+    assert gate["passed"] is False
+    assert gate["scientific_truth_verified"] is False
+
+
+def test_quality_gate_requires_four_of_five():
+    from research.paper_evidence import quote_quality_gate
+    evidence = {k: {"status": "quote_matched_not_fact_verified"} for k in FIELDS}
+    evidence["hypothesis"]["status"] = "unverified"
+    assert quote_quality_gate(evidence)["passed"] is True
+    evidence["methods"]["status"] = "unverified"
+    assert quote_quality_gate(evidence)["passed"] is False
