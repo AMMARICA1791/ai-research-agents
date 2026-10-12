@@ -54,9 +54,9 @@ jobs:
           sudo apt-get install -y -qq poppler-utils
           curl --fail --location --retry 3 --retry-all-errors --max-time 120 'https://articles.adsabs.harvard.edu/pdf/1995ApJS..101..181W' -o results/primary.pdf
           pdfinfo results/primary.pdf | head -n 16
-          pdftotext -layout results/primary.pdf results/primary.txt
+          pdftotext -raw results/primary.pdf results/primary.txt
           curl --fail --location --retry 3 --retry-all-errors --max-time 120 'https://arxiv.org/pdf/astro-ph/0002337' -o results/type-ia.pdf
-          pdftotext -layout results/type-ia.pdf results/type-ia.txt
+          pdftotext -raw results/type-ia.pdf results/type-ia.txt
           python -m research.two_paper_gate --core-collapse results/primary.txt --type-ia results/type-ia.txt --output results/two-paper-comparison.json
           python -m research.bounded_entailment --cases tests/fixtures/bounded_entailment_cases.json --output results/bounded-entailment-benchmark.json
           python -m research.scientific_comparison_engine --core-collapse results/primary.txt --type-ia results/type-ia.txt --output results/scientific-comparison.json
