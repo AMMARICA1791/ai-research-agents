@@ -15,7 +15,7 @@ def synthetic_probe():
 
 def test_review_is_provisional_and_traceable():
     result = validate(REVIEW, synthetic_probe())
-    assert result["reviewed"] == 8
+    assert result["reviewed"] == 30
     assert result["independent_expert_labels"] == 0
     assert result["scientific_acceptance"] == "NOT_PASSED"
 
