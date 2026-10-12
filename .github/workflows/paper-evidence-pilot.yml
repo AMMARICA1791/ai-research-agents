@@ -27,7 +27,6 @@ jobs:
           python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py tests/test_primary_pdf_audit.py
 
   primary-source:
-    if: github.event_name == 'workflow_dispatch'
     needs: offline-provenance
     runs-on: ubuntu-latest
     timeout-minutes: 12
