@@ -30,6 +30,29 @@ def validate(raw, source):
     return result
 
 
+
+def anchor_explicit_labels(source):
+    """Deterministic fixture-only extraction of explicitly labeled source lines.
+
+    This is not semantic extraction and must not be used to claim that an
+    unlabeled research paper has been understood.
+    """
+    result = {field: {"status": "unverified", "reason": "no explicit label"}
+              for field in FIELDS}
+    for number, line in enumerate(source.splitlines(), 1):
+        for field in FIELDS:
+            prefix = field + ":"
+            if line.lower().startswith(prefix):
+                quote = line[len(prefix):].strip()
+                if len(quote) >= 12:
+                    result[field] = {
+                        "status": "quote_matched_not_fact_verified",
+                        "claim": "Verbatim labeled excerpt; no model interpretation",
+                        "quote": quote, "source_line": number,
+                    }
+    return result
+
+
 def quote_quality_gate(evidence, minimum=4):
     """Mechanical provenance gate only; not a scientific entailment test."""
     matched = sum(
