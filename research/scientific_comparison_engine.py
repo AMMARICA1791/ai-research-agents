@@ -16,6 +16,14 @@ AXES = {
 }
 SUBJECT = re.compile(r"\b(?:iron[ -]group|nucleosynthesis|nickel|isotop\w*|\bFe\b|supernova)\b",re.I)
 
+FRONT_MATTER = re.compile(r"\\b(?:keywords?|key words|subject headings|abstract|table of contents)\\s*[:—-]",re.I)
+TITLE_LIKE = re.compile(r"^(?:[A-Z0-9 ,:;()\\-]{25,}|(?:THE |A |AN )[A-Z][A-Za-z ,:;()\\-]{20,})$")
+RESULT_CONTEXT = re.compile(r"\\b(?:yields?|abundances?|production|synthesi[sz]|calculated|computed|produced)\\b",re.I)
+
+def is_front_matter(chunk):
+    head=chunk.strip()[:160]
+    return bool(FRONT_MATTER.search(head) or TITLE_LIKE.fullmatch(head))
+
 def sentences(text):
     """Keep page references; reject likely two-column row interleaving.
 
@@ -49,7 +57,7 @@ def analyze(text):
         fingerprint=re.sub(r"\W+","",chunk).lower()
         if fingerprint in seen: continue
         seen.add(fingerprint)
-        if not SUBJECT.search(chunk): continue
+        if is_front_matter(chunk) or not SUBJECT.search(chunk): continue
         for axis,pattern in AXES.items():
             if re.search(pattern,chunk,re.I) and len(items[axis])<5:
                 items[axis].append({"pdf_page":page,"verbatim_text":chunk,
