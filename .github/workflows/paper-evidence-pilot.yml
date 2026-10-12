@@ -44,12 +44,12 @@ jobs:
           d=json.load(open("results/paper-evidence.json"))
           assert d["scientific_truth_verified"] is False
           assert set(d["evidence"]) == {"hypothesis","methods","evidence","findings","limitations"}
-          verified = [k for k,v in d["evidence"].items()
-                      if v["status"] == "quote_matched_not_fact_verified"]
-          print("MATCHED_QUOTATIONS=" + str(len(verified)) + "/5", flush=True)
+          from research.paper_evidence import quote_quality_gate
+          gate = quote_quality_gate(d["evidence"])
+          print("MATCHED_QUOTATIONS=" + str(gate["matched"]) + "/5", flush=True)
           for k,v in d["evidence"].items():
               print(k, v["status"], flush=True)
-          assert len(verified) >= 4, (
+          assert gate["passed"], (
               "EVIDENCE_QUALITY_GATE_FAILED: fewer than 4/5 exact source quotes; "
               "this is a model-output quality failure, not a successful analysis"
           )
