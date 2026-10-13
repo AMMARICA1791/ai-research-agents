@@ -2,6 +2,11 @@ name: AI News Collection Pilot
 
 on:
   workflow_dispatch:
+    inputs:
+      article_url:
+        description: 'Optional public HTTPS article URL to analyze directly'
+        required: false
+        type: string
   schedule:
     - cron: "17 10 * * *"
 
@@ -20,7 +25,27 @@ jobs:
       - name: Collect public AI headlines
         run: python -m research.ai_news_feed --output research_output/ai_news.json
       - name: Retrieve articles and prepare source dossiers
-        run: python -m research.news_research_pipeline --output research_output/news_research.json --max-articles 3
+        env:
+          ARTICLE_URL: ${{ inputs.article_url }}
+        run: |
+          if [ -n "$ARTICLE_URL" ]; then
+            python -m research.news_research_pipeline --url "$ARTICLE_URL" --output research_output/news_research.json
+          else
+            python -m research.news_research_pipeline --output research_output/news_research.json --max-articles 3
+          fi
+      - name: Show retrieved article count
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('research_output/news_research.json',encoding='utf-8'))
+          retrieved=sum(x['retrieval_status']=='ARTICLE_RETRIEVED' for x in p['article_cases'])
+          print('Article cases:',len(p['article_cases']))
+          print('Retrieved:',retrieved)
+          for x in p['article_cases']:
+              print(x['retrieval_status'], x['url'], x.get('error',''))
+          if retrieved == 0:
+              raise SystemExit('No articles retrieved; cannot claim successful live-source demo')
+          PY
       - name: Display collection summary
         run: |
           python - <<'PY'
