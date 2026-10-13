@@ -1,0 +1,2 @@
+Altogether 78 different model supernova explosions are calculated.
+The synthesis of each isotope is discussed along with its sensitivity to model parameters.

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "title": "Scoped scientific evidence report: iron-group nucleosynthesis",
+  "status": "PROVISIONAL_SOURCE_ANCHORED_NOT_EXPERT_VERIFIED",
+  "question": "What do these two original papers establish about iron-group nucleosynthesis, and what remains unestablished about Earth's iron?",
+  "sources": {
+    "massive_star_core_collapse": {
+      "citation": "Woosley & Weaver (1995), ApJS 101, 181–235",
+      "url": "https://articles.adsabs.harvard.edu/pdf/1995ApJS..101..181W"
+    },
+    "type_ia": {
+      "citation": "Iwamoto et al. (1999), ApJS 125, 439–462",
+      "url": "https://arxiv.org/pdf/astro-ph/0002337"
+    }
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "source": "massive_star_core_collapse",
+      "case_index": 0,
+      "statement": "The paper models 78 supernova explosions.",
+      "kind": "METHOD",
+      "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
+    },
+    {
+      "id": "F2",
+      "source": "massive_star_core_collapse",
+      "case_index": 7,
+      "statement": "The authors identify explosion-mechanism uncertainty as a limitation on predictions for certain isotopic abundances.",
+      "kind": "LIMITATION",
+      "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
+    },
+    {
+      "id": "F3",
+      "source": "massive_star_core_collapse",
+      "case_index": 8,
+      "statement": "The paper presents ejected isotope yields for modeled stars at different metallicities.",
+      "kind": "RESULT_SCOPE",
+      "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
+    },
+    {
+      "id": "F4",
+      "source": "type_ia",
+      "case_index": 16,
+      "statement": "The authors calculate explosive nucleosynthesis for models varying deflagration speeds and ignition densities.",
+      "kind": "METHOD",
+      "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
+    },
+    {
+      "id": "F5",
+      "source": "type_ia",
+      "case_index": 18,
+      "statement": "In the modeled Type Ia scenarios, the total amount of nickel-56 and the Si-Ca/Fe ratio depend on the deflagration-to-detonation transition density.",
+      "kind": "MODEL_RESULT",
+      "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
+    },
+    {
+      "id": "F6",
+      "source": "type_ia",
+      "case_index": 20,
+      "statement": "The modeled abundances of some neutron-rich iron-group isotopes are sensitive to electron capture.",
+      "kind": "MODEL_RESULT",
+      "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
+    }
+  ],
+  "comparison": {
+    "method": "The papers address distinct modeled explosion channels: massive-star explosions versus Chandrasekhar-mass Type Ia explosions.",
+    "results": "Both discuss modeled nucleosynthesis and iron-group-related isotopes, but their yields have not been normalized or quantitatively compared by this laboratory.",
+    "limitations": "Explosion physics and model parameters affect predicted isotope yields. These are source-specific statements, not a demonstrated cross-paper disagreement.",
+    "cross_paper_agreement": "NOT_ESTABLISHED",
+    "quantitative_source_contributions": "NOT_ESTABLISHED"
+  },
+  "earth_iron": {
+    "conclusion": "NOT_ESTABLISHED_BY_THESE_TWO_PAPERS_ALONE",
+    "reason": "Neither this limited two-paper comparison nor the extracted evidence quantifies the provenance of iron incorporated into the proto-solar nebula or Earth. Additional galactic chemical-evolution, solar-system formation, and isotopic evidence is required."
+  },
+  "boundaries": [
+    "The report does not independently verify semantic entailment or full-page context.",
+    "PDF pages refer to physical PDF pages, not necessarily printed journal pages.",
+    "The same excerpt repeated under several axes is one evidence item.",
+    "No inference is made about scriptural interpretation or a unique terrestrial iron source.",
+    "A green CI run validates traceability checks, not scientific truth."
+  ],
+  "scientific_acceptance": "NOT_PASSED",
+  "independent_expert_labels": 0
+}

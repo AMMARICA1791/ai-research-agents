@@ -1,0 +1,46 @@
+{
+  "cases": [
+    {
+      "id": "support-iron",
+      "claim_id": "iron_group_yields",
+      "quote": "The iron-group yields were calculated using the explosion models.",
+      "expected": "SUPPORTED_EXPLICITLY"
+    },
+    {
+      "id": "contradict-iron",
+      "claim_id": "iron_group_yields",
+      "quote": "No iron-group yields were calculated in these models.",
+      "expected": "CONTRADICTED_EXPLICITLY"
+    },
+    {
+      "id": "unsupported-iron",
+      "claim_id": "iron_group_yields",
+      "quote": "The authors discuss explosion energies and stellar masses.",
+      "expected": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "id": "support-nucleo",
+      "claim_id": "nucleosynthesis",
+      "quote": "Explosive nucleosynthesis occurs in supernova explosions.",
+      "expected": "SUPPORTED_EXPLICITLY"
+    },
+    {
+      "id": "contradict-nucleo",
+      "claim_id": "nucleosynthesis",
+      "quote": "No nucleosynthesis occurs in these supernova explosions.",
+      "expected": "CONTRADICTED_EXPLICITLY"
+    },
+    {
+      "id": "unsupported-nucleo",
+      "claim_id": "nucleosynthesis",
+      "quote": "Nucleosynthesis calculations are presented.",
+      "expected": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "id": "unrecognized-claim",
+      "claim_id": "all_earth_iron_supernova",
+      "quote": "All terrestrial iron comes from supernovae.",
+      "expected": "INSUFFICIENT_EVIDENCE"
+    }
+  ]
+}
