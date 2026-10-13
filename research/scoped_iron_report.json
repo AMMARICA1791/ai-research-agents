@@ -50,7 +50,7 @@
       "id": "F5",
       "source": "type_ia",
       "case_index": 18,
-      "statement": "In the modeled Type Ia scenarios, nickel production and some element ratios depend on transition density.",
+      "statement": "In the modeled Type Ia scenarios, the total amount of nickel-56 and the Si-Ca/Fe ratio depend on the deflagration-to-detonation transition density.",
       "kind": "MODEL_RESULT",
       "confidence": "PROVISIONAL_TEXTUAL_SUPPORT"
     },
