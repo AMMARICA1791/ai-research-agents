@@ -16,6 +16,8 @@ on:
       - 'research/validate_provisional_review.py'
       - 'research/evidence_quality_report.py'
       - 'research/scoped_iron_report.json'
+      - 'research/reviewed_iron_claims_baseline.json'
+      - 'research/claim_review_gate.py'
       - 'research/validate_scoped_iron_report.py'
       - 'tests/test_scoped_iron_report.py'
       - 'tests/test_evidence_quality_report.py'
