@@ -3,8 +3,12 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from research.claim_review_gate import enforce
 
-def validate(report, review, probe):
+def validate(report, review, probe, baseline=None):
+    if baseline is None:
+        baseline = json.loads(Path('research/reviewed_iron_claims_baseline.json').read_text())
+    claim_gate = enforce(report, baseline)
     assert report["scientific_acceptance"] == "NOT_PASSED"
     assert report["independent_expert_labels"] == 0
     assert report["earth_iron"]["conclusion"] == "NOT_ESTABLISHED_BY_THESE_TWO_PAPERS_ALONE"
@@ -30,7 +34,7 @@ def validate(report, review, probe):
     assert len(used) >= 2
     assert {x["source"] for x in report["findings"]} == set(report["sources"])
     return {"findings_checked": len(used), "source_count": 2,
-            "independent_expert_labels": 0, "scientific_acceptance": "NOT_PASSED"}
+            "independent_expert_labels": 0, "scientific_acceptance": "NOT_PASSED", "claim_gate": claim_gate["decision"]}
 
 def main():
     p = argparse.ArgumentParser()
