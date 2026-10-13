@@ -18,3 +18,13 @@ def test_keywords_are_not_scientific_evidence():
     assert rows[0]["classifications"]==[]
     assert rows[1]["claim_alignment"]=="LEXICAL_CANDIDATE"
     assert rows[1]["evidence_role"]=="UNDETERMINED_PENDING_EXPERT_REVIEW"
+
+
+def test_publication_metadata_cannot_be_lexical_evidence():
+    record={"sources":{"type_ia":{"axes":{"methods":[
+        {"pdf_page":1,"verbatim_text":"arXiv:astro-ph/0002337v1 17 Feb 2000 Published in the Astrophysical Journal Supplement Series, 1999, v.125, pp.439-462 Preprint typeset using LATEX style emulateapj NUCLEOSYNTHESIS IN CHANDRASEKHAR MASS MODELS FOR TYPE IA SUPERNOVAE"},
+        {"pdf_page":3,"verbatim_text":"After a description of our model calculations in section 2, including initial models and hydrodynamic treatment, we present in section 3 detailed nucleosynthesis results."}
+    ],"results":[],"limitations":[]}}}}
+    rows=evaluate(record)["cases"]
+    assert [x["claim_alignment"] for x in rows]==["EXCLUDED_FRONT_MATTER","EXCLUDED_SECTION_OVERVIEW"]
+    assert all(x["candidate_claims"]==[] and x["classifications"]==[] for x in rows)
