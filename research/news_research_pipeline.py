@@ -11,8 +11,13 @@ from pathlib import Path
 from research.ai_news_feed import gather
 from research.live_news_research import collect, dossier
 
-def run(max_articles=3):
-    inventory = gather(limit=8)
+def run(max_articles=3, url=None):
+    if url:
+        from research.live_news_research import safe_url
+        safe_url(url)
+        inventory = {"stories": [{"title": "User-provided article", "source": "direct_url", "url": url, "published": ""}], "source_errors": {}}
+    else:
+        inventory = gather(limit=8)
     cases = []
     for story in inventory["stories"][:max_articles]:
         case = {"headline": story["title"], "feed_source": story["source"],
@@ -42,10 +47,11 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--output", default="research_output/news_research.json")
     p.add_argument("--max-articles", type=int, default=3)
+    p.add_argument("--url", help="Optional public HTTPS article URL, bypassing feed discovery")
     args = p.parse_args()
     if not 1 <= args.max_articles <= 10:
         p.error("--max-articles must be 1..10")
-    result = run(args.max_articles)
+    result = run(args.max_articles, url=args.url)
     target = Path(args.output)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
