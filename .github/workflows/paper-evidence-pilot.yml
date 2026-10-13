@@ -15,6 +15,9 @@ on:
       - 'research/provisional_primary_paper_review.json'
       - 'research/validate_provisional_review.py'
       - 'research/evidence_quality_report.py'
+      - 'research/scoped_iron_report.json'
+      - 'research/validate_scoped_iron_report.py'
+      - 'tests/test_scoped_iron_report.py'
       - 'tests/test_evidence_quality_report.py'
       - 'tests/test_provisional_review.py'
       - 'tests/test_real_paper_probe.py'
@@ -45,7 +48,7 @@ jobs:
       - run: |
           python -m pip install pytest==8.3.2
           python -m compileall -q research tests
-          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py tests/test_primary_pdf_audit.py tests/test_independent_evidence_review.py tests/test_claim_scope_review.py tests/test_two_paper_gate.py tests/test_scientific_acceptance.py tests/test_scientific_comparison_engine.py tests/test_bounded_entailment.py tests/test_real_paper_probe.py tests/test_provisional_review.py tests/test_evidence_quality_report.py
+          python -m pytest -q tests/test_paper_evidence.py tests/test_primary_paper_provenance.py tests/test_primary_pdf_audit.py tests/test_independent_evidence_review.py tests/test_claim_scope_review.py tests/test_two_paper_gate.py tests/test_scientific_acceptance.py tests/test_scientific_comparison_engine.py tests/test_bounded_entailment.py tests/test_real_paper_probe.py tests/test_provisional_review.py tests/test_evidence_quality_report.py tests/test_scoped_iron_report.py
 
   primary-source:
     needs: offline-provenance
@@ -70,6 +73,7 @@ jobs:
           python -m research.real_paper_probe --comparison results/scientific-comparison.json --output results/real-paper-probe.json
           python -m research.validate_provisional_review --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json
           python -m research.evidence_quality_report --review research/provisional_primary_paper_review.json --output results/evidence-quality.json
+          python -m research.validate_scoped_iron_report --report research/scoped_iron_report.json --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json --output results/scoped-iron-report-validation.json
           python -m research.scientific_acceptance --comparison results/two-paper-comparison.json --output results/scientific-acceptance.json
           sha256sum results/primary.pdf results/primary.txt | tee results/source-digests.txt
           python -m research.primary_pdf_audit --source results/primary.txt --output results/primary-evidence-audit.json
@@ -90,5 +94,6 @@ jobs:
             results/bounded-entailment-benchmark.json
             results/real-paper-probe.json
             results/evidence-quality.json
+            results/scoped-iron-report-validation.json
             results/source-digests.txt
           if-no-files-found: warn
