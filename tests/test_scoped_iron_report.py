@@ -22,13 +22,29 @@ def test_report_rejects_synthetic_excerpt_substitution():
         validate(REPORT, REVIEW, probe)
 
 
-def test_semantically_false_claim_can_pass_existing_validator():
+def test_semantically_false_claim_is_rejected_by_review_gate():
     """Regression exposure: a correct excerpt fingerprint does not validate a claim."""
     import copy
     report = copy.deepcopy(REPORT)
     report["findings"][0]["statement"] = "The paper proves that all iron on Earth originated exclusively in Type Ia supernovae."
-    # Populate genuine excerpts only when supplied by real primary-paper extraction.
-    # The current validator never examines statement text, so this mutation is
-    # undetectable regardless of the verbatim evidence supplied.
-    assert report["findings"][0]["statement"] != REPORT["findings"][0]["statement"]
-    assert "statement" not in __import__("inspect").getsource(validate)
+    from research.claim_review_gate import assess, enforce
+    assert assess(report, REPORT)["decision"] == "ABSTAIN"
+    with pytest.raises(ValueError):
+        enforce(report, REPORT)
+
+def test_new_claim_and_removed_finding_abstain():
+    import copy
+    from research.claim_review_gate import assess
+    missing = copy.deepcopy(REPORT)
+    missing["findings"].pop()
+    assert assess(missing, REPORT)["decision"] == "ABSTAIN"
+    added = copy.deepcopy(REPORT)
+    added["findings"].append({"id":"F7","statement":"Earth's iron is exclusively Type Ia.","source":"type_ia","case_index":16})
+    assert assess(added, REPORT)["decision"] == "ABSTAIN"
+
+def test_original_report_is_only_provisionally_review_bound():
+    from research.claim_review_gate import enforce
+    result = enforce(REPORT, REPORT)
+    assert result["decision"] == "PROVISIONAL_ONLY"
+    assert result["independent_semantic_verification"] is False
+    assert result["scientific_acceptance"] == "NOT_PASSED"
