@@ -20,3 +20,18 @@ def test_report_rejects_synthetic_excerpt_substitution():
                        for r in REVIEW["cases"]]}
     with pytest.raises(AssertionError):
         validate(REPORT, REVIEW, probe)
+
+
+def test_semantically_false_claim_can_pass_existing_validator():
+    """Regression exposure: a correct excerpt fingerprint does not validate a claim."""
+    import copy
+    report = copy.deepcopy(REPORT)
+    report["findings"][0]["statement"] = "The paper proves that all iron on Earth originated exclusively in Type Ia supernovae."
+    probe = {"cases": [{"source": r["source"], "pdf_page": r["pdf_page"],
+                        "verbatim_text": "", "ground_truth": "UNLABELED"}
+                       for r in REVIEW["cases"]]}
+    # Populate genuine excerpts only when supplied by real primary-paper extraction.
+    # The current validator never examines statement text, so this mutation is
+    # undetectable regardless of the verbatim evidence supplied.
+    assert report["findings"][0]["statement"] != REPORT["findings"][0]["statement"]
+    assert "statement" not in __import__("inspect").getsource(validate)
