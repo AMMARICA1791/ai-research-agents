@@ -18,6 +18,7 @@ on:
       - 'research/scoped_iron_report.json'
       - 'research/reviewed_iron_claims_baseline.json'
       - 'research/claim_review_gate.py'
+      - 'research/semantic_review_queue.py'
       - 'research/validate_scoped_iron_report.py'
       - 'tests/test_scoped_iron_report.py'
       - 'tests/test_evidence_quality_report.py'
@@ -75,6 +76,7 @@ jobs:
           python -m research.real_paper_probe --comparison results/scientific-comparison.json --output results/real-paper-probe.json
           python -m research.validate_provisional_review --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json
           python -m research.evidence_quality_report --review research/provisional_primary_paper_review.json --output results/evidence-quality.json
+          python -m research.semantic_review_queue --report research/scoped_iron_report.json --baseline research/reviewed_iron_claims_baseline.json --review research/provisional_primary_paper_review.json --output results/semantic-review-queue.json
           python -m research.validate_scoped_iron_report --report research/scoped_iron_report.json --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json --output results/scoped-iron-report-validation.json
           python -m research.scientific_acceptance --comparison results/two-paper-comparison.json --output results/scientific-acceptance.json
           sha256sum results/primary.pdf results/primary.txt | tee results/source-digests.txt
@@ -97,5 +99,6 @@ jobs:
             results/real-paper-probe.json
             results/evidence-quality.json
             results/scoped-iron-report-validation.json
+            results/semantic-review-queue.json
             results/source-digests.txt
           if-no-files-found: warn
