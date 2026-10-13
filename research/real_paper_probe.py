@@ -5,9 +5,20 @@ This produces observable predictions for review, with source and page.
 """
 import argparse
 import json
+import re
 from pathlib import Path
 from research.bounded_entailment import classify
 from research.scientific_comparison_engine import is_front_matter
+
+PUBLICATION_HEADER = re.compile(r"^\\s*(?:arXiv:|Published in\\b|Preprint typeset\\b)", re.I)
+SECTION_OVERVIEW = re.compile(r"^\\s*After a description of our model calculations\\b", re.I)
+
+def non_evidence_reason(quote):
+    if is_front_matter(quote) or PUBLICATION_HEADER.search(quote):
+        return "FRONT_MATTER"
+    if SECTION_OVERVIEW.search(quote):
+        return "SECTION_OVERVIEW"
+    return None
 
 def matched_claims(quote):
     from research.bounded_entailment import CLAIMS
@@ -22,7 +33,8 @@ def evaluate(report):
         for axis,items in record["axes"].items():
             for item in items[:5]:
                 quote=item["verbatim_text"]
-                excluded=is_front_matter(quote)
+                exclusion_reason=non_evidence_reason(quote)
+                excluded=exclusion_reason is not None
                 claims=[] if excluded else matched_claims(quote)
                 rows.append({"source":source,"axis":axis,"pdf_page":item["pdf_page"],
                              "verbatim_text":quote,"candidate_claims":claims,
@@ -31,7 +43,7 @@ def evaluate(report):
                                                 for claim in claims],
                              "ground_truth":"UNLABELED",
                              "semantic_correctness":"NOT_ASSESSED",
-                             "claim_alignment":"EXCLUDED_FRONT_MATTER" if excluded else ("LEXICAL_CANDIDATE" if claims else "NO_MATCHING_CLAIM"),
+                             "claim_alignment":("EXCLUDED_"+exclusion_reason) if excluded else ("LEXICAL_CANDIDATE" if claims else "NO_MATCHING_CLAIM"),
                              "evidence_role":"UNDETERMINED_PENDING_EXPERT_REVIEW"})
     return {"test":"real_primary_paper_claim_evidence_probe",
             "total_verbatim_cases":len(rows),"cases":rows,
