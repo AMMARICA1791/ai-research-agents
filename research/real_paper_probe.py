@@ -10,8 +10,8 @@ from pathlib import Path
 from research.bounded_entailment import classify
 from research.scientific_comparison_engine import is_front_matter
 
-PUBLICATION_HEADER = re.compile(r"^\\s*(?:arXiv:|Published in\\b|Preprint typeset\\b)", re.I)
-SECTION_OVERVIEW = re.compile(r"^\\s*After a description of our model calculations\\b", re.I)
+PUBLICATION_HEADER = re.compile(r"^\s*(?:arXiv:|Published in\b|Preprint typeset\b)", re.I)
+SECTION_OVERVIEW = re.compile(r"^\s*After a description of our model calculations\b", re.I)
 
 def non_evidence_reason(quote):
     if is_front_matter(quote) or PUBLICATION_HEADER.search(quote):
