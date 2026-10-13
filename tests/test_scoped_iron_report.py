@@ -27,9 +27,6 @@ def test_semantically_false_claim_can_pass_existing_validator():
     import copy
     report = copy.deepcopy(REPORT)
     report["findings"][0]["statement"] = "The paper proves that all iron on Earth originated exclusively in Type Ia supernovae."
-    probe = {"cases": [{"source": r["source"], "pdf_page": r["pdf_page"],
-                        "verbatim_text": "", "ground_truth": "UNLABELED"}
-                       for r in REVIEW["cases"]]}
     # Populate genuine excerpts only when supplied by real primary-paper extraction.
     # The current validator never examines statement text, so this mutation is
     # undetectable regardless of the verbatim evidence supplied.
