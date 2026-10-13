@@ -77,7 +77,8 @@ jobs:
           python -m research.validate_provisional_review --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json
           python -m research.evidence_quality_report --review research/provisional_primary_paper_review.json --output results/evidence-quality.json
           python -m research.semantic_review_queue --report research/scoped_iron_report.json --baseline research/reviewed_iron_claims_baseline.json --review research/provisional_primary_paper_review.json --output results/semantic-review-queue.json
-          python -m research.validate_scoped_iron_report --report research/scoped_iron_report.json --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json --output results/scoped-iron-report-validation.json
+          # Validate the frozen, previously reviewed claim set; changed claims remain pending in the queue.
+          python -m research.validate_scoped_iron_report --report research/reviewed_iron_claims_baseline.json --review research/provisional_primary_paper_review.json --probe results/real-paper-probe.json --output results/scoped-iron-report-validation.json
           python -m research.scientific_acceptance --comparison results/two-paper-comparison.json --output results/scientific-acceptance.json
           sha256sum results/primary.pdf results/primary.txt | tee results/source-digests.txt
           python -m research.primary_pdf_audit --source results/primary.txt --output results/primary-evidence-audit.json
