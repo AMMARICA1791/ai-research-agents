@@ -19,6 +19,8 @@ jobs:
           python-version: "3.11"
       - name: Collect public AI headlines
         run: python -m research.ai_news_feed --output research_output/ai_news.json
+      - name: Retrieve articles and prepare source dossiers
+        run: python -m research.news_research_pipeline --output research_output/news_research.json --max-articles 3
       - name: Display collection summary
         run: |
           python - <<'PY'
@@ -33,6 +35,8 @@ jobs:
         if: always()
         with:
           name: ai-news-inventory
-          path: research_output/ai_news.json
+          path: |
+            research_output/ai_news.json
+            research_output/news_research.json
           if-no-files-found: warn
           retention-days: 7
