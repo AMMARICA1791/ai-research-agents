@@ -3,6 +3,8 @@
 > **Special short research contribution:** We currently seek **two independent human reviewers** for [15 Qwen news-answer citation checks — Issue #52](https://github.com/AMMARICA1791/ai-research-agents/issues/52). This voluntary evaluation needs English reading and evidence criticism, **not coding**. The original model quotation must be assessed; it must not be silently replaced by a better one. Please volunteer in the issue rather than submitting unrelated PRs. No independent semantic-accuracy result is claimed yet.
 
 
+**Broader project feedback is welcome without coding:** Explore the [public project showcase](docs/PROJECT_SHOWCASE.md) and leave your perspective in [Issue #54](https://github.com/AMMARICA1791/ai-research-agents/issues/54). A structured [project feedback form](https://github.com/AMMARICA1791/ai-research-agents/issues/new/choose) is also available. This does **not** expand general bug-fix support to unrelated third-party repositories or waive research evidence requirements.
+
 We value reproducible bug reports, test cases and honest results, including failed experiments.
 
 **License:** This project is distributed under [Apache-2.0](LICENSE). By intentionally submitting an authorized contribution for inclusion in the project, you normally license that contribution under Apache-2.0 in accordance with Section 5, unless expressly stated otherwise or a separate agreement applies. You retain copyright in your own work; no assignment to the maintainer is presumed. Submit only material you own or are authorized to redistribute. See [NOTICE](NOTICE) and [licensing guidance](docs/LICENSING_DECISION.md).

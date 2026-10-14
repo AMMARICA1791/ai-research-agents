@@ -1,0 +1,54 @@
+name: Project-wide feedback and external review
+description: Critique the project's evidence, architecture, reproducibility, accessibility, or research priorities
+title: "[Feedback] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reviewing our experimental AI research laboratory. We welcome critical findings and failures.
+        You can also leave an informal comment in [Issue #54](https://github.com/AMMARICA1791/ai-research-agents/issues/54).
+        Please read the [public project showcase](https://github.com/AMMARICA1791/ai-research-agents/blob/main/docs/PROJECT_SHOWCASE.md) first. Do not include secrets, private data or security exploit details.
+  - type: dropdown
+    id: perspective
+    attributes:
+      label: Main perspective
+      description: What kind of input are you sharing?
+      options:
+        - Project architecture / design
+        - Research method / scientific evidence
+        - Reproducibility / unexpected test result
+        - Security or data provenance (non-sensitive only)
+        - Documentation / access / usability
+        - Suggested new experiment
+        - Other constructive feedback
+    validations:
+      required: true
+  - type: input
+    id: reviewed
+    attributes:
+      label: Relevant file, workflow, issue, commit, or release (optional)
+      placeholder: https://github.com/AMMARICA1791/ai-research-agents/...
+    validations:
+      required: false
+  - type: textarea
+    id: observation
+    attributes:
+      label: What did you observe or find unclear?
+      description: State the concrete issue, criticism, contradiction or improvement idea. You may write in English, Arabic, Portuguese, Spanish or French.
+      placeholder: I examined ... and found ...
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: A small, verifiable next step (optional)
+      description: What would prove or disprove this claim? Provide a reproduction step or acceptance criterion if possible.
+    validations:
+      required: false
+  - type: textarea
+    id: limits
+    attributes:
+      label: What could you not verify? (optional)
+      description: Disclose missing evidence or assumptions; criticism is welcome even without a full reproduction.
+    validations:
+      required: false

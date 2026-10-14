@@ -19,8 +19,15 @@ These pillars complement rather than replace each other. Crossref metadata is **
 - [x] Document contribution rules, security, governance, and current limitations.
 - [x] **Repository owner approved Apache-2.0**, and the canonical license and attribution notices are published.
 - [x] Add relevant GitHub topics for discoverability.
-- [ ] Replace the generic GitHub About description; this requires repository settings access.
-- [ ] Publish and validate the `v0.1.0-experimental` prerelease only after full release gates pass.
+- [x] Replace the generic GitHub About description with a concrete, evidence-first summary; confirmed from current public repository metadata on 2026-10-14.
+- [x] Publish the **experimental**, non-production [`v0.1.0-experimental` prerelease](https://github.com/AMMARICA1791/ai-research-agents/releases/tag/v0.1.0-experimental); published on 2026-10-11. This is a tagged historical baseline, **not** a production-quality certification or a re-test of later `main` commits.
+
+## Public external feedback (active)
+- [x] Publish an honest [public project showcase](docs/PROJECT_SHOWCASE.md) with evidence, non-goals and reproduction routes.
+- [x] Invite researchers, developers and nontechnical reviewers to [discuss the project as a whole in Issue #54](https://github.com/AMMARICA1791/ai-research-agents/issues/54).
+- [ ] Obtain an independent external critique and respond to its evidence or counterexamples.
+- [ ] Obtain two independent human semantic reviews of the Qwen news pilot; [volunteers wanted](https://github.com/AMMARICA1791/ai-research-agents/issues/52).
+- [ ] Capture a continuous, independently checkable demonstration video; do **not** label a simulated recording as proof.
 
 ## Earn community trust (next)
 - [x] One-click evidence tour on GitHub Actions, with independent synthetic and historical real-source regression tests.

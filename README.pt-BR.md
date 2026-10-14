@@ -1,5 +1,7 @@
 # AI Research Agents — laboratório aberto de pesquisa em IA, com evidências
 
+> **Projeto aberto à avaliação externa:** [visite o resumo e os testes](docs/PROJECT_SHOWCASE.md) · [envie sugestões ou críticas — Issue #54](https://github.com/AMMARICA1791/ai-research-agents/issues/54). Ainda é um protótipo experimental, não uma plataforma de agentes autônomos validada.
+
 > **Convite à comunidade — 2 revisores voluntários:** precisamos de duas avaliações humanas independentes de **15 respostas reais do Qwen**, verificando se **a citação original do modelo** sustenta cada resposta. Sem programação, pagamento ou chave de API; é necessário ler os trechos originais em inglês. **[Participe na issue #52](https://github.com/AMMARICA1791/ai-research-agents/issues/52)**. A precisão semântica do modelo ainda não foi validada.
 
 

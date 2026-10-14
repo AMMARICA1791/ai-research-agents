@@ -1,5 +1,7 @@
 # AI Research Agents — 可验证证据驱动的开源 AI 研究实验室
 
+> **欢迎外部审阅：**[公开项目介绍与证据](docs/PROJECT_SHOWCASE.md) · [分享项目建议与批评 — Issue #54](https://github.com/AMMARICA1791/ai-research-agents/issues/54)。项目目前仍处实验阶段，尚不是经过验证的自主研究中心。
+
 > **招募两名独立志愿评审：**评估 Qwen 在真实新闻摘录上的 **15 条回答**，核对模型自己引用的文字是否真正支持其结论。无需编程、付费或 API 密钥，但须阅读英文原文，评审应独立完成。**[在 Issue #52 报名（英／阿／葡／西／法）](https://github.com/AMMARICA1791/ai-research-agents/issues/52)**。目前尚无经独立人工评审确认的语义准确率。
 
 
