@@ -71,6 +71,9 @@ jobs:
               raise SystemExit("FAIL_CLOSED: no real article excerpts were retrieved")
           PY
 
+      - name: Prepare independent human-label review template
+        run: python -m research.news_eval --dossier research_output/news_qwen_sources.json --output research_output/news_eval_template.json
+
       - name: Install free local Ollama (no paid API, no keys)
         run: |
           set -euo pipefail
@@ -98,7 +101,7 @@ jobs:
           import re
           from pathlib import Path
           from research.news_chat import ask
-          from research.news_eval import verify_quote
+          from research.news_eval import verify_quote, negative_control_ok
 
           dossier = json.loads(Path("research_output/news_qwen_sources.json").read_text(encoding="utf-8"))
           results = []
@@ -111,7 +114,7 @@ jobs:
               questions = {
                   "direct": "Based only on the supplied excerpt, explain the main announcement. Return ONLY valid JSON with exactly 3 keys: answer (brief), quote (verbatim contiguous 15+ character passage from the excerpt), source_url (copy exact source URL). No surrounding Markdown.",
                   "inference": "Based only on the excerpt, give ONE cautious inference and explicitly distinguish publisher claims from independent proof. Return ONLY JSON with exactly keys answer, quote (exact contiguous 15+ chars from excerpt), source_url (copy URL exactly). No Markdown.",
-                  "unanswerable": "What was the publisher's exact verified revenue in 2031? It is not in the excerpt; do NOT infer it. Return ONLY JSON with keys answer (NOT_IN_SOURCE), quote (empty string), source_url (exact source URL).",
+                  "unanswerable": "According to the supplied excerpt, what is the publisher's exact audited revenue for calendar year 2031? ONLY facts explicitly in the excerpt are allowed. If no revenue for that exact year is given, answer MUST equal the literal token NOT_IN_SOURCE, never an empty string or a general verification status. Use quote as an empty string for missing evidence. Respond ONLY as JSON with exactly three keys answer, quote, source_url (copy the exact source URL). Example format for a MISSING fact: {\"answer\":\"NOT_IN_SOURCE\",\"quote\":\"\",\"source_url\":\"COPY_THE_ACTUAL_URL\"}. Do not invent numbers.",
               }
               for kind, question in questions.items():
                   entry = {
@@ -144,7 +147,10 @@ jobs:
                           entry["exact_quote_found"] = verify_quote(
                               entry["parsed_quote"], source_excerpt
                           ) == "exact"
-                          entry["explicit_abstention"] = entry["parsed_answer"].strip().upper() == "NOT_IN_SOURCE"
+                          entry["explicit_abstention"] = negative_control_ok(
+                              entry["parsed_answer"], entry["parsed_quote"],
+                              entry["model_source_url"], evidence["source"]["url"]
+                          )
                       except (json.JSONDecodeError, ValueError, TypeError) as exc:
                           entry["json_error"] = f"{type(exc).__name__}: {exc}"[:160]
                   except Exception as exc:
@@ -153,6 +159,15 @@ jobs:
                   print("QWEN_CASE:", kind, entry["status"], "quote=", entry.get("exact_quote_found", False))
           answered = sum(row["status"] == "MODEL_RESPONSE_UNVERIFIED" for row in results)
           quoted = sum(row.get("exact_quote_found", False) for row in results)
+          negative_rows = [r for r in results if r["type"] == "unanswerable"]
+          negative_pass = sum(r.get("explicit_abstention", False) for r in negative_rows)
+          json_pass = sum(r.get("valid_json", False) for r in results)
+          url_pass = sum(r.get("exact_source_url", False) for r in results)
+          gate_pass = (
+              len(negative_rows) >= 3 and negative_pass == len(negative_rows)
+              and quoted >= 9 and json_pass == len(results)
+              and url_pass == len(results)
+          )
           summary = {
               "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
               "model": "qwen2.5:1.5b",
@@ -162,10 +177,10 @@ jobs:
               "exact_quote_matches_in_model_responses": quoted,
               "valid_json_responses": sum(row.get("valid_json", False) for row in results),
               "exact_source_url_matches": sum(row.get("exact_source_url", False) for row in results),
-              "exact_negative_control_abstentions": sum(
-                  row.get("explicit_abstention", False) for row in results if row["type"] == "unanswerable"
-              ),
-              "status": "BOUNDED_SOURCE_QUOTE_GATE_PASSED" if quoted else "NO_VERIFIED_MODEL_QUOTES",
+              "exact_negative_control_abstentions": negative_pass,
+              "negative_control_attempts": len(negative_rows),
+              "strict_mechanical_gate_passed": gate_pass,
+              "status": "MECHANICAL_EVIDENCE_GATES_PASSED" if gate_pass else "MECHANICAL_EVIDENCE_GATES_FAILED",
               "does_not_establish": [
                   "answer accuracy", "semantic entailment", "independent truth verification",
                   "human gold-label scores", "cross-publisher generalization"
@@ -185,6 +200,8 @@ jobs:
               raise SystemExit("FAIL_CLOSED: no Qwen response on real article evidence")
           if not quoted:
               raise SystemExit("FAIL_CLOSED: no exact model-provided source quote")
+          if not gate_pass:
+              raise SystemExit("FAIL_CLOSED: negative-control, URL, JSON, or quote baseline gate unmet")
           PY
 
       - name: Preserve empirical evidence and failed-source reasons
@@ -195,5 +212,6 @@ jobs:
           path: |
             research_output/news_qwen_sources.json
             research_output/news_qwen_probe.json
+            research_output/news_eval_template.json
           if-no-files-found: warn
           retention-days: 7
