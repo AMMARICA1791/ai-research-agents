@@ -10,14 +10,14 @@ from pathlib import Path
 import urllib.request
 import xml.etree.ElementTree as ET
 
-from research.live_news_research import NoRedirect, USER_AGENT, safe_url
+from research.live_news_research import SafeRedirect, USER_AGENT, safe_url
 
 FEEDS = {
     "Google DeepMind": "https://deepmind.google/blog/rss.xml",
     "arXiv cs.AI": "https://export.arxiv.org/rss/cs.AI",
 }
 ATOM = "{http://www.w3.org/2005/Atom}"
-MAX_FEED_BYTES = 500_000
+MAX_FEED_BYTES = 2_000_000
 
 def _text(node, names):
     for name in names:
@@ -57,10 +57,11 @@ def parse_feed(data, source, limit=12):
 
 def fetch_feed(url):
     safe_url(url)
-    opener = urllib.request.build_opener(NoRedirect)
+    opener = urllib.request.build_opener(SafeRedirect)
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT,
                                                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml"})
     with opener.open(req, timeout=15) as response:
+        safe_url(response.geturl())
         payload = response.read(MAX_FEED_BYTES + 1)
         if len(payload) > MAX_FEED_BYTES:
             raise ValueError("Feed exceeds size limit")
