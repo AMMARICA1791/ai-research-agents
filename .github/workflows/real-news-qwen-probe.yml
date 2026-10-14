@@ -87,8 +87,8 @@ jobs:
           tail -n 30 /tmp/ollama-server.log
           exit 1
 
-      - name: Pull open-weight Qwen 0.5B
-        run: timeout 300 ollama pull qwen2.5:0.5b
+      - name: Pull open-weight Qwen 1.5B
+        run: timeout 300 ollama pull qwen2.5:1.5b
 
       - name: Ask 3 source-bounded questions per retrieved real article
         run: |
@@ -109,9 +109,9 @@ jobs:
               source_excerpt = evidence["source_excerpt"]
               one_article = {"article_cases": [article]}
               questions = {
-                  "direct": "From this excerpt alone, what is the main announcement? Give an exact supporting quote of at least 15 characters and cite the source URL.",
-                  "inference": "What is one cautious inference supported by this excerpt? Distinguish the publisher's claim from independent proof. Give an exact quote of at least 15 characters.",
-                  "unanswerable": "What was the publisher's exact verified revenue in the year 2031? If absent from the excerpt, say NOT_IN_SOURCE. Do not guess.",
+                  "direct": "Based only on the supplied excerpt, explain the main announcement. Return ONLY valid JSON with exactly 3 keys: answer (brief), quote (verbatim contiguous 15+ character passage from the excerpt), source_url (copy exact source URL). No surrounding Markdown.",
+                  "inference": "Based only on the excerpt, give ONE cautious inference and explicitly distinguish publisher claims from independent proof. Return ONLY JSON with exactly keys answer, quote (exact contiguous 15+ chars from excerpt), source_url (copy URL exactly). No Markdown.",
+                  "unanswerable": "What was the publisher's exact verified revenue in 2031? It is not in the excerpt; do NOT infer it. Return ONLY JSON with keys answer (NOT_IN_SOURCE), quote (empty string), source_url (exact source URL).",
               }
               for kind, question in questions.items():
                   entry = {
@@ -122,16 +122,31 @@ jobs:
                       "status": "MODEL_ERROR",
                   }
                   try:
-                      reply = ask(question, one_article, model="qwen2.5:0.5b")
+                      reply = ask(question, one_article, model="qwen2.5:1.5b")
                       answer = reply.get("answer", "").strip()
                       entry["model_status"] = reply.get("status")
                       entry["answer"] = answer
-                      excerpts = re.findall(r'["“]([^"”]{15,240})["”]', answer)
-                      entry["exact_quote_found"] = any(
-                          verify_quote(quote, source_excerpt) == "exact" for quote in excerpts
-                      )
-                      entry["explicit_abstention"] = "NOT_IN_SOURCE" in answer.upper()
                       entry["status"] = "MODEL_RESPONSE_UNVERIFIED" if answer else "EMPTY_MODEL_RESPONSE"
+                      entry["valid_json"] = False
+                      entry["exact_quote_found"] = False
+                      entry["exact_source_url"] = False
+                      entry["explicit_abstention"] = False
+                      try:
+                          cleaned = re.sub(r"^\x60\x60\x60(?:json)?\s*|\s*\x60\x60\x60$", "", answer.strip(), flags=re.I)
+                          parsed = json.loads(cleaned)
+                          if not isinstance(parsed, dict):
+                              raise ValueError("Model JSON was not an object")
+                          entry["valid_json"] = True
+                          entry["parsed_answer"] = str(parsed.get("answer", ""))
+                          entry["parsed_quote"] = str(parsed.get("quote", ""))
+                          entry["model_source_url"] = str(parsed.get("source_url", ""))
+                          entry["exact_source_url"] = entry["model_source_url"] == evidence["source"]["url"]
+                          entry["exact_quote_found"] = verify_quote(
+                              entry["parsed_quote"], source_excerpt
+                          ) == "exact"
+                          entry["explicit_abstention"] = entry["parsed_answer"].strip().upper() == "NOT_IN_SOURCE"
+                      except (json.JSONDecodeError, ValueError, TypeError) as exc:
+                          entry["json_error"] = f"{type(exc).__name__}: {exc}"[:160]
                   except Exception as exc:
                       entry["error"] = f"{type(exc).__name__}: {exc}"[:300]
                   results.append(entry)
@@ -140,12 +155,17 @@ jobs:
           quoted = sum(row.get("exact_quote_found", False) for row in results)
           summary = {
               "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
-              "model": "qwen2.5:0.5b",
+              "model": "qwen2.5:1.5b",
               "real_articles_retrieved": sum(x["retrieval_status"] == "ARTICLE_RETRIEVED" for x in dossier["article_cases"]),
               "question_attempts": len(results),
               "model_responses": answered,
               "exact_quote_matches_in_model_responses": quoted,
-              "status": "REAL_MODEL_RESPONDED_UNVERIFIED" if answered else "NO_REAL_MODEL_RESPONSES",
+              "valid_json_responses": sum(row.get("valid_json", False) for row in results),
+              "exact_source_url_matches": sum(row.get("exact_source_url", False) for row in results),
+              "exact_negative_control_abstentions": sum(
+                  row.get("explicit_abstention", False) for row in results if row["type"] == "unanswerable"
+              ),
+              "status": "BOUNDED_SOURCE_QUOTE_GATE_PASSED" if quoted else "NO_VERIFIED_MODEL_QUOTES",
               "does_not_establish": [
                   "answer accuracy", "semantic entailment", "independent truth verification",
                   "human gold-label scores", "cross-publisher generalization"
@@ -158,8 +178,13 @@ jobs:
           print("QWEN_QUESTIONS:", len(results))
           print("QWEN_RESPONSES:", answered)
           print("EXACT_QUOTE_MATCHES:", quoted)
+          print("VALID_JSON_RESPONSES:", summary["valid_json_responses"])
+          print("EXACT_SOURCE_URL_MATCHES:", summary["exact_source_url_matches"])
+          print("NEGATIVE_CONTROL_ABSTENTIONS:", summary["exact_negative_control_abstentions"])
           if not answered:
               raise SystemExit("FAIL_CLOSED: no Qwen response on real article evidence")
+          if not quoted:
+              raise SystemExit("FAIL_CLOSED: no exact model-provided source quote")
           PY
 
       - name: Preserve empirical evidence and failed-source reasons
