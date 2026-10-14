@@ -1,5 +1,8 @@
 # AI Research Agents — laboratório aberto de pesquisa em IA, com evidências
 
+> **Convite à comunidade — 2 revisores voluntários:** precisamos de duas avaliações humanas independentes de **15 respostas reais do Qwen**, verificando se **a citação original do modelo** sustenta cada resposta. Sem programação, pagamento ou chave de API; é necessário ler os trechos originais em inglês. **[Participe na issue #52](https://github.com/AMMARICA1791/ai-research-agents/issues/52)**. A precisão semântica do modelo ainda não foi validada.
+
+
 **Nossa missão:** desenvolver ferramentas de pesquisa de código que verifiquem, de forma reproduzível, alterações propostas por modelos de IA de pesos abertos, usando recursos gratuitos sempre que viável.
 
 **Estado atual:** protótipo experimental; não é um serviço comercial nem um agente capaz de corrigir qualquer programa sozinho. O sistema possui sete etapas de trabalho, mas elas **não são sete modelos de IA independentes**.

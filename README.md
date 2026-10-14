@@ -4,6 +4,8 @@
 
 > **Seven coordinated pipeline stages, NOT seven independent thinking AI agents.** This laboratory is experimental; human review remains mandatory.
 
+> **Community call — 2 volunteer reviewers needed:** We are recruiting two independent human reviewers to evaluate **15 real Qwen news answers**, checking whether each **model-cited quotation** actually supports the answer. No coding, fees, paid APIs or prior affiliation required; reviewers must read the original English excerpts and work separately. **[Volunteer in Issue #52](https://github.com/AMMARICA1791/ai-research-agents/issues/52)**. Open call: English · العربية · Português · Español · Français. The model's semantic accuracy has **not** been established.
+
 We are building a reproducible Python research lab that inspects source, records bounded findings, proposes narrowly scoped changes with open-weight models, and tests those changes before human review.
 
 > **Experimental research software, not a commercial service or fully autonomous developer.** We demonstrated one AI-generated fix to a pre-scoped real repository bug. This does not establish general bug discovery or repair ability.
