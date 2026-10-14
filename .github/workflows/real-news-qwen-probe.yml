@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/real-news-qwen-probe.yml
+      - research/live_news_research.py
   workflow_dispatch:
 
 permissions:
@@ -44,6 +45,8 @@ jobs:
                   evidence = dossier(page, "What is actually supported by this excerpt?")
                   if len(evidence["source_excerpt"].strip()) < 150:
                       raise ValueError("Extracted source excerpt too short for evaluation")
+                  if "Explore our next generation AI systems" in evidence["source_excerpt"][:500]:
+                      raise ValueError("Navigation-dominated excerpt is not valid news evidence")
                   case.update(retrieval_status="ARTICLE_RETRIEVED", evidence=evidence)
               except Exception as exc:
                   case.update(retrieval_status="ARTICLE_NOT_RETRIEVED",

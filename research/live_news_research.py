@@ -23,12 +23,19 @@ class PageParser(html.parser.HTMLParser):
     def __init__(self):
         super().__init__()
         self.parts = []
+        self.article_parts = []
+        self.article_depth = 0
+        self.navigation_depth = 0
         self.links = []
         self.title = []
         self.skip = 0
         self.in_title = False
 
     def handle_starttag(self, tag, attrs):
+        if tag in ("main", "article"):
+            self.article_depth += 1
+        if tag in ("nav", "aside", "footer"):
+            self.navigation_depth += 1
         if tag in ("script", "style", "noscript", "svg"):
             self.skip += 1
         if tag == "title":
@@ -39,13 +46,17 @@ class PageParser(html.parser.HTMLParser):
                 self.links.append(href)
 
     def handle_endtag(self, tag):
+        if tag in ("main", "article"):
+            self.article_depth = max(0, self.article_depth - 1)
+        if tag in ("nav", "aside", "footer"):
+            self.navigation_depth = max(0, self.navigation_depth - 1)
         if tag in ("script", "style", "noscript", "svg"):
             self.skip = max(0, self.skip - 1)
         if tag == "title":
             self.in_title = False
 
     def handle_data(self, data):
-        if self.skip:
+        if self.skip or self.navigation_depth:
             return
         value = " ".join(data.split())
         if value:
@@ -53,6 +64,14 @@ class PageParser(html.parser.HTMLParser):
                 self.title.append(value)
             if len(self.parts) < 3000:
                 self.parts.append(value)
+            if self.article_depth and len(self.article_parts) < 3000:
+                self.article_parts.append(value)
+
+def extracted_text(page):
+    """Prefer actual HTML main/article text over boilerplate site chrome."""
+    focused = " ".join(page.article_parts)
+    selected = focused if len(focused) >= 150 else " ".join(page.parts)
+    return re.sub(r"\s+", " ", selected)[:20000]
 
 def safe_url(url):
     parsed = urllib.parse.urlsplit(url)
@@ -92,8 +111,7 @@ def collect(url):
         charset = response.headers.get_content_charset() or "utf-8"
     page = PageParser()
     page.feed(raw.decode(charset, errors="replace"))
-    text = " ".join(page.parts)
-    text = re.sub(r"\s+", " ", text)[:20000]
+    text = extracted_text(page)
     links = []
     for href in page.links:
         target = urllib.parse.urljoin(final_url, href)
