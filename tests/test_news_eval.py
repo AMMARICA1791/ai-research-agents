@@ -1,6 +1,6 @@
 """Offline regression tests for evidence-first news evaluation."""
 import unittest
-from research.news_eval import build, validate, verify_quote
+from research.news_eval import build, validate, verify_quote, negative_control_ok
 
 class NewsEvalTests(unittest.TestCase):
     def test_exact_quote_only(self):
@@ -23,6 +23,15 @@ class NewsEvalTests(unittest.TestCase):
         self.assertTrue(validate({"questions": []}))
         self.assertTrue(validate({"questions": ["not a question record"]}))
         self.assertTrue(validate({"questions": [{"type": "unknown", "question": "Q", "reference_answer": "A", "source_url": "https://example.org"}]}))
+
+    def test_negative_control_requires_exact_token_empty_quote_and_source(self):
+        url = "https://example.org/article"
+        self.assertTrue(negative_control_ok("NOT_IN_SOURCE", "", url, url))
+        self.assertFalse(negative_control_ok("", "", url, url))
+        self.assertFalse(negative_control_ok("SOURCE_RETRIEVED_NOT_INDEPENDENTLY_VERIFIED", "", url, url))
+        self.assertFalse(negative_control_ok("NOT_IN_SOURCE", "fabricated", url, url))
+        self.assertFalse(negative_control_ok("NOT_IN_SOURCE", "", "https://other.org", url))
+        self.assertFalse(negative_control_ok("not_in_source", "", url, url))
 
     def test_completed_labels_checked(self):
         excerpt="The original report measured an increase of 20 percent."
