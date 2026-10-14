@@ -41,6 +41,16 @@ def verify_quote(quote, excerpt):
         return "not_found"
     return "exact" if " ".join(quote.split()) in " ".join(excerpt.split()) else "not_found"
 
+
+def negative_control_ok(answer, quote, model_source_url, expected_source_url):
+    """Strictly recognize model abstention; never coerce blanks into success."""
+    return (
+        isinstance(answer, str) and answer.strip() == "NOT_IN_SOURCE"
+        and isinstance(quote, str) and quote == ""
+        and isinstance(model_source_url, str) and model_source_url == expected_source_url
+        and isinstance(expected_source_url, str) and bool(expected_source_url)
+    )
+
 def validate(data):
     errors=[]
     if not isinstance(data, dict) or not isinstance(data.get("questions"), list) or not data["questions"]:
