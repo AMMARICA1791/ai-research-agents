@@ -51,6 +51,70 @@ def negative_control_ok(answer, quote, model_source_url, expected_source_url):
         and isinstance(expected_source_url, str) and bool(expected_source_url)
     )
 
+
+def audit_model_evidence(kind, parsed, evidence):
+    """Review-only record: publisher URL/hash come solely from archived retrieval.
+
+    Passing this mechanical check never establishes semantic entailment or truth.
+    An invalid or invented model quote is withheld, never corrected silently.
+    """
+    source = evidence.get("source", {}) if isinstance(evidence, dict) else {}
+    if not isinstance(source, dict):
+        source = {}
+    trusted_url = source.get("url")
+    trusted_hash = source.get("sha256")
+    excerpt = evidence.get("source_excerpt") if isinstance(evidence, dict) else None
+    record = {
+        "trusted_source_url": trusted_url if isinstance(trusted_url, str) else None,
+        "trusted_source_sha256": trusted_hash if isinstance(trusted_hash, str) else None,
+        "model_source_url_matches": False,
+        "model_detected_absence": False,
+        "exact_quote_found": False,
+        "status": "WITHHELD_INVALID_EVIDENCE",
+        "review_answer": None,
+        "review_quote": None,
+        "publication_allowed": False,
+        "human_semantic_review_required": True,
+        "issues": [],
+    }
+    errors = record["issues"]
+    if not isinstance(trusted_url, str) or not trusted_url.startswith("https://") or not isinstance(excerpt, str) or not excerpt.strip():
+        errors.append("invalid_archived_provenance")
+        return record
+    if not isinstance(parsed, dict):
+        errors.append("invalid_model_json")
+        return record
+
+    answer, quote, model_url = (parsed.get(k) for k in ("answer", "quote", "source_url"))
+    record["model_source_url_matches"] = isinstance(model_url, str) and model_url == trusted_url
+    if not record["model_source_url_matches"]:
+        errors.append("model_source_url_mismatch")
+    record["model_detected_absence"] = isinstance(answer, str) and answer.strip() == "NOT_IN_SOURCE"
+
+    if kind == "unanswerable":
+        if not record["model_detected_absence"]:
+            errors.append("missing_explicit_abstention")
+        if quote != "":
+            errors.append("nonempty_quote_for_absence")
+        if not errors:
+            record["status"] = "VALID_ABSTENTION_ENVELOPE"
+            record["review_answer"] = "NOT_IN_SOURCE"
+        return record
+
+    if kind not in ("direct", "inference"):
+        errors.append("invalid_question_type")
+        return record
+    if not isinstance(answer, str) or not answer.strip() or record["model_detected_absence"]:
+        errors.append("missing_substantive_answer")
+    record["exact_quote_found"] = verify_quote(quote, excerpt) == "exact"
+    if not record["exact_quote_found"]:
+        errors.append("quote_not_in_archived_excerpt")
+    if not errors:
+        record["status"] = "QUOTE_MATCH_ONLY_SEMANTICS_UNVERIFIED"
+        record["review_answer"] = answer
+        record["review_quote"] = quote
+    return record
+
 def validate(data):
     errors=[]
     if not isinstance(data, dict) or not isinstance(data.get("questions"), list) or not data["questions"]:
