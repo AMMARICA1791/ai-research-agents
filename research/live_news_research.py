@@ -65,15 +65,24 @@ def safe_url(url):
             raise ValueError("Private or non-public addresses are blocked")
     return url
 
+class SafeRedirect(urllib.request.HTTPRedirectHandler):
+    """Permit bounded public HTTPS redirects, validating every destination."""
+    max_redirections = 4
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        safe_url(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         raise ValueError("Redirects are disabled to protect against private-network access")
 
 def collect(url):
     safe_url(url)
-    opener = urllib.request.build_opener(NoRedirect)
+    opener = urllib.request.build_opener(SafeRedirect)
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/html"})
     with opener.open(req, timeout=15) as response:
+        final_url = response.geturl()
+        safe_url(final_url)
         ctype = response.headers.get_content_type()
         if ctype != "text/html":
             raise ValueError("Source is not an HTML document")
@@ -87,11 +96,11 @@ def collect(url):
     text = re.sub(r"\s+", " ", text)[:20000]
     links = []
     for href in page.links:
-        target = urllib.parse.urljoin(url, href)
+        target = urllib.parse.urljoin(final_url, href)
         p = urllib.parse.urlsplit(target)
         if p.scheme == "https" and p.hostname and target not in links:
             links.append(target)
-    return {"url": url, "title": " ".join(page.title)[:250], "text": text,
+    return {"url": final_url, "requested_url": url, "title": " ".join(page.title)[:250], "text": text,
             "outbound_links": links[:30], "sha256": hashlib.sha256(raw).hexdigest()}
 
 def dossier(source, question):
