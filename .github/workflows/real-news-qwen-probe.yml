@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/real-news-qwen-probe.yml
       - research/live_news_research.py
+      - research/news_eval.py
+      - research/news_probe_audit.py
   workflow_dispatch:
 
 permissions:
@@ -204,6 +206,18 @@ jobs:
               raise SystemExit("FAIL_CLOSED: negative-control, URL, JSON, or quote baseline gate unmet")
           PY
 
+      - name: Audit provenance and quarantine unsupported answers
+        if: always()
+        run: |
+          if [ -s research_output/news_qwen_sources.json ] && [ -s research_output/news_qwen_probe.json ]; then
+            python -m research.news_probe_audit \
+              --sources research_output/news_qwen_sources.json \
+              --probe research_output/news_qwen_probe.json \
+              --output research_output/news_audit.json
+          else
+            echo "No complete source/model evidence available for replay audit."
+          fi
+
       - name: Preserve empirical evidence and failed-source reasons
         if: always()
         uses: actions/upload-artifact@v4
@@ -213,5 +227,6 @@ jobs:
             research_output/news_qwen_sources.json
             research_output/news_qwen_probe.json
             research_output/news_eval_template.json
+            research_output/news_audit.json
           if-no-files-found: warn
           retention-days: 7
