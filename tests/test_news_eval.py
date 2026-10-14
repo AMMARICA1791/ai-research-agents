@@ -19,6 +19,11 @@ class NewsEvalTests(unittest.TestCase):
         self.assertTrue(all(q["review_status"]=="NEEDS_HUMAN_GOLD_LABEL" for q in result["questions"]))
         self.assertTrue(validate(result))
 
+    def test_empty_or_invalid_dataset_rejected(self):
+        self.assertTrue(validate({"questions": []}))
+        self.assertTrue(validate({"questions": ["not a question record"]}))
+        self.assertTrue(validate({"questions": [{"type": "unknown", "question": "Q", "reference_answer": "A", "source_url": "https://example.org"}]}))
+
     def test_completed_labels_checked(self):
         excerpt="The original report measured an increase of 20 percent."
         data={"questions":[{"type":"direct","question":"What increase was reported?",
