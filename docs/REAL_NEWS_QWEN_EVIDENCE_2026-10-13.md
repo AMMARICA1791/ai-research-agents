@@ -74,6 +74,16 @@ The five quarantined cases were **three** missing/mismatched model URLs on abste
 
 This **proves mechanical quarantining and provenance handling**, not semantic entailment, independent fact checking, or suitability for unattended news publishing. The [15-case preliminary triage](REAL_NEWS_QWEN_15_CASE_TRIAGE.md) describes an *earlier* run; it is an assistant-authored checklist rather than independent human ground truth.
 
+## New milestone: independently reviewable semantic packet (2026-10-13 Brazil)
+
+Commit [56ebee2](https://github.com/AMMARICA1791/ai-research-agents/commit/56ebee2d2b77bf1babc612d557923c0b9aefe154) introduced a source-bound, **unlabeled** semantic entailment review packet and an optional two-reviewer consistency checker. The implementation passed **320 CI tests** in [PR #50](https://github.com/AMMARICA1791/ai-research-agents/pull/50).
+
+The first [live evidence run](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/38500177379) on the merged code showed 5/5 real source retrievals, 15/15 structured model responses, 9/10 exact answerable citations and only 1/5 correctly formatted abstention envelopes. The **model-quality gate correctly remained red**. Importantly, the mechanical archive audit and the new **Prepare unlabelled semantic entailment review packet** steps both completed successfully even after that red gate. The archived ZIP (artifact 11865338443) contains `news_semantic_review_packet.json`, in addition to source snippets, model answers, source-hash audit and a human-label template. This artifact is retained for a limited time by GitHub.
+
+Checked the packet contents directly: **15 cases, 15 marked UNREVIEWED, 0 gold semantic labels, `semantic_accuracy = null`, `publication_allowed = false`.** There are 9 quote-match-only cases, 5 mechanically quarantined cases and 1 mechanically valid abstention case. The packet's existence therefore proves **review readiness**, not Qwen reasoning accuracy. No independent human assessor has supplied labels or performed adjudication.
+
+The methodological rubric and review command appear in [NEWS_SEMANTIC_REVIEW_PROTOCOL.md](NEWS_SEMANTIC_REVIEW_PROTOCOL.md). The model still has not demonstrated source-entailed answers or cross-publisher generalization.
+
 ## What remains unproven / next acceptance gate
 
 - **Human-reviewed gold labels** for the five archived article excerpts and 15 questions: direct correctness, justified inference, unsupported-answer rejection, and citation entailment.
