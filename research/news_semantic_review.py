@@ -70,6 +70,14 @@ def build_packet(sources, probe, audit):
         if not isinstance(excerpt, str) or not excerpt.strip():
             raise ValueError(f"Missing archived excerpt for case {i}")
 
+        model_quote = model.get("parsed_quote") if model.get("valid_json") is True else None
+        quote_matches_archive = verify_quote(model_quote, excerpt) == "exact"
+        model_echo_matches_archive = model.get("model_source_url") == key[0]
+        if bool(check.get("exact_quote_found")) != quote_matches_archive:
+            raise ValueError(f"Audit quote flag inconsistent with archived excerpt at case {i}")
+        if bool(check.get("model_source_url_matches")) != model_echo_matches_archive:
+            raise ValueError(f"Audit URL flag inconsistent with archived source at case {i}")
+
         cases.append({
             "case_id": f"Q{i:02d}",
             "question_type": kind,
@@ -78,10 +86,10 @@ def build_packet(sources, probe, audit):
             "source_sha256": key[1],
             "source_excerpt": excerpt,
             "model_answer": model.get("parsed_answer") if model.get("valid_json") is True else None,
-            "model_quote": model.get("parsed_quote") if model.get("valid_json") is True else None,
+            "model_quote": model_quote,
             "mechanical_audit_status": check.get("status"),
-            "model_quote_matches_excerpt": bool(check.get("exact_quote_found")),
-            "model_source_echo_matches_archive": bool(check.get("model_source_url_matches")),
+            "model_quote_matches_excerpt": quote_matches_archive,
+            "model_source_echo_matches_archive": model_echo_matches_archive,
             "review_labels": [],
             "semantic_label": None,
             "human_review_status": "UNREVIEWED",
@@ -146,8 +154,13 @@ def evaluate_reviews(packet, submitted):
         supporting_quote = rev.get("supporting_quote", "")
         if not isinstance(supporting_quote, str):
             raise ValueError("Human quote must be text")
-        if label in ("SUPPORTED", "PARTIAL") and verify_quote(supporting_quote, case["source_excerpt"]) != "exact":
-            raise ValueError("Positive reviewer label must identify an exact source passage")
+        if label in ("SUPPORTED", "PARTIAL"):
+            if verify_quote(supporting_quote, case["source_excerpt"]) != "exact":
+                raise ValueError("Positive reviewer label must identify an exact source passage")
+            if not case.get("model_quote_matches_excerpt"):
+                raise ValueError("Positive review forbidden when model quotation is not in archived source")
+            if " ".join(supporting_quote.split()) != " ".join(str(case.get("model_quote", "")).split()):
+                raise ValueError("Reviewer quote cannot silently replace the model's original citation")
         if label == "CORRECT_ABSTENTION" and case.get("model_answer") != "NOT_IN_SOURCE":
             raise ValueError("Cannot mark non-abstaining model answer as correct abstention")
         grouped[case_id].append({"reviewer_id": reviewer.strip(), "label": label})
