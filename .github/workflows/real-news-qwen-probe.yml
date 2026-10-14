@@ -8,6 +8,7 @@ on:
       - research/live_news_research.py
       - research/news_eval.py
       - research/news_probe_audit.py
+      - research/news_semantic_review.py
   workflow_dispatch:
 
 permissions:
@@ -218,6 +219,19 @@ jobs:
             echo "No complete source/model evidence available for replay audit."
           fi
 
+      - name: Prepare unlabelled semantic entailment review packet
+        if: always()
+        run: |
+          if [ -s research_output/news_qwen_sources.json ] && [ -s research_output/news_qwen_probe.json ] && [ -s research_output/news_audit.json ]; then
+            python -m research.news_semantic_review \
+              --sources research_output/news_qwen_sources.json \
+              --probe research_output/news_qwen_probe.json \
+              --audit research_output/news_audit.json \
+              --output research_output/news_semantic_review_packet.json
+          else
+            echo "Insufficient archived inputs for independent semantic review."
+          fi
+
       - name: Preserve empirical evidence and failed-source reasons
         if: always()
         uses: actions/upload-artifact@v4
@@ -228,5 +242,6 @@ jobs:
             research_output/news_qwen_probe.json
             research_output/news_eval_template.json
             research_output/news_audit.json
+            research_output/news_semantic_review_packet.json
           if-no-files-found: warn
           retention-days: 7
