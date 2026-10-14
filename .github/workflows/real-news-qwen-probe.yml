@@ -1,0 +1,171 @@
+name: Real-News Qwen Evidence Probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/real-news-qwen-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-sources-and-qwen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Archive authentic public news sources (no fabricated fixture)
+        run: |
+          mkdir -p research_output
+          python - <<'PY'
+          import datetime as dt
+          import json
+          from pathlib import Path
+          from research.live_news_research import collect, dossier
+
+          urls = [
+              "https://deepmind.google/blog/gemini-4-argon-for-robotics/",
+              "https://deepmind.google/blog/introducing-synthid-bio/",
+              "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/",
+              "https://deepmind.google/blog/piloting-the-worlds-first-double-blind-ai-evaluations/",
+              "https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/",
+          ]
+          rows = []
+          for url in urls:
+              case = {"url": url}
+              try:
+                  page = collect(url)
+                  evidence = dossier(page, "What is actually supported by this excerpt?")
+                  if len(evidence["source_excerpt"].strip()) < 150:
+                      raise ValueError("Extracted source excerpt too short for evaluation")
+                  case.update(retrieval_status="ARTICLE_RETRIEVED", evidence=evidence)
+              except Exception as exc:
+                  case.update(retrieval_status="ARTICLE_NOT_RETRIEVED",
+                              error=f"{type(exc).__name__}: {exc}"[:300])
+              rows.append(case)
+              print(case["retrieval_status"], url, case.get("error", ""))
+          report = {
+              "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "status": "LIVE_SOURCES_NOT_INDEPENDENTLY_VERIFIED",
+              "article_cases": rows,
+              "limitations": [
+                  "Single-publisher news set is not independent corroboration",
+                  "HTML excerpts may include navigation text and are capped at 1200 characters",
+                  "No human gold labels or semantic correctness established"
+              ]
+          }
+          Path("research_output/news_qwen_sources.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          retrieved = sum(x["retrieval_status"] == "ARTICLE_RETRIEVED" for x in rows)
+          print("REAL_SOURCES_RETRIEVED:", retrieved, "/", len(rows))
+          if retrieved == 0:
+              raise SystemExit("FAIL_CLOSED: no real article excerpts were retrieved")
+          PY
+
+      - name: Install free local Ollama (no paid API, no keys)
+        run: |
+          set -euo pipefail
+          curl -fsSL https://ollama.com/install.sh -o /tmp/ollama-install.sh
+          sh /tmp/ollama-install.sh
+          OLLAMA_HOST=127.0.0.1:11434 ollama serve > /tmp/ollama-server.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:11434/api/tags > /dev/null; then
+              echo "LOCAL_OLLAMA_READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          tail -n 30 /tmp/ollama-server.log
+          exit 1
+
+      - name: Pull open-weight Qwen 0.5B
+        run: timeout 300 ollama pull qwen2.5:0.5b
+
+      - name: Ask 3 source-bounded questions per retrieved real article
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          import json
+          import re
+          from pathlib import Path
+          from research.news_chat import ask
+          from research.news_eval import verify_quote
+
+          dossier = json.loads(Path("research_output/news_qwen_sources.json").read_text(encoding="utf-8"))
+          results = []
+          for article in dossier["article_cases"]:
+              if article["retrieval_status"] != "ARTICLE_RETRIEVED":
+                  continue
+              evidence = article["evidence"]
+              source_excerpt = evidence["source_excerpt"]
+              one_article = {"article_cases": [article]}
+              questions = {
+                  "direct": "From this excerpt alone, what is the main announcement? Give an exact supporting quote of at least 15 characters and cite the source URL.",
+                  "inference": "What is one cautious inference supported by this excerpt? Distinguish the publisher's claim from independent proof. Give an exact quote of at least 15 characters.",
+                  "unanswerable": "What was the publisher's exact verified revenue in the year 2031? If absent from the excerpt, say NOT_IN_SOURCE. Do not guess.",
+              }
+              for kind, question in questions.items():
+                  entry = {
+                      "type": kind,
+                      "question": question,
+                      "url": evidence["source"]["url"],
+                      "source_sha256": evidence["source"]["sha256"],
+                      "status": "MODEL_ERROR",
+                  }
+                  try:
+                      reply = ask(question, one_article, model="qwen2.5:0.5b")
+                      answer = reply.get("answer", "").strip()
+                      entry["model_status"] = reply.get("status")
+                      entry["answer"] = answer
+                      excerpts = re.findall(r'["“]([^"”]{15,240})["”]', answer)
+                      entry["exact_quote_found"] = any(
+                          verify_quote(quote, source_excerpt) == "exact" for quote in excerpts
+                      )
+                      entry["explicit_abstention"] = "NOT_IN_SOURCE" in answer.upper()
+                      entry["status"] = "MODEL_RESPONSE_UNVERIFIED" if answer else "EMPTY_MODEL_RESPONSE"
+                  except Exception as exc:
+                      entry["error"] = f"{type(exc).__name__}: {exc}"[:300]
+                  results.append(entry)
+                  print("QWEN_CASE:", kind, entry["status"], "quote=", entry.get("exact_quote_found", False))
+          answered = sum(row["status"] == "MODEL_RESPONSE_UNVERIFIED" for row in results)
+          quoted = sum(row.get("exact_quote_found", False) for row in results)
+          summary = {
+              "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "model": "qwen2.5:0.5b",
+              "real_articles_retrieved": sum(x["retrieval_status"] == "ARTICLE_RETRIEVED" for x in dossier["article_cases"]),
+              "question_attempts": len(results),
+              "model_responses": answered,
+              "exact_quote_matches_in_model_responses": quoted,
+              "status": "REAL_MODEL_RESPONDED_UNVERIFIED" if answered else "NO_REAL_MODEL_RESPONSES",
+              "does_not_establish": [
+                  "answer accuracy", "semantic entailment", "independent truth verification",
+                  "human gold-label scores", "cross-publisher generalization"
+              ],
+              "results": results,
+          }
+          Path("research_output/news_qwen_probe.json").write_text(
+              json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print("REAL_ARTICLES:", summary["real_articles_retrieved"])
+          print("QWEN_QUESTIONS:", len(results))
+          print("QWEN_RESPONSES:", answered)
+          print("EXACT_QUOTE_MATCHES:", quoted)
+          if not answered:
+              raise SystemExit("FAIL_CLOSED: no Qwen response on real article evidence")
+          PY
+
+      - name: Preserve empirical evidence and failed-source reasons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-news-qwen-evidence
+          path: |
+            research_output/news_qwen_sources.json
+            research_output/news_qwen_probe.json
+          if-no-files-found: warn
+          retention-days: 7
