@@ -43,7 +43,14 @@ def verify_quote(quote, excerpt):
 
 def validate(data):
     errors=[]
-    for i,row in enumerate(data.get("questions",[]),1):
+    if not isinstance(data, dict) or not isinstance(data.get("questions"), list) or not data["questions"]:
+        return ["Evaluation set must contain at least one question"]
+    for i,row in enumerate(data["questions"],1):
+        if not isinstance(row, dict):
+            errors.append(f"Q{i}: invalid question record")
+            continue
+        if row.get("type") not in ("direct", "inference", "unanswerable"):
+            errors.append(f"Q{i}: invalid question type")
         if any(str(row.get(k,"")).startswith("TODO") or not row.get(k)
                for k in ("question","reference_answer","source_url")):
             errors.append(f"Q{i}: incomplete gold label")
