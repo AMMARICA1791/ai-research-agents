@@ -52,10 +52,32 @@ This distinction prevents a mistaken reading of the failure: the model recognize
 
 The [workflow artifact for the failed run](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/38498244857) retains the sources, raw responses, and an unfilled human-gold-label template. The template is **not** itself a completed evaluation dataset; no semantic answer-accuracy percentage is justified yet.
 
+
+## Source-anchored quarantine replay — 2026-10-13 (Brazil), run 38499262620
+
+On commit `a1f83e49`, [Real-News Qwen Evidence Probe](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/38499262620) fetched **5/5** real pages, received **15/15** model replies in valid JSON, and found **9/10** exact literal quotations in answerable cases. The Qwen quality step remained **red**, correctly: only **12/15** echoed model URLs matched the archived source URLs, and **1/5** unanswerable records satisfied the entire token + empty-quote + URL contract. All five negative-control model `answer` fields chose `NOT_IN_SOURCE`; that does **not** repair the malformed provenance envelopes.
+
+Crucially, the *new, separately executed* **Audit provenance and quarantine unsupported answers** step **passed even though the quality gate failed**. Its archived `news_audit.json` reported:
+
+| Replay audit result | Count |
+| --- | ---: |
+| Source records matched by archived URL and SHA-256 | 5 |
+| Model responses audited against source archive | 15 |
+| Matching literal quotes for answerable cases | 9 |
+| Strict abstention envelopes | 1 |
+| Quarantined as invalid evidence | 5 |
+| Review-only quote cases | 9 |
+| Model source URL mismatches | 3 |
+| Automatically publishable answers | **0** |
+
+The five quarantined cases were **three** missing/mismatched model URLs on abstentions, **one** nonempty quote for missing evidence, and **one** unmatchable quote on a direct answer. The auditor **did not** use a model-supplied URL as authoritative and **did not** invent a replacement quote. Raw model answers, archived source hashes, the human review template (still unfilled), and audit outcomes are available in the downloadable workflow artifact while GitHub retains it.
+
+This **proves mechanical quarantining and provenance handling**, not semantic entailment, independent fact checking, or suitability for unattended news publishing. The [15-case preliminary triage](REAL_NEWS_QWEN_15_CASE_TRIAGE.md) describes an *earlier* run; it is an assistant-authored checklist rather than independent human ground truth.
+
 ## What remains unproven / next acceptance gate
 
 - **Human-reviewed gold labels** for the five archived article excerpts and 15 questions: direct correctness, justified inference, unsupported-answer rejection, and citation entailment.
-- **Strict structured abstention** across all five negative controls (currently 3/5 complete format, although 5/5 answered NOT_IN_SOURCE).
+- **Strict structured abstention** across all five negative controls (latest run: 1/5 complete format, although 5/5 answered NOT_IN_SOURCE; stochastic variability remains).
 - **Publisher diversity** and reproducibility beyond this one sample and date.
 - Long-term robustness to page HTML changes, failed feeds, prompt injection, and timeouts.
 
