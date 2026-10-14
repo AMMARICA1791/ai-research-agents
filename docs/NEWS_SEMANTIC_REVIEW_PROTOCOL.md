@@ -19,7 +19,7 @@ Two actual reviewers must independently examine each case **before** seeing one 
 
 For unanswerable cases: **CORRECT_ABSTENTION**, **INCORRECT_ABSTENTION**, or **INSUFFICIENT_CONTEXT**. Correctness is scoped to absence/presence of the precise requested information in the excerpt only. It does **not** claim the information is absent from the full publication.
 
-Every entry needs a reviewer ID, case ID, label, and a substantive reason. A SUPPORTED or PARTIAL judgment must include a supporting quote present verbatim in the archived excerpt. This exact-string check is an input-integrity measure, **not semantic verification**.
+Every entry needs a reviewer ID, case ID, label, and a substantive reason. A SUPPORTED or PARTIAL judgment must quote **the exact passage Qwen itself cited**, not a convenient different passage from the same article. The reviewer cannot repair a bad model citation by silently swapping it for better evidence. The citation must also be mechanically confirmed present in the archived excerpt; mismatched or fabricated citations cannot receive positive support labels. This is an input-integrity measure, **not semantic verification**.
 
 ## Review file and command
 
@@ -45,7 +45,7 @@ Run:
 python -m research.news_semantic_review --packet news_semantic_review_packet.json --reviews reviews.json --output review_consistency.json
 ```
 
-The program checks formatting, source-quote presence, repeated reviewer IDs, two-reviewer coverage, and disagreements requiring adjudication. **It cannot authenticate the human identities or independence**. It deliberately returns `semantic_accuracy: null` and `publication_allowed: false` even when both reviewers agree. No self-certification or fabricated scoring.
+The program recomputes source-quote and URL checks from archived evidence before building review cases, then checks formatting, that reviewers cite **Qwen's original passage**, repeated reviewer IDs, two-reviewer coverage, and disagreements requiring adjudication. **It cannot authenticate the human identities or independence**. It deliberately returns `semantic_accuracy: null` and `publication_allowed: false` even when both reviewers agree. No self-certification or fabricated scoring.
 
 ## Prioritized cases and exit
 

@@ -6,6 +6,7 @@ from research.news_semantic_review import build_packet, evaluate_reviews
 URL = "https://example.org/research"
 HASH = "sha256-example"
 EXCERPT = "The report describes a new system that was tested on twenty samples in a controlled demonstration. No financial revenue was reported."
+MODEL_QUOTE = "The report describes a new system that was tested on twenty samples in a controlled demonstration."
 
 
 def fixture():
@@ -76,7 +77,7 @@ def test_no_reviews_or_only_one_reviewer_cannot_claim_accuracy():
     empty = evaluate_reviews(packet, {"reviews": []})
     assert empty["status"] == "REVIEWER_LABELS_INCOMPLETE"
     assert empty["semantic_accuracy"] is None
-    one = evaluate_reviews(packet, {"reviews": [review("Q01", "human-A", "SUPPORTED", EXCERPT[:100])]})
+    one = evaluate_reviews(packet, {"reviews": [review("Q01", "human-A", "SUPPORTED", MODEL_QUOTE)]})
     assert one["cases_with_two_reviews"] == 0
     assert one["publication_allowed"] is False
 
@@ -89,9 +90,50 @@ def test_positive_review_requires_exact_source_quote():
         evaluate_reviews(packet, {"reviews": [review("Q01", "human-A", "PARTIAL", "")]})
 
 
+def test_real_quote_but_different_from_model_quote_is_not_allowed_as_repair():
+    packet = reviews_packet()
+    alternate_quote = "No financial revenue was reported."
+    # This is a true quotation in the same excerpt, but it was NOT Qwen's cited passage.
+    with pytest.raises(ValueError, match="cannot silently replace"):
+        evaluate_reviews(packet, {"reviews": [review("Q01", "reviewer-A", "SUPPORTED", alternate_quote)]})
+
+
+def test_cannot_label_fabricated_model_quote_as_supported_even_with_valid_replacement():
+    packet = reviews_packet()
+    tampered = copy.deepcopy(packet)
+    tampered["cases"][0]["model_quote_matches_excerpt"] = False
+    with pytest.raises(ValueError, match="model quotation is not in"):
+        evaluate_reviews(tampered, {"reviews": [review("Q01", "reviewer-A", "SUPPORTED", MODEL_QUOTE)]})
+
+
+def test_packet_recomputes_quote_and_link_checks_instead_of_trusting_audit_flags():
+    sources, probe, audit = fixture()
+    audit["results"][0]["audit"]["exact_quote_found"] = False
+    with pytest.raises(ValueError, match="Audit quote flag inconsistent"):
+        build_packet(sources, probe, audit)
+    sources, probe, audit = fixture()
+    audit["results"][0]["audit"]["model_source_url_matches"] = False
+    with pytest.raises(ValueError, match="Audit URL flag inconsistent"):
+        build_packet(sources, probe, audit)
+
+
+def test_verbatim_quote_not_proof_of_semantics_under_adversarial_claim():
+    sources, probe, audit = fixture()
+    probe["results"][0]["parsed_answer"] = "The report showed one million tested samples."
+    # The model's quote is still genuine; mechanically correct provenance says NOTHING
+    # about the fabricated million-sample assertion.
+    packet = build_packet(sources, probe, audit)
+    row = packet["cases"][0]
+    assert row["model_quote_matches_excerpt"] is True
+    assert row["semantic_label"] is None
+    assert row["human_review_status"] == "UNREVIEWED"
+    assert row["publication_allowed"] is False
+    assert packet["semantic_accuracy"] is None
+
+
 def test_duplicate_or_invalid_reviewer_is_rejected():
     packet = reviews_packet()
-    entries = [review("Q01", "human-A", "SUPPORTED", EXCERPT[:100])] * 2
+    entries = [review("Q01", "human-A", "SUPPORTED", MODEL_QUOTE)] * 2
     with pytest.raises(ValueError, match="Duplicate reviewer"):
         evaluate_reviews(packet, {"reviews": entries})
     with pytest.raises(ValueError, match="Invalid label"):
@@ -110,8 +152,8 @@ def full_reviews(disagree=False):
     rows = []
     for who in ("human-A", "human-B"):
         rows.extend([
-            review("Q01", who, "SUPPORTED", EXCERPT[:100]),
-            review("Q02", who, "PARTIAL" if (disagree and who == "human-B") else "UNSUPPORTED", EXCERPT[:100] if (disagree and who == "human-B") else ""),
+            review("Q01", who, "SUPPORTED", MODEL_QUOTE),
+            review("Q02", who, "PARTIAL" if (disagree and who == "human-B") else "UNSUPPORTED", MODEL_QUOTE if (disagree and who == "human-B") else ""),
             review("Q03", who, "CORRECT_ABSTENTION"),
         ])
     return {"reviews": rows}
