@@ -1,0 +1,11 @@
+{
+  "topic": "privacy",
+  "trend_hypothesis": "More workflows process sensitive information",
+  "research_question": "Can a local redaction stage prevent obvious secret leakage?",
+  "falsifiable_prediction": "Matching secret patterns are replaced before export.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "3f893d0b3af6443b",
+  "source_title": "Protection Is Not One Event: A Survey of RAG Protection Research by Measured Endpoint",
+  "source_url": "https://arxiv.org/abs/2610.30193"
+}
