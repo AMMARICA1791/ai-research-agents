@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "CoSec: Benchmarking Agent Security in Communities",
+  "source_excerpt": "arXiv:2609.34790v4 Announce Type: replace-cross Abstract: LLM agents operate in persistent collaborative environments involving multiple users, communities, memories, files, and tools. Community boundaries may remain fixed or evolve with changes in membership, roles, composition, and relationships. Agents must complete legitimate tasks and prevent unauthorized disclosure of protected information. Existing evaluations do not fully examine these ri",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: CoSec: Benchmarking Agent Security in Communities?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "5034cfbab5003c4f",
+  "source_title": "CoSec: Benchmarking Agent Security in Communities",
+  "source_url": "https://arxiv.org/abs/2609.34790"
+}
