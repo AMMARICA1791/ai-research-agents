@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Protection Is Not One Event: A Survey of RAG Protection Research by Measured Endpoint",
+  "source_excerpt": "arXiv:2610.30193v1 Announce Type: new Abstract: Retrieval-augmented generation (RAG) systems face security, privacy, and copyright risks including content leakage, source reconstruction, unauthorized access, data poisoning, and prompt injection. Yet RAG protection studies use incompatible evaluation metrics, datasets, and threat models. We present a systematic survey and human-coded evidence map of 118 full-text-confirmed RAG defense papers, orga",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Protection Is Not One Event: A Survey of RAG Protection Research by Measured Endpoint?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "3f893d0b3af6443b",
+  "source_title": "Protection Is Not One Event: A Survey of RAG Protection Research by Measured Endpoint",
+  "source_url": "https://arxiv.org/abs/2610.30193"
+}
