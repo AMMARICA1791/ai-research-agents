@@ -49,8 +49,6 @@ def parse_feed(xml, source):
         if not link.startswith("https://") or not title:
             continue
         metrics=score(title,desc)
-        if metrics["score"]==0:
-            continue
         entries.append({"id":hashlib.sha256(link.encode()).hexdigest()[:16],
                         "source":source,"title":title[:300],"url":link,
                         "published":item.findtext("pubDate"),
@@ -76,7 +74,7 @@ def run(feeds=FEEDS, fetcher=fetch):
     dedup={x["id"]:x for x in results}
     items=sorted(dedup.values(),key=lambda x:(-x["signal"]["score"],x["id"]))
     return {"generated_at_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
-            "status":"discovery_only","signals":items[:40],
+            "status":"unfiltered_source_discovery","signals":items[:40],
             "feed_errors":errors,"successful_feeds":len(feeds)-len(errors),
             "autonomous_code_generation":False}
 
