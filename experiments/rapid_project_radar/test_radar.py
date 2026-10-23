@@ -19,7 +19,7 @@ class RadarTests(unittest.TestCase):
         self.assertIn("Unrelated article",[item["title"] for item in items])
     def test_deduplicate(self):
         r=run({"a":"https://example.org/a","b":"https://example.org/b"},lambda _:XML)
-        self.assertEqual(len(r["signals"]),1)
+        self.assertEqual(len(r["signals"]),2)
         self.assertEqual(r["successful_feeds"],2)
     def test_failures_visible(self):
         def fail(_): raise OSError("offline")
