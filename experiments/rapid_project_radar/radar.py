@@ -1,5 +1,6 @@
 """Free-first public signal radar. Discovery and draft scaffolding only."""
 # CI verification trigger: behavior unchanged; validates main-branch push workflow.
+# Incubator integration check: no change to feed parsing or ranking.
 import argparse
 import datetime as dt
 import hashlib
