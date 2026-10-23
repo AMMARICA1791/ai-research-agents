@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Consensus accelerates research with GPT-5 and Responses API",
+  "source_excerpt": "Consensus uses GPT-5 and OpenAI\u2019s Responses API to power a multi-agent research assistant that reads, analyzes, and synthesizes evidence in minutes\u2014helping over 8 million researchers accelerate scientific discovery.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Consensus accelerates research with GPT-5 and Responses API?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0b05d5ebb510f7c5",
+  "source_title": "Consensus accelerates research with GPT-5 and Responses API",
+  "source_url": "https://openai.com/index/consensus"
+}
