@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "38a773a4b07d9bf1",
+  "source_title": "The End of Consensus Research?",
+  "source_url": "https://arxiv.org/abs/2610.30114"
+}
