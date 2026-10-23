@@ -1,0 +1,46 @@
+name: Rapid Radar Event Intake
+on:
+  repository_dispatch:
+    types: [rapid_news_signal]
+  workflow_dispatch:
+    inputs:
+      title:
+        description: 'News headline'
+        required: true
+        type: string
+      url:
+        description: 'Source HTTPS URL'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  inspect-event:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate offline tests
+        run: python -m unittest discover -s experiments/rapid_project_radar -p 'test_*.py' -v
+      - name: Create inert opportunity proposal
+        env:
+          DISPATCH_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+          MANUAL_TITLE: ${{ inputs.title }}
+          MANUAL_URL: ${{ inputs.url }}
+        run: |
+          python - <<'PY'
+          import json,os
+          payload=json.loads(os.environ.get('DISPATCH_PAYLOAD') or '{}')
+          if not payload:
+              payload={'title':os.environ.get('MANUAL_TITLE',''),'url':os.environ.get('MANUAL_URL','')}
+          with open('/tmp/radar-event.json','w') as f: json.dump(payload,f)
+          PY
+          python -m experiments.rapid_project_radar.event_intake --input /tmp/radar-event.json --output /tmp/radar-proposal.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: radar-event-proposal
+          path: /tmp/radar-proposal.json
+          retention-days: 14
