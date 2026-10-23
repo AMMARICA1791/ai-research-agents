@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Kernel-Managed Shared Memory for System-Wide Personalization",
+  "source_excerpt": "arXiv:2609.10144v3 Announce Type: replace-cross Abstract: AI systems become more useful when they can adapt to the people using them, but in multi-agent systems, useful context learned by one agent often remains unavailable to others. We present kernel-managed shared memory, a system-level abstraction in which specialized agents write structured, tagged memories while the agent-system kernel, not individual agents, governs retrieval, privacy enfo",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Kernel-Managed Shared Memory for System-Wide Personalization?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d1e4560aa8b75851",
+  "source_title": "Kernel-Managed Shared Memory for System-Wide Personalization",
+  "source_url": "https://arxiv.org/abs/2609.10144"
+}
