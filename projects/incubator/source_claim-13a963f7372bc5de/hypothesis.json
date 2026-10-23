@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "FVQKD: A Formal Verification of Quantum Key Distribution Security in Rocq",
+  "source_excerpt": "arXiv:2610.30645v1 Announce Type: cross Abstract: Quantum key distribution (QKD), whose security is derived from quantum mechanics rather than computational assumptions, is moving into standardization and commercial deployment. Yet its security guarantees rest on technically delicate proofs checked by hand. Formal verification closes this gap, establishing a two-factor assurance: unconditional security from physical principles, and machine-checke",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: FVQKD: A Formal Verification of Quantum Key Distribution Security in Rocq?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "13a963f7372bc5de",
+  "source_title": "FVQKD: A Formal Verification of Quantum Key Distribution Security in Rocq",
+  "source_url": "https://arxiv.org/abs/2610.30645"
+}
