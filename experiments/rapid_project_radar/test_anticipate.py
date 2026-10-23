@@ -10,14 +10,16 @@ class AnticipateTests(unittest.TestCase):
         h=hypotheses({"signal":{"topics":{"privacy":["privacy"]}}})
         self.assertEqual(len(h),1)
         self.assertFalse(h[0]["novelty_verified"])
-    def test_deduplicate_topics(self):
+    def test_distinct_signals_get_distinct_projects(self):
         report={"signals":[{"id":"a","signal":{"topics":{"privacy":["privacy"]}}},
                            {"id":"b","signal":{"topics":{"privacy":["privacy"]}}}]}
         with tempfile.TemporaryDirectory() as d:
             result=generate(report,d)
-            self.assertEqual(len(result),1)
-            self.assertTrue((Path(d)/"privacy"/"prototype.py").exists())
-            self.assertTrue((Path(d)/"privacy"/"test_prototype.py").exists())
+            self.assertEqual(len(result),2)
+            self.assertNotEqual(result[0]['project_id'],result[1]['project_id'])
+            for item in result:
+                self.assertTrue((Path(item['path'])/'prototype.py').exists())
+                self.assertTrue((Path(item['path'])/'test_prototype.py').exists())
     def test_unsupported_topic_not_executed(self):
         with tempfile.TemporaryDirectory() as d:
             r=generate({"signals":[{"signal":{"topics":{"evil_code":["exec"]}}}]},d)
