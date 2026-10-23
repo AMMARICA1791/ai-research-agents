@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Incentivizing Tool-Use Reinforcement Learning for Post-Arrival Emergency Care Prediction",
+  "source_excerpt": "arXiv:2610.21449v2 Announce Type: replace Abstract: Large language models (LLMs) can reason over both structured measurements and free-text records, which makes them attractive for emergency department (ED) prediction. However, most existing LLMs still fall short of conventional ML methods like trees on EHR-based prediction tasks. Our controlled analysis traces this gap to two weaknesses: LLMs do not select informative features, and they misjudge",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Incentivizing Tool-Use Reinforcement Learning for Post-Arrival Emergency Care Prediction?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "09fc95dac48f144e",
+  "source_title": "Incentivizing Tool-Use Reinforcement Learning for Post-Arrival Emergency Care Prediction",
+  "source_url": "https://arxiv.org/abs/2610.21449"
+}
