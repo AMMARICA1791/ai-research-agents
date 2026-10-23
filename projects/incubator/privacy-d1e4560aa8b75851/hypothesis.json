@@ -1,0 +1,11 @@
+{
+  "topic": "privacy",
+  "trend_hypothesis": "More workflows process sensitive information",
+  "research_question": "Can a local redaction stage prevent obvious secret leakage?",
+  "falsifiable_prediction": "Matching secret patterns are replaced before export.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d1e4560aa8b75851",
+  "source_title": "Kernel-Managed Shared Memory for System-Wide Personalization",
+  "source_url": "https://arxiv.org/abs/2609.10144"
+}
