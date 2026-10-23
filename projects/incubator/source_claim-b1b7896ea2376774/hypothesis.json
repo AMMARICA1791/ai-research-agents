@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Can Loan Processors and Underwriters Spot AI-Edited Statements? An Empirical Study",
+  "source_excerpt": "arXiv:2610.30758v1 Announce Type: cross Abstract: AI-assisted editing can produce loan documents that preserve familiar issuer layouts while changing the applicant's identity. We investigated whether experienced underwriters and loan processors identify such forgeries in first-pass, document-only review. Three practitioners recruited through Upwork each received one applicant package drawn from 134 forged PDFs derived from 47 genuine financial do",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Can Loan Processors and Underwriters Spot AI-Edited Statements? An Empirical Study?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "b1b7896ea2376774",
+  "source_title": "Can Loan Processors and Underwriters Spot AI-Edited Statements? An Empirical Study",
+  "source_url": "https://arxiv.org/abs/2610.30758"
+}
