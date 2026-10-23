@@ -30,3 +30,21 @@ resolve exact sentences, construct and archive source/quote pairs, obtain
 Alternative real-world corpus: https://fever.ai/dataset/averitec.html .
 AVeriTeC has web-source question-answer evidence, but its claim verdicts also
 must not be treated as quote-level defect labels.
+
+## Resolve archived evidence sentences
+
+After acquiring both official files (the labeled development JSONL and matching
+`wiki-pages.zip`), run:
+
+```sh
+python -m experiments.claim_stress_lab.fever_resolve --claims /path/to/paper_dev.jsonl --wiki-zip /path/to/wiki-pages.zip --limit 30 --output resolved_references.json
+```
+
+The resolver streams archive members and keeps only requested pages; it does
+not need to extract the full archive. It reports missing references explicitly.
+The resulting sentence texts are **not** automatically considered correct
+quotations and do not include independent quote-defect labels.
+
+At the time of implementation, the official dataset download could not be
+completed from the execution environment (network name-resolution failure).
+No real FEVER evaluation results are claimed.
