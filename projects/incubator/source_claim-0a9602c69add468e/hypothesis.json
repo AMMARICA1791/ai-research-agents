@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Measuring the Permission Gate: A Stress-Test Evaluation of Claude Code's Auto Mode",
+  "source_excerpt": "arXiv:2604.04978v3 Announce Type: replace-cross Abstract: Claude Code's auto mode is the first deployed permission system for AI coding agents, using a two-stage transcript classifier to gate dangerous tool calls. Anthropic reports a 0.4% false positive rate and 17% false negative rate on production traffic. We present the first independent evaluation of this system on deliberately ambiguous authorization scenarios, i.e., tasks where the user's i",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Measuring the Permission Gate: A Stress-Test Evaluation of Claude Code's Auto Mode?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0a9602c69add468e",
+  "source_title": "Measuring the Permission Gate: A Stress-Test Evaluation of Claude Code's Auto Mode",
+  "source_url": "https://arxiv.org/abs/2604.04978"
+}
