@@ -50,3 +50,15 @@ subsequent evaluation report.
 
 No local download was completed during this work session. The offline tools
 are prepared but have not produced real-dataset results.
+
+## Sampling interpretation (mandatory)
+
+The seeded round-robin procedure **oversamples minority claim-verdict
+categories** by design. It is useful for stress testing but **not a
+representative prevalence estimate** of the AVeriTeC development set.
+The manifest now reports both population and selected verdict counts and
+sets `sample_is_population_representative: false`. Do not extrapolate
+unweighted sample precision, false-positive rates, or defect prevalence to
+the full dataset. For prevalence estimation, use an independently labeled
+probability sample with documented inclusion probabilities and suitable
+weights, and report uncertainty.
