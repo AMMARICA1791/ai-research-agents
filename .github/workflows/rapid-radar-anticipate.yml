@@ -42,19 +42,19 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for dir in /tmp/anticipatory-projects/*; do
             [ -d "$dir" ] || continue
-            topic="$(basename "$dir")"
-            branch="radar/incubator-$topic"
+            project_id="$(basename "$dir")"
+            branch="radar/incubator-$project_id"
             if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-              echo "Already proposed: $topic"
+              echo "Already proposed: $project_id"
               continue
             fi
             git switch -c "$branch" origin/main
-            mkdir -p "projects/incubator/$topic"
-            cp -R "$dir"/. "projects/incubator/$topic/"
-            git add "projects/incubator/$topic"
-            git commit -m "experiment: incubate $topic from radar hypothesis"
+            mkdir -p "projects/incubator/$project_id"
+            cp -R "$dir"/. "projects/incubator/$project_id/"
+            git add "projects/incubator/$project_id"
+            git commit -m "experiment: incubate $project_id from radar signal"
             git push origin "$branch"
-            if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $topic (unvalidated scaffold)" --body "Automated trusted-template scaffold, not a validated invention. Requires prior-art search, domain-specific implementation and human review. Do not merge automatically."; then
+            if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $project_id (signal prototype)" --body "Automated trusted-template scaffold, not a validated invention. Requires prior-art search, domain-specific implementation and human review. Do not merge automatically."; then
               echo "::warning::Branch published but PR creation unavailable; inspect $branch"
             fi
             git switch --detach "${{ github.sha }}"
