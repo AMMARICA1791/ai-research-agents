@@ -28,12 +28,14 @@ def review(hypothesis, peers=()):
     comparisons = []
     for other in peers:
         other_title = str(other.get("source_title") or other.get("title") or "")
-        if not other_title or other_title == title:
+        if not other_title:
+            continue
+        if other.get("source_id") and other.get("source_id") == hypothesis.get("source_id"):
             continue
         other_words = _words(other_title)
         overlap = len(this_words & other_words) / max(1, len(this_words | other_words))
         if overlap >= 0.35:
-            comparisons.append({"title": other_title[:200], "title_jaccard": round(overlap, 3)})
+            comparisons.append({"title": other_title[:200], "title_jaccard": round(overlap, 3), "branch": str(other.get("_branch", ""))})
     comparisons.sort(key=lambda x: -x["title_jaccard"])
     comparator = {"agent": "similarity_reviewer", "possible_overlaps": comparisons[:5],
                   "method": "title_word_jaccard_not_semantic_equivalence"}
@@ -68,12 +70,26 @@ def write_review(project, peers=()):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--projects", required=True)
+    parser.add_argument("--portfolio", help="Read-only historical inventory JSON")
     args = parser.parse_args()
     root = Path(args.projects)
     projects = sorted(root.glob("*/hypothesis.json"))
     all_hypotheses = [json.loads(p.read_text(encoding="utf-8")) for p in projects]
+    historical = []
+    inventory_complete = None
+    if args.portfolio:
+        portfolio = json.loads(Path(args.portfolio).read_text(encoding="utf-8"))
+        inventory_complete = bool(portfolio.get("complete"))
+        for item in portfolio.get("projects", []):
+            h = dict(item.get("hypothesis") or {})
+            h["_branch"] = item.get("branch", "")
+            historical.append(h)
     output = []
     for path, hypothesis in zip(projects, all_hypotheses):
-        peers = [other for other in all_hypotheses if other is not hypothesis]
-        output.append(write_review(path.parent, peers))
+        peers = [other for other in all_hypotheses if other is not hypothesis] + historical
+        dossier = write_review(path.parent, peers)
+        dossier["portfolio_comparison"] = {"historical_candidates": len(historical), "inventory_complete": inventory_complete,
+                                           "scope": "radar_branches_and_current_batch", "semantic_equivalence_verified": False}
+        (path.parent / "COUNCIL_REVIEW.json").write_text(json.dumps(dossier, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        output.append(dossier)
     print(json.dumps({"reviewed": len(output), "priority_bands": {band: sum(d["priority"]["band"] == band for d in output) for band in ("REVIEW_FIRST", "RESEARCH_NEXT", "EVIDENCE_NEEDED")}}, indent=2))
