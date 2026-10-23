@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d5a82cd5f204f888",
+  "source_title": "Rethinking Agentic Model Orchestration for Time Series Forecasting",
+  "source_url": "https://arxiv.org/abs/2610.29504"
+}
