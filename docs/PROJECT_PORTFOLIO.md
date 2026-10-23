@@ -49,7 +49,7 @@ PR #60 is 5 ahead; PR #61 is 4 ahead; PR #62 is 4 ahead.
 The comparison is historical/structural evidence, **not** a passing test report.
 
 ### Important cleanup finding
-PR #62 is now redundant as an integration PR: its four radar files were
+PR #62 was closed without merging on 2026-10-23, and is redundant as an integration PR: its four radar files were
 already independently installed on `main`, followed by newer radar components.
 Do **not** merge PR #62 as if it were a new radar installation. Preserve it as
 historical review context until formally closed or annotated.
@@ -86,3 +86,4 @@ This establishes passing **configured CI checks at those commits only**. It does
 - **#58–#61 EXPERIMENTAL**: CI passed, but domain-specific validation remains incomplete.
 - **#62 REDUNDANT FOR INTEGRATION**: main already contains radar components; avoid merging older radar files.
 - **Radar on main: UNVERIFIED RUNTIME**: scheduled/event-triggered live operation and artifact production still need run-level confirmation.
+\n## Operations runbook\n\nSee [Radar operations](RADAR_OPERATIONS.md) for workflows, manual verification, source-event configuration, and known runtime limits.\n
