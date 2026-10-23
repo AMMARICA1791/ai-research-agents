@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6eee2e56ac4094c4",
+  "source_title": "Correlated Failures of AI Approval Monitors",
+  "source_url": "https://arxiv.org/abs/2610.29178"
+}
