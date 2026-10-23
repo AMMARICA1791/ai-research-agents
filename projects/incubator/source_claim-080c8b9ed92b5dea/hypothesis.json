@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "AgentTriage: Replayable Security Diagnosis Across Heterogeneous Agent Runtimes",
+  "source_excerpt": "arXiv:2610.30738v1 Announce Type: cross Abstract: When tool-use agents write files, execute code, or send data, their final responses do not explain the resulting security events, and heterogeneous runtimes expose the relevant evidence through incompatible interfaces. We present AgentTriage, an executable contract for replayable security diagnosis across heterogeneous runtimes. The contract admits conclusions whose claims cite canonical runtime e",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: AgentTriage: Replayable Security Diagnosis Across Heterogeneous Agent Runtimes?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "080c8b9ed92b5dea",
+  "source_title": "AgentTriage: Replayable Security Diagnosis Across Heterogeneous Agent Runtimes",
+  "source_url": "https://arxiv.org/abs/2610.30738"
+}
