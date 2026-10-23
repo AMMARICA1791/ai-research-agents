@@ -66,6 +66,7 @@ def scaffold(hypothesis, root, project_id=None):
     (project/"prototype.py").write_text(code,encoding="utf-8")
     (project/"test_prototype.py").write_text(test,encoding="utf-8")
     (project/"hypothesis.json").write_text(json.dumps(hypothesis,indent=2)+"\n",encoding="utf-8")
+    (project/"LEARNING_LOG.json").write_text(json.dumps({"project_id":project.name,"iterations":[],"lessons":[],"automatic_code_changes":False,"model_weights_updated":False},indent=2)+"\\n",encoding="utf-8")
     (project/"README.md").write_text(
         "# Anticipatory prototype: "+topic+"\n\n"
         "Source-grounded question with executable evidence traceability check. "
