@@ -20,7 +20,7 @@ def intake(event):
     if not re.fullmatch(r"[A-Za-z0-9.-]+",parsed.hostname):
         raise ValueError("invalid hostname")
     key=hashlib.sha256(url.strip().encode()).hexdigest()[:20]
-    return {"id":key,"title":title.strip(),"source_url":url.strip(),
+    return {"id":key,"title":title.strip(),"source_url":url.strip(),"url":url.strip(), "description":str(event.get("description") or "")[:2500],
             "status":"proposal_only","requires_prior_art_review":True,
             "novelty_verified":False,"project_created":False,
             "untrusted_input":True}
@@ -32,3 +32,12 @@ if __name__=="__main__":
     with open(args.input,encoding="utf-8") as f: event=json.load(f)
     result=intake(event)
     with open(args.output,"w",encoding="utf-8") as f: json.dump(result,f,indent=2)
+
+
+def to_radar_report(event):
+    """Convert a validated push signal to the normal radar-to-council input contract."""
+    proposal = intake(event)
+    signal = {"id": proposal["id"][:16], "title": proposal["title"],
+              "url": proposal["url"], "description": proposal["description"],
+              "signal": {"topics": {}}, "event_driven": True}
+    return {"signals": [signal], "source": "validated_repository_dispatch"}
