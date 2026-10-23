@@ -15,6 +15,15 @@ FEEDS = {
     "arxiv_cs_ai": "https://export.arxiv.org/rss/cs.AI",
     "arxiv_cs_cy": "https://export.arxiv.org/rss/cs.CY",
     "w3c_news": "https://www.w3.org/blog/news/feed/",
+    "arxiv_cs_cr": "https://export.arxiv.org/rss/cs.CR",
+    "arxiv_cs_lg": "https://export.arxiv.org/rss/cs.LG",
+    "arxiv_cs_dc": "https://export.arxiv.org/rss/cs.DC",
+    "arxiv_cs_hc": "https://export.arxiv.org/rss/cs.HC",
+    "hacker_news": "https://hnrss.org/newest?q=AI",
+    "github_blog": "https://github.blog/feed/",
+    "cloudflare_blog": "https://blog.cloudflare.com/rss/",
+    "google_research": "https://research.google/blog/rss/",
+    "openai_news": "https://openai.com/news/rss.xml",
 }
 KEYWORDS = {
     "agent_security": ("agent", "permission", "authorization", "prompt injection", "consent"),
