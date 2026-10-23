@@ -1,5 +1,7 @@
 # AI Research Agents
 
+> **Project navigation:** [Experiment index](experiments/README.md) · [Portfolio organization and migration plan](docs/PROJECT_PORTFOLIO.md). Experimental branches are not merged products.
+
 **Evidence-first, free-first AI research for reproducible experiments, open-weight models and verifiable engineering.**
 
 > **Seven coordinated pipeline stages, NOT seven independent thinking AI agents.** This laboratory is experimental; human review remains mandatory.
