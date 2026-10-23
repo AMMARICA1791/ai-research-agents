@@ -1,0 +1,62 @@
+name: Claim Stress Lab
+
+on:
+  pull_request:
+    paths:
+      - "experiments/claim_stress_lab/**"
+      - ".github/workflows/claim-stress-lab.yml"
+  push:
+    branches:
+      - "experiment/claim-stress-lab"
+    paths:
+      - "experiments/claim_stress_lab/**"
+      - ".github/workflows/claim-stress-lab.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run offline unit tests
+        run: python -m unittest discover -s experiments/claim_stress_lab -p 'test_*.py' -v
+      - name: Run labeled synthetic benchmark
+        run: |
+          python -m experiments.claim_stress_lab.benchmark > /tmp/claim-stress-benchmark.json
+          python -c 'import json; p=json.load(open("/tmp/claim-stress-benchmark.json")); assert p["dataset"]=="synthetic_smoke_only"; assert p["n"]==4; assert p["true_positive"]==2; assert p["false_positive"]==0; assert p["false_negative"]==0; assert p["semantic_accuracy"] is None'
+      - name: Run sample diagnostic
+        run: |
+          python -m experiments.claim_stress_lab.lab --input experiments/claim_stress_lab/examples.json --output /tmp/claim-stress-results.json
+          python -c 'import json; p=json.load(open("/tmp/claim-stress-results.json")); assert len(p["results"])==2; assert all(not r["publication_allowed"] for r in p["results"])'
+
+  optional-real-data-acquisition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Download real AVeriTeC development data (with fallback)
+        id: acquisition
+        run: |
+          python -m experiments.claim_stress_lab.acquire_averitec --output /tmp/averitec-dev.json
+      - name: Audit and sample only if real data exists
+        run: |
+          python -m experiments.claim_stress_lab.averitec_audit --input /tmp/averitec-dev.json > /tmp/averitec-audit.json
+          python -m experiments.claim_stress_lab.averitec_sample --input /tmp/averitec-dev.json --count 30 --output /tmp/averitec-sample.json
+          python -c 'import json; p=json.load(open("/tmp/averitec-sample.json")); assert p["sample_size"]==30; assert not p["independent_quote_labels"]'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: averitec-audit-and-sample
+          path: |
+            /tmp/averitec-audit.json
+            /tmp/averitec-sample.json
+          retention-days: 7
