@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Correlated Failures of AI Approval Monitors",
+  "source_excerpt": "arXiv:2610.29178v1 Announce Type: cross Abstract: Before an AI agent takes a consequential action, such as paying, messaging or changing code, several monitors check it. Their verdicts are combined by aggregating scores or by counting approvals, whatever inputs the monitors share. Monitors that share a base model or a poisoned input, however, may fail together. We borrow the fail-prone systems of distributed computing: lists of monitor sets that ",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Correlated Failures of AI Approval Monitors?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6eee2e56ac4094c4",
+  "source_title": "Correlated Failures of AI Approval Monitors",
+  "source_url": "https://arxiv.org/abs/2610.29178"
+}
