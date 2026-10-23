@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "The End of Consensus Research?",
+  "source_excerpt": "arXiv:2610.30114v1 Announce Type: cross Abstract: Consensus is a fundamental problem in distributed computing and at the core of state machine replication (SMR). Despite decades of active human research, discovering practical low-latency solutions to the problem is still open, as it requires combining protocol knowledge, correctness reasoning, implementation, and experimental evaluation. We report on how AI helped us discover A-greement, a new co",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: The End of Consensus Research??",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "38a773a4b07d9bf1",
+  "source_title": "The End of Consensus Research?",
+  "source_url": "https://arxiv.org/abs/2610.30114"
+}
