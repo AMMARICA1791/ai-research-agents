@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "RuleSmith: Multi-Agent LLMs for Automated Game Balancing",
+  "source_excerpt": "arXiv:2602.06232v2 Announce Type: replace-cross Abstract: Game balancing is a longstanding challenge requiring repeated playtesting, expert intuition, and extensive manual tuning. We introduce RuleSmith, a framework that couples multi-agent LLM self-play with surrogate-based optimization over a parameterized rule space. As a proof of concept, we build CivMini, a simplified civilization-style game with two asymmetric factions governed by 12 tunabl",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: RuleSmith: Multi-Agent LLMs for Automated Game Balancing?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "006e5f17677b8079",
+  "source_title": "RuleSmith: Multi-Agent LLMs for Automated Game Balancing",
+  "source_url": "https://arxiv.org/abs/2602.06232"
+}
