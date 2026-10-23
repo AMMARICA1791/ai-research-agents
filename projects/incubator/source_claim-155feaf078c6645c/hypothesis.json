@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "LLM-Guided Transportation Hub Capacity Planning with Textual Business Inputs",
+  "source_excerpt": "arXiv:2607.03651v4 Announce Type: replace Abstract: While traditional hub capacity planning models optimize effectively for quantitative inputs, they often fail to digest qualitative business context. We propose a novel framework where a large language model (LLM) agent iteratively proposes hub capacity decisions guided by natural-language business context descriptions. The key mechanism is a chain-of-thought reasoning protocol: the LLM construct",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: LLM-Guided Transportation Hub Capacity Planning with Textual Business Inputs?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "155feaf078c6645c",
+  "source_title": "LLM-Guided Transportation Hub Capacity Planning with Textual Business Inputs",
+  "source_url": "https://arxiv.org/abs/2607.03651"
+}
