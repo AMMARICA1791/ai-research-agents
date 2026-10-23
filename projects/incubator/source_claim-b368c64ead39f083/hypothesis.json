@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "SUDP: Secret-Use Delegation Protocol for Agentic Systems",
+  "source_excerpt": "arXiv:2604.24920v4 Announce Type: replace-cross Abstract: Agentic systems now act with user secrets for APIs, messaging platforms, and cloud services. Today's agent runtimes typically implement authorization by exposure: enabling action means placing a reusable secret, or a reusable artifact derived from it, inside the runtime, so a transient prompt-injection or tool-side compromise becomes durable account compromise. Existing defenses cover adja",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: SUDP: Secret-Use Delegation Protocol for Agentic Systems?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "b368c64ead39f083",
+  "source_title": "SUDP: Secret-Use Delegation Protocol for Agentic Systems",
+  "source_url": "https://arxiv.org/abs/2604.24920"
+}
