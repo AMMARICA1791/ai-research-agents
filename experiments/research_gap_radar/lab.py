@@ -8,7 +8,7 @@ def assess(candidate):
         raise TypeError("candidate must be a JSON object")
     missing=[k for k in REQUIRED if not isinstance(candidate.get(k),str) or not candidate[k].strip()]
     text=" ".join(str(candidate.get(k,"")) for k in REQUIRED)
-    has_measure=bool(re.search(r"\\b(accuracy|latency|error rate|precision|recall|seconds|percent|count|rate|time|cost)\\b|%|\\d",text,re.I))
+    has_measure=bool(re.search(r"[0-9%]|accuracy|latency|error rate|precision|recall|seconds|percent|count|rate|time|cost",text,re.I))
     return {"ready_for_human_review":not missing and has_measure,
             "missing_fields":missing,
             "quantified_test_signal":has_measure,
