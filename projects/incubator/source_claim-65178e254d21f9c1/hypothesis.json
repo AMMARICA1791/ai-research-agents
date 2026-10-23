@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "RetryBench: Separating Retry Permission from Recovery Outcomes in GPT Tool Use",
+  "source_excerpt": "arXiv:2610.15884v3 Announce Type: replace-cross Abstract: False retry permission (FRP) occurs when an agent retries a timed-out tool call without support from the visible contract. RetryBench separates this error from realized recovery. Successful protected recovery does not imply reliable rejection of unsupported retries. In a 720-response key control, valid keys usually enabled safe progress, but offered changed keys elicited unsupported retrie",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: RetryBench: Separating Retry Permission from Recovery Outcomes in GPT Tool Use?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "65178e254d21f9c1",
+  "source_title": "RetryBench: Separating Retry Permission from Recovery Outcomes in GPT Tool Use",
+  "source_url": "https://arxiv.org/abs/2610.15884"
+}
