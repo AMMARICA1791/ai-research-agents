@@ -12,7 +12,11 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual(result["false_negative"], 0)
         self.assertEqual(result["precision"], 1.0)
         self.assertEqual(result["recall"], 1.0)
-        baseline = result["baseline_exact_quote_only"]\n        self.assertEqual(baseline["true_positive"], 1)\n        self.assertEqual(baseline["false_negative"], 1)\n        self.assertEqual(baseline["false_positive"], 0)\n        self.assertIsNone(result["semantic_accuracy"])
+        baseline = result["baseline_exact_quote_only"]
+        self.assertEqual(baseline["true_positive"], 1)
+        self.assertEqual(baseline["false_negative"], 1)
+        self.assertEqual(baseline["false_positive"], 0)
+        self.assertIsNone(result["semantic_accuracy"])
         self.assertFalse(result["publication_allowed"])
 
 
