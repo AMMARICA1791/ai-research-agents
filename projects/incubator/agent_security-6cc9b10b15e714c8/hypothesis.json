@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6cc9b10b15e714c8",
+  "source_title": "Privacy Preference Controls for Agentic Systems",
+  "source_url": "https://arxiv.org/abs/2610.29929"
+}
