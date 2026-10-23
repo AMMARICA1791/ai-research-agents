@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d5a82cd5f204f888",
+  "source_title": "Rethinking Agentic Model Orchestration for Time Series Forecasting",
+  "source_url": "https://arxiv.org/abs/2610.29504"
+}
