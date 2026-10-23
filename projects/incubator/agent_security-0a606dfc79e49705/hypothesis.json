@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0a606dfc79e49705",
+  "source_title": "RegoMender: A Multi-agent Framework for Automated Rego Policy Repair",
+  "source_url": "https://arxiv.org/abs/2610.29456"
+}
