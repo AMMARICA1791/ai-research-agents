@@ -13,7 +13,7 @@ on:
         required: true
         type: string
 permissions:
-  contents: read
+  contents: write
 jobs:
   inspect-event:
     runs-on: ubuntu-latest
@@ -39,8 +39,66 @@ jobs:
           with open('/tmp/radar-event.json','w') as f: json.dump(payload,f)
           PY
           python -m experiments.rapid_project_radar.event_intake --input /tmp/radar-event.json --output /tmp/radar-proposal.json
+      - name: Build validated event radar report
+        run: |
+          python - <<'PY'
+          import json
+          from experiments.rapid_project_radar.event_intake import to_radar_report
+          with open('/tmp/radar-event.json', encoding='utf-8') as f:
+              event = json.load(f)
+          with open('/tmp/radar-event-report.json', 'w', encoding='utf-8') as f:
+              json.dump(to_radar_report(event), f)
+          PY
+      - name: Generate signal-specific project
+        run: python -m experiments.rapid_project_radar.anticipate --report /tmp/radar-event-report.json --output-dir /tmp/event-projects
+      - name: Historical portfolio inventory
+        continue-on-error: true
+        env:
+          GH_TOKEN: \${{ github.token }}
+        run: python -m experiments.rapid_project_radar.portfolio --repo \${{ github.repository }} --output /tmp/radar-portfolio.json
+      - name: Council review before publishing
+        run: |
+          if [ -f /tmp/radar-portfolio.json ]; then
+            python -m experiments.rapid_project_radar.council --projects /tmp/event-projects --portfolio /tmp/radar-portfolio.json
+          else
+            python -m experiments.rapid_project_radar.council --projects /tmp/event-projects
+          fi
+      - name: Verify project tests
+        run: |
+          set -eu
+          for dir in /tmp/event-projects/*; do
+            [ -d "$dir" ] || continue
+            (cd "$dir" && python -m unittest discover -s . -p 'test_*.py' -v)
+          done
+      - name: Publish isolated project branch
+        env:
+          GH_TOKEN: \${{ github.token }}
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for dir in /tmp/event-projects/*; do
+            [ -d "$dir" ] || continue
+            project_id="$(basename "$dir")"
+            branch="radar/incubator-$project_id"
+            if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+              echo "Already exists: $branch"
+              continue
+            fi
+            git switch -c "$branch" origin/main
+            mkdir -p "projects/incubator/$project_id"
+            cp -R "$dir"/. "projects/incubator/$project_id/"
+            git add "projects/incubator/$project_id"
+            git commit -m "experiment: event-driven incubator $project_id"
+            git push origin "$branch"
+            git switch --detach "\${{ github.sha }}"
+            git branch -D "$branch"
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: radar-event-proposal
-          path: /tmp/radar-proposal.json
+          path: |
+            /tmp/radar-proposal.json
+            /tmp/radar-event-report.json
+            /tmp/event-projects/
           retention-days: 14
