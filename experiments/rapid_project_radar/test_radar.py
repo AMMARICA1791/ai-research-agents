@@ -10,11 +10,13 @@ XML=b'''<rss><channel><item><title>Agent permission and consent</title>
 class RadarTests(unittest.TestCase):
     def test_relevant_feed(self):
         items=parse_feed(XML,"sample")
-        self.assertEqual(len(items),1)
+        self.assertEqual(len(items),2)
         self.assertGreater(items[0]["signal"]["score"],0)
         self.assertFalse(items[0]["novelty_verified"])
-    def test_irrelevant(self):
+    def test_no_keyword_signal_still_retained(self):
         self.assertEqual(score("gardening","flowers")["score"],0)
+        items=parse_feed(XML,"sample")
+        self.assertIn("Unrelated article",[item["title"] for item in items])
     def test_deduplicate(self):
         r=run({"a":"https://example.org/a","b":"https://example.org/b"},lambda _:XML)
         self.assertEqual(len(r["signals"]),1)
