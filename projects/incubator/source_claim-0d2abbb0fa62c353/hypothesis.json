@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Keeping your data safe when an AI agent clicks a link",
+  "source_excerpt": "Learn how OpenAI protects user data when AI agents open links, preventing URL-based data exfiltration and prompt injection with built-in safeguards.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Keeping your data safe when an AI agent clicks a link?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0d2abbb0fa62c353",
+  "source_title": "Keeping your data safe when an AI agent clicks a link",
+  "source_url": "https://openai.com/index/ai-agent-link-safety"
+}
