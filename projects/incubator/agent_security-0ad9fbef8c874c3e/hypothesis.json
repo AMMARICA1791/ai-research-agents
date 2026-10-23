@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0ad9fbef8c874c3e",
+  "source_title": "Continuously hardening ChatGPT Atlas against prompt injection",
+  "source_url": "https://openai.com/index/hardening-atlas-against-prompt-injection"
+}
