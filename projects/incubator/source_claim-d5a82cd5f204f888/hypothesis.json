@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Rethinking Agentic Model Orchestration for Time Series Forecasting",
+  "source_excerpt": "arXiv:2610.29504v1 Announce Type: cross Abstract: Time series foundation models (TSFMs) perform unevenly across forecasting tasks. Recent work uses agentic model orchestration (AMO) to select or combine TSFMs, often outperforming individual forecasters. Yet these gains may reflect stronger or more complementary candidates rather than better orchestration. To disentangle these effects, we introduce FairAMO, a controlled evaluation protocol with fr",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Rethinking Agentic Model Orchestration for Time Series Forecasting?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d5a82cd5f204f888",
+  "source_title": "Rethinking Agentic Model Orchestration for Time Series Forecasting",
+  "source_url": "https://arxiv.org/abs/2610.29504"
+}
