@@ -34,3 +34,13 @@ The GitHub connector available during this audit did not expose a way to list de
 
 ## Future separation
 Keep the radar as its own independently deployable system only after live tests and dependencies are audited. Extract other experiments individually while retaining their commit histories and attribution. Do not mass-merge or delete branches to simplify the UI.
+
+## Verified live run — 2026-10-23
+
+A behavior-neutral comment-only change on `main` (commit `588b614ff230eb6cd64c96b025877f18b81d50af`) triggered [Rapid Project Radar run 40036621481](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/40036621481).
+
+**Result: completed / success.** Verified job `test-and-discover` had successful steps for offline tests, public RSS fetching and evidence upload. Artifact `rapid-radar-report` exists (ID `12536588776`, 3376 bytes, SHA-256 digest `1e8a5af683567dfe28f0adf8cba178a105cd7f9b77e3481c5290235f25ac66f5`). This proves a successful one-off push-triggered run, **not** continuous uptime or future scheduled-run reliability. Artifact contents have not been independently audited.
+
+An earlier [anticipatory-prototypes run 40031378837](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/40031378837) also completed successfully and produced artifact `anticipatory-projects` (ID `12535630223`). These are generic templates, not domain-specific inventions.
+
+The original note above about unavailable run listings was superseded by successful read-only access through the GitHub Actions runs collection. The connector still does not expose manual workflow dispatch in this session.
