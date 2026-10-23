@@ -26,6 +26,8 @@ jobs:
         run: python -m experiments.rapid_project_radar.radar --output /tmp/rapid-radar-report.json
       - name: Generate isolated prototype templates
         run: python -m experiments.rapid_project_radar.anticipate --report /tmp/rapid-radar-report.json --output-dir /tmp/anticipatory-projects
+      - name: Council peer review and priority triage
+        run: python -m experiments.rapid_project_radar.council --projects /tmp/anticipatory-projects
       - name: Verify generated prototypes
         run: |
           for dir in /tmp/anticipatory-projects/*; do
