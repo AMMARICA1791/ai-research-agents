@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Real PMIDs, Wrong Papers: Harness Design for Biomedical Claim-Verification Agents",
+  "source_excerpt": "arXiv:2610.29812v1 Announce Type: new Abstract: Literature-searching language agents are becoming a standard component of scientific assistants for the life sciences, yet there is little controlled evidence on which parts of their harness matter. We run a controlled ablation on biomedical claim verification (SciFact) with the live PubMed API as the only tool. Holding the backbone and output format fixed, we compare four harnesses: closed-book ans",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Real PMIDs, Wrong Papers: Harness Design for Biomedical Claim-Verification Agents?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1353be402f8662ba",
+  "source_title": "Real PMIDs, Wrong Papers: Harness Design for Biomedical Claim-Verification Agents",
+  "source_url": "https://arxiv.org/abs/2610.29812"
+}
