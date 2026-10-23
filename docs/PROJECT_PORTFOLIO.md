@@ -5,6 +5,10 @@ Updated: 2026-10-23. This is an organizational index, not a validation certifica
 ## Mission
 Anticipate future technical needs before they become mainstream; convert falsifiable hypotheses into runnable experiments. Commercial outcomes are not prerequisites for prototyping. Claims of worldwide novelty require evidence and remain provisional.
 
+## Current project directory
+
+**[Open the complete Radar Project Registry](RADAR_PROJECT_REGISTRY.md)** — 133 indexed radar branches grouped by family, with direct project links (snapshot 2026-10-23). This is a directory, not a validation claim. The projects remain on separate branches; they have not been merged into `main`.
+
 ## Three layers
 1. **Core research lab** (this repository's existing `lab/`, `agents/`, `tests/`, documentation and demos). Preserve current behavior and evidence.
 2. **Radar infrastructure** (`experiments/rapid_project_radar/` plus `.github/workflows/rapid-*`). Collects public signals, handles dispatched events and emits *bounded template artifacts*. Not a 24/7 hosted service, not a general autonomous coding agent.
