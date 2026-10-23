@@ -59,8 +59,8 @@ def scaffold(hypothesis, root, project_id=None):
     # Topic-specific code comes only from the trusted PROTOTYPES map.
     if topic == "source_claim":
         excerpt = hypothesis["source_excerpt"]
-        code = "SOURCE_EXCERPT = " + repr(excerpt) + "\\n" + "def evidence_matches(text):\\n    return isinstance(text, str) and bool(SOURCE_EXCERPT) and SOURCE_EXCERPT in text\\n"
-        test = "import unittest\\nfrom prototype import evidence_matches\\nclass Tests(unittest.TestCase):\\n    def test_trace(self):\\n        self.assertTrue(evidence_matches(" + repr(excerpt) + "))\\n    def test_missing(self):\\n        self.assertFalse(evidence_matches('unrelated'))\\n"
+        code = "SOURCE_EXCERPT = " + repr(excerpt) + "\n" + "def evidence_matches(text):\n    return isinstance(text, str) and bool(SOURCE_EXCERPT) and SOURCE_EXCERPT in text\n"
+        test = "import unittest\nfrom prototype import evidence_matches\nclass Tests(unittest.TestCase):\n    def test_trace(self):\n        self.assertTrue(evidence_matches(" + repr(excerpt) + "))\n    def test_missing(self):\n        self.assertFalse(evidence_matches('unrelated'))\n"
     else:
         code, test = PROTOTYPES[topic]
     (project/"prototype.py").write_text(code,encoding="utf-8")
