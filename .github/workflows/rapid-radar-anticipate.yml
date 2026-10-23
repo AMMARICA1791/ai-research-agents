@@ -26,8 +26,18 @@ jobs:
         run: python -m experiments.rapid_project_radar.radar --output /tmp/rapid-radar-report.json
       - name: Generate isolated prototype templates
         run: python -m experiments.rapid_project_radar.anticipate --report /tmp/rapid-radar-report.json --output-dir /tmp/anticipatory-projects
+      - name: Read historical project portfolio
+        continue-on-error: true
+        env:
+          GH_TOKEN: \${{ github.token }}
+        run: python -m experiments.rapid_project_radar.portfolio --repo \${{ github.repository }} --output /tmp/radar-portfolio.json
       - name: Council peer review and priority triage
-        run: python -m experiments.rapid_project_radar.council --projects /tmp/anticipatory-projects
+        run: |
+          if [ -f /tmp/radar-portfolio.json ]; then
+            python -m experiments.rapid_project_radar.council --projects /tmp/anticipatory-projects --portfolio /tmp/radar-portfolio.json
+          else
+            python -m experiments.rapid_project_radar.council --projects /tmp/anticipatory-projects
+          fi
       - name: Verify generated prototypes
         run: |
           for dir in /tmp/anticipatory-projects/*; do
