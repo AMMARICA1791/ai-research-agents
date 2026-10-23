@@ -27,7 +27,11 @@ jobs:
           python-version: "3.11"
       - name: Run offline unit tests
         run: python -m unittest discover -s experiments/claim_stress_lab -p 'test_*.py' -v
-      - name: Run labeled synthetic benchmark\n        run: |\n          python -m experiments.claim_stress_lab.benchmark > /tmp/claim-stress-benchmark.json\n          python -c 'import json; p=json.load(open("/tmp/claim-stress-benchmark.json")); assert p["dataset"]=="synthetic_smoke_only"; assert p["n"]==4; assert p["true_positive"]==2; assert p["false_positive"]==0; assert p["false_negative"]==0; assert p["semantic_accuracy"] is None'\n      - name: Run sample diagnostic
+      - name: Run labeled synthetic benchmark
+        run: |
+          python -m experiments.claim_stress_lab.benchmark > /tmp/claim-stress-benchmark.json
+          python -c 'import json; p=json.load(open("/tmp/claim-stress-benchmark.json")); assert p["dataset"]=="synthetic_smoke_only"; assert p["n"]==4; assert p["true_positive"]==2; assert p["false_positive"]==0; assert p["false_negative"]==0; assert p["semantic_accuracy"] is None'
+      - name: Run sample diagnostic
         run: |
           python -m experiments.claim_stress_lab.lab --input experiments/claim_stress_lab/examples.json --output /tmp/claim-stress-results.json
           python -c 'import json; p=json.load(open("/tmp/claim-stress-results.json")); assert len(p["results"])==2; assert all(not r["publication_allowed"] for r in p["results"])'
