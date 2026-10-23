@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Privacy Preference Controls for Agentic Systems",
+  "source_excerpt": "arXiv:2610.29929v2 Announce Type: replace-cross Abstract: In response to vast and widespread online tracking, regulators and technologists alike have worked to develop laws and tools that allow people to express their privacy preferences. These measures seek to offer users greater control over the sale and sharing of personal information, putting agency in their hands to protect their privacy. However, the web is undergoing a seismic shift, away ",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Privacy Preference Controls for Agentic Systems?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6cc9b10b15e714c8",
+  "source_title": "Privacy Preference Controls for Agentic Systems",
+  "source_url": "https://arxiv.org/abs/2610.29929"
+}
