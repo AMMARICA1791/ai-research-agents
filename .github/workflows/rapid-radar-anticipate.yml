@@ -38,11 +38,16 @@ jobs:
           else
             python -m experiments.rapid_project_radar.council --projects /tmp/anticipatory-projects
           fi
-      - name: Verify generated prototypes
+      - name: Run experiments and preserve failures as learning
         run: |
+          set -eu
           for dir in /tmp/anticipatory-projects/*; do
             [ -d "$dir" ] || continue
-            (cd "$dir" && python -m unittest discover -s . -p 'test_*.py' -v)
+            if (cd "$dir" && python -m unittest discover -s . -p 'test_*.py' -v); then
+              python -m experiments.rapid_project_radar.learning --project "$dir" --outcome PASS --observation "Initial scaffold tests passed; scientific hypothesis remains unverified."
+            else
+              python -m experiments.rapid_project_radar.learning --project "$dir" --outcome FAIL --observation "Initial scaffold tests failed; preserve this experiment for investigation." --correction "Inspect test output, revise hypothesis or implementation, and retry."
+            fi
           done
       - name: Publish new isolated project branches
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_run'
