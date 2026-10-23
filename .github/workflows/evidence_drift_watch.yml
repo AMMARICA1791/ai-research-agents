@@ -1,0 +1,24 @@
+name: Evidence Drift Watch
+on:
+  push:
+    branches: [experiment/evidence-drift-watch]
+    paths:
+      - 'experiments/evidence_drift_watch/**'
+      - '.github/workflows/evidence_drift_watch.yml'
+  pull_request:
+    paths:
+      - 'experiments/evidence_drift_watch/**'
+      - '.github/workflows/evidence_drift_watch.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s experiments/evidence_drift_watch -p 'test_*.py' -v
