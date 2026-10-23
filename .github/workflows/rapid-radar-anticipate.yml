@@ -1,0 +1,31 @@
+name: Rapid Radar Anticipatory Prototypes
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Rapid Project Radar]
+    types: [completed]
+permissions:
+  contents: read
+jobs:
+  anticipate:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests
+        run: python -m unittest discover -s experiments/rapid_project_radar -p 'test_*.py' -v
+      - name: Collect early signals
+        run: python -m experiments.rapid_project_radar.radar --output /tmp/rapid-radar-report.json
+      - name: Generate isolated prototype templates
+        run: python -m experiments.rapid_project_radar.anticipate --report /tmp/rapid-radar-report.json --output-dir /tmp/anticipatory-projects
+      - name: Upload prototype archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: anticipatory-projects
+          path: /tmp/anticipatory-projects/
+          if-no-files-found: warn
+          retention-days: 14
