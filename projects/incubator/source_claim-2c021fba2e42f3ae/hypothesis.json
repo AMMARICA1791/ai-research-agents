@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Semantics Delivery Network: Rethinking Web Retrieval Infrastructure for LLM Agents",
+  "source_excerpt": "arXiv:2609.22486v2 Announce Type: replace-cross Abstract: Large language models (LLMs) increasingly ground their answers in proprietary data and live web content through both single-shot retrieval-augmented generation (RAG) and multi-turn agentic search. Yet the web path they use was built for human readers: search services return URLs and snippets ranked by generic relevance, and content delivery networks (CDNs) cache URL-addressed objects witho",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Semantics Delivery Network: Rethinking Web Retrieval Infrastructure for LLM Agents?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "2c021fba2e42f3ae",
+  "source_title": "Semantics Delivery Network: Rethinking Web Retrieval Infrastructure for LLM Agents",
+  "source_url": "https://arxiv.org/abs/2609.22486"
+}
