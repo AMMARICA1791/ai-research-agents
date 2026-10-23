@@ -1,0 +1,16 @@
+[
+  {
+    "id": "example-1",
+    "claim": "The experiment involved 500 participants",
+    "quote": "The experiment involved 50 participants",
+    "source_text": "The experiment involved 50 participants and ran for a week.",
+    "source_url": "https://example.org/study"
+  },
+  {
+    "id": "example-2",
+    "claim": "The project launched publicly",
+    "quote": "The project launched publicly",
+    "source_text": "The project launched publicly on Monday.",
+    "source_url": "https://example.org/launch"
+  }
+]
