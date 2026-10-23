@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "XIR: A Framework for Interoperability across Cross-Chain Protocols Based on a Verifiable Intermediate Representation",
+  "source_excerpt": "arXiv:2609.20010v5 Announce Type: replace-cross Abstract: Cross-chain protocols enable applications to exchange messages across blockchains. Under point-to-point configurations, communication depends on a direct connection between the source and destination blockchains, limiting blockchain reachability and requiring additional configurations to connect more blockchains. To quantify this problem, this paper analyzes approximately 25 million mainne",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: XIR: A Framework for Interoperability across Cross-Chain Protocols Based on a Verifiable Intermediate Representation?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "354d582adcf7507d",
+  "source_title": "XIR: A Framework for Interoperability across Cross-Chain Protocols Based on a Verifiable Intermediate Representation",
+  "source_url": "https://arxiv.org/abs/2609.20010"
+}
