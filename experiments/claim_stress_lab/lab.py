@@ -22,12 +22,14 @@ def evaluate(record):
 
     This is intentionally a diagnostic heuristic. A high score never proves entailment.
     """
+    if not isinstance(record, dict) or not all(
+        isinstance(record.get(k), str) for k in
+        ("claim", "quote", "source_text", "source_url")
+    ):
+        raise ValueError("Each record requires string claim, quote, source_text and source_url")
     claim = record["claim"]
     quote = record["quote"]
     source = record["source_text"]
-    if not all(isinstance(record.get(k), str) for k in
-               ("claim", "quote", "source_text", "source_url")):
-        raise ValueError("All evidence fields must be strings")
     quote_present = bool(quote.strip()) and quote in source
     claim_words = tokens(claim)
     quote_words = tokens(quote)
