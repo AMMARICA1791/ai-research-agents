@@ -24,3 +24,29 @@ exact quote being audited, and obtain separately reviewed quote-defect labels.
 The GitHub connector located the official `data/dev.json` file but did not
 return its body; direct file download from this runtime failed DNS resolution.
 Thus no real-data sample or empirical score has been processed here yet.
+
+## Lightweight mirror and reproducible selection
+
+A public mirror offers the development JSON directly (approximately 1.79 MB):
+https://huggingface.co/chenxwh/AVeriTeC/resolve/main/data/dev.json
+
+The mirror is a fallback, **not automatically authenticated as byte-identical**
+to the official GitHub dataset. Preserve its downloaded SHA-256 and provenance,
+and compare with the official release if available. Do not commit the raw
+third-party dataset into this repository.
+
+After obtaining the file, produce a deterministic, claim-verdict-stratified
+sample manifest with its source-file SHA-256:
+
+```sh
+python -m experiments.claim_stress_lab.averitec_audit --input /path/to/dev.json
+python -m experiments.claim_stress_lab.averitec_sample --input /path/to/dev.json --count 30 --seed 20261022 --output averitec_sample_manifest.json
+```
+
+This selection deliberately balances claim verdict categories, **not** quote
+defects. The 30 indices are candidates for independent human review, not 30
+verified citations. Keep the manifest and source fingerprint alongside any
+subsequent evaluation report.
+
+No local download was completed during this work session. The offline tools
+are prepared but have not produced real-dataset results.
