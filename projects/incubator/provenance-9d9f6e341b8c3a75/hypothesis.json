@@ -1,0 +1,11 @@
+{
+  "topic": "provenance",
+  "trend_hypothesis": "Generated claims proliferate faster than evidence reviews",
+  "research_question": "Can source snapshots reveal when quoted support disappears?",
+  "falsifiable_prediction": "A source change triggers a quote-presence recheck.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "9d9f6e341b8c3a75",
+  "source_title": "Who Verifies the Builder? Toward Independent Assurance for Agent-Produced Software",
+  "source_url": "https://arxiv.org/abs/2610.28667"
+}
