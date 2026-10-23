@@ -52,6 +52,7 @@ def parse_feed(xml, source):
         entries.append({"id":hashlib.sha256(link.encode()).hexdigest()[:16],
                         "source":source,"title":title[:300],"url":link,
                         "published":item.findtext("pubDate"),
+                        "description":desc[:2500],
                         "signal":metrics,"validated_market_need":False,
                         "novelty_verified":False})
     return entries
