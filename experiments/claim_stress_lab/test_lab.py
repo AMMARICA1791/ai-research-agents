@@ -25,6 +25,17 @@ class ClaimStressTests(unittest.TestCase):
         self.assertTrue(result["quote_present"])
         self.assertLess(result["ablated_source_overlap"], result["claim_quote_overlap"])
 
+    def test_malformed_input_fails_with_clear_error(self):
+        for invalid in (None, [], {}, {"claim": 10}):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValueError):
+                    evaluate(invalid)
+
+    def test_empty_quote_never_passes_verbatim_check(self):
+        result = evaluate(self.sample(quote=""))
+        self.assertFalse(result["quote_present"])
+        self.assertIn("QUOTE_NOT_VERBATIM_IN_SOURCE", result["flags"])
+
     def test_no_claim_is_automatically_approved(self):
         result = evaluate(self.sample(claim="Revenue was 50"))
         self.assertTrue(result["review_required"])
