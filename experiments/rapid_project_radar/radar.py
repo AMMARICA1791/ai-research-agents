@@ -1,4 +1,5 @@
 """Free-first public signal radar. Discovery and draft scaffolding only."""
+# CI verification trigger: behavior unchanged; validates main-branch push workflow.
 import argparse
 import datetime as dt
 import hashlib
