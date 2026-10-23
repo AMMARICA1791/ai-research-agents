@@ -1,0 +1,11 @@
+{
+  "topic": "privacy",
+  "trend_hypothesis": "More workflows process sensitive information",
+  "research_question": "Can a local redaction stage prevent obvious secret leakage?",
+  "falsifiable_prediction": "Matching secret patterns are replaced before export.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "2c021fba2e42f3ae",
+  "source_title": "Semantics Delivery Network: Rethinking Web Retrieval Infrastructure for LLM Agents",
+  "source_url": "https://arxiv.org/abs/2609.22486"
+}
