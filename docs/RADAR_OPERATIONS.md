@@ -44,3 +44,11 @@ A behavior-neutral comment-only change on `main` (commit `588b614ff230eb6cd64c96
 An earlier [anticipatory-prototypes run 40031378837](https://github.com/AMMARICA1791/ai-research-agents/actions/runs/40031378837) also completed successfully and produced artifact `anticipatory-projects` (ID `12535630223`). These are generic templates, not domain-specific inventions.
 
 The original note above about unavailable run listings was superseded by successful read-only access through the GitHub Actions runs collection. The connector still does not expose manual workflow dispatch in this session.
+
+## Five-minute polling and automated incubator — 2026-10-23
+
+The scheduled radar interval was changed to `*/5 * * * *` (five minutes). GitHub may delay or skip scheduled jobs under load; this is **not guaranteed real-time monitoring**. Only the three configured RSS feeds are scanned, not every news or social platform.
+
+The anticipatory workflow now tests generated **trusted fixed-template** prototypes, then attempts to publish each previously unseen topic into an isolated `radar/incubator-<topic>` branch and open a **draft PR**. It does not auto-merge. A branch may be created without a PR if GitHub's Actions permission setting blocks PR creation. This depends on the workflow completing successfully; **the new publishing stage has not yet been verified in a run**.
+
+Projects in `projects/incubator/<topic>/` are generic authorization-gate examples and must **not** be represented as topic-specific finished inventions. Topic-level deduplication means at most one initial incubator per configured topic, not a new invention every five minutes. Expanding sources, dynamic hypotheses, topic-specific code, robust prior-art review and deployment remains future work.
