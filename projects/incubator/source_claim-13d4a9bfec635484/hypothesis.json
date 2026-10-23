@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "GPT-5.1-Codex-Max System Card",
+  "source_excerpt": "This system card outlines the comprehensive safety measures implemented for GPT\u20115.1-CodexMax. It details both model-level mitigations, such as specialized safety training for harmful tasks and prompt injections, and product-level mitigations like agent sandboxing and configurable network access.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: GPT-5.1-Codex-Max System Card?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "13d4a9bfec635484",
+  "source_title": "GPT-5.1-Codex-Max System Card",
+  "source_url": "https://openai.com/index/gpt-5-1-codex-max-system-card"
+}
