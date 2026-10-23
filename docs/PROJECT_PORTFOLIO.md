@@ -1,0 +1,41 @@
+# Research portfolio and repository organization
+
+Updated: 2026-10-23. This is an organizational index, not a validation certificate.
+
+## Mission
+Anticipate future technical needs before they become mainstream; convert falsifiable hypotheses into runnable experiments. Commercial outcomes are not prerequisites for prototyping. Claims of worldwide novelty require evidence and remain provisional.
+
+## Three layers
+1. **Core research lab** (this repository's existing `lab/`, `agents/`, `tests/`, documentation and demos). Preserve current behavior and evidence.
+2. **Radar infrastructure** (`experiments/rapid_project_radar/` plus `.github/workflows/rapid-*`). Collects public signals, handles dispatched events and emits *bounded template artifacts*. Not a 24/7 hosted service, not a general autonomous coding agent.
+3. **Independent experiments** (draft branches and PRs listed in [experiments/README.md](../experiments/README.md)). Separate repositories may be created after independent scope and ownership are established.
+
+## Operational statuses
+- **IDEA**: hypothesis only.
+- **SCAFFOLD**: runnable template; no evidence it solves the proposed problem.
+- **PROTOTYPE**: implementation and tests; claims bounded by actual results.
+- **REVIEW**: independent prior-art, security and evidence review.
+- **VALIDATED**: named reproducible evaluation with clear acceptance criteria.
+- **ARCHIVED**: paused or superseded; keep records.
+
+No experiment is implicitly VALIDATED by appearing in this portfolio.
+
+## Radar lifecycle
+Signal -> deduplicate -> future scenario -> hypothesis -> prior-art screening -> isolated scaffold -> reproducible test -> draft review -> independent repository when warranted.
+
+The existing code implements **only parts** of this lifecycle. In particular, continuous push ingestion requires a configured external sender, the current hypothesis engine uses fixed templates, and no automatic independent repository creation exists.
+
+## Safety and repository governance
+- Protect `main` with reviews and required checks where supported.
+- Grant workflows minimum permissions. Use separate credentials only if justified, and never expose tokens in reports.
+- Do not promote external source text into executable instructions.
+- No automatic deployment, purchase, external messaging, or destructive changes.
+- Preserve evidence, source links, commit history, licensing and attribution.
+- Do not delete or rename historical branches merely to make the branch count smaller.
+
+## Migration sequence
+1. Inventory and label existing projects (**this document and the experiment index**).
+2. Verify each experimental PR's tests and evidence; fix failures before promoting.
+3. Decide which projects warrant standalone repositories, and move each with preserved history.
+4. Extract the radar into its own repository only after its workflows and source dependencies are inventoried.
+5. Connect event sources, prior-art screening and sandboxed code generation with explicit boundaries.
