@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "3f893d0b3af6443b",
+  "source_title": "Protection Is Not One Event: A Survey of RAG Protection Research by Measured Endpoint",
+  "source_url": "https://arxiv.org/abs/2610.30193"
+}
