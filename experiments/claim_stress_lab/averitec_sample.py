@@ -31,7 +31,12 @@ def select(records, count=30, seed=20261022):
                 progressed = True
         if not progressed:
             break
+    selected_counts = {key: sum(records[i].get("label", "MISSING") == key for i in selected) for key in keys}
+    population_counts = {key: sum(records[i].get("label", "MISSING") == key for i in range(len(records))) for key in keys}
     return {"selection_method": "seeded_round_robin_by_claim_verdict",
+            "population_size": len(records), "population_verdict_counts": population_counts,
+            "sample_verdict_counts": selected_counts,
+            "sample_is_population_representative": False,
             "seed": seed, "sample_size": len(selected),
             "selected_indices": selected,
             "claim_verdicts_not_quote_defect_labels": True,
