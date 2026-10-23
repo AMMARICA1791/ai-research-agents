@@ -24,4 +24,4 @@ This directory holds **isolated experiments**, not a claim that every project is
 5. No automatic merge or deployment of generated code without a separate safety and test gate.
 6. When an experiment becomes a truly independent product, migrate it into its own repository with history and attribution preserved; leave a link here.
 
-See [portfolio governance](../docs/PROJECT_PORTFOLIO.md).
+See [portfolio governance](../docs/PROJECT_PORTFOLIO.md) and [radar operating instructions](../docs/RADAR_OPERATIONS.md).\n\nHistorical radar [PR #62](https://github.com/AMMARICA1791/ai-research-agents/pull/62) is **closed without merge** because its components already exist on main; the branch is preserved.
