@@ -5,12 +5,16 @@ on:
     workflows: [Rapid Project Radar]
     types: [completed]
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 jobs:
   anticipate:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
+    concurrency:
+      group: radar-project-incubator
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,6 +26,40 @@ jobs:
         run: python -m experiments.rapid_project_radar.radar --output /tmp/rapid-radar-report.json
       - name: Generate isolated prototype templates
         run: python -m experiments.rapid_project_radar.anticipate --report /tmp/rapid-radar-report.json --output-dir /tmp/anticipatory-projects
+      - name: Verify generated prototypes
+        run: |
+          for dir in /tmp/anticipatory-projects/*; do
+            [ -d "$dir" ] || continue
+            (cd "$dir" && python -m unittest discover -s . -p 'test_*.py' -v)
+          done
+      - name: Publish new isolated project branches
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for dir in /tmp/anticipatory-projects/*; do
+            [ -d "$dir" ] || continue
+            topic="$(basename "$dir")"
+            branch="radar/incubator-$topic"
+            if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+              echo "Already proposed: $topic"
+              continue
+            fi
+            git switch -c "$branch" origin/main
+            mkdir -p "projects/incubator/$topic"
+            cp -R "$dir"/. "projects/incubator/$topic/"
+            git add "projects/incubator/$topic"
+            git commit -m "experiment: incubate $topic from radar hypothesis"
+            git push origin "$branch"
+            if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $topic (unvalidated scaffold)" --body "Automated trusted-template scaffold, not a validated invention. Requires prior-art search, domain-specific implementation and human review. Do not merge automatically."; then
+              echo "::warning::Branch published but PR creation unavailable; inspect $branch"
+            fi
+            git switch --detach "${{ github.sha }}"
+            git branch -D "$branch"
+          done
       - name: Upload prototype archive
         uses: actions/upload-artifact@v4
         with:
