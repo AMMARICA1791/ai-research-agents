@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Who Verifies the Builder? Toward Independent Assurance for Agent-Produced Software",
+  "source_excerpt": "arXiv:2610.28667v1 Announce Type: cross Abstract: Coding agents can now implement a specification, write and run tests, repair failures, and declare the result ready for release. When the same agentic system produces both the software and the evidence of its correctness, a passing test suite is no longer independent evidence: visible tests become an optimization target, code and tests may share one misinterpretation of the specification, and the ",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Who Verifies the Builder? Toward Independent Assurance for Agent-Produced Software?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "9d9f6e341b8c3a75",
+  "source_title": "Who Verifies the Builder? Toward Independent Assurance for Agent-Produced Software",
+  "source_url": "https://arxiv.org/abs/2610.28667"
+}
