@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "e9dcc55eabbffd8f",
+  "source_title": "Post-Audit Mirage: Identifiability Limits of Offline Agent Verification",
+  "source_url": "https://arxiv.org/abs/2610.31130"
+}
