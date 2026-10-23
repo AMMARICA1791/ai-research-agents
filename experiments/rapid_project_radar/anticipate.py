@@ -45,12 +45,12 @@ def hypotheses(signal):
                        "market_validated":False,"novelty_verified":False})
     return result
 
-def scaffold(hypothesis, root):
+def scaffold(hypothesis, root, project_id=None):
     topic=hypothesis["topic"]
     if topic not in SCENARIOS:
         raise ValueError("unknown template")
     root=Path(root)
-    project=root/topic
+    project=root/(project_id or topic)
     project.mkdir(parents=True,exist_ok=True)
     # Topic-specific code comes only from the trusted PROTOTYPES map.
     code, test = PROTOTYPES[topic]
@@ -70,13 +70,26 @@ def generate(report, root):
     output=[]
     seen=set()
     for signal in report["signals"]:
+        source_id=signal.get("id")
+        if not isinstance(source_id,str) or not re.fullmatch(r"[a-fA-F0-9]{16,64}",source_id):
+            # Older synthetic tests can use a short stable identifier.
+            if not isinstance(source_id,str) or not source_id or len(source_id)>128:
+                continue
+            source_id=hashlib.sha256(source_id.encode()).hexdigest()[:16]
+        source_id=source_id[:16].lower()
         for hypothesis in hypotheses(signal):
             topic=hypothesis["topic"]
-            if topic in seen:
+            project_id=f"{topic}-{source_id}"
+            if project_id in seen:
                 continue
-            seen.add(topic)
-            output.append({"topic":topic,"path":scaffold(hypothesis,root),
-                           "source_id":signal.get("id"),"status":"template_prototype"})
+            seen.add(project_id)
+            hypothesis["source_id"]=source_id
+            hypothesis["source_title"]=str(signal.get("title",""))[:300]
+            hypothesis["source_url"]=str(signal.get("url",""))[:500]
+            output.append({"topic":topic,"project_id":project_id,
+                           "path":scaffold(hypothesis,root,project_id),
+                           "source_id":source_id,"status":"signal_specific_prototype"})
+
     return output
 
 if __name__=="__main__":
