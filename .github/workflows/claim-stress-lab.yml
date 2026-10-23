@@ -35,3 +35,35 @@ jobs:
         run: |
           python -m experiments.claim_stress_lab.lab --input experiments/claim_stress_lab/examples.json --output /tmp/claim-stress-results.json
           python -c 'import json; p=json.load(open("/tmp/claim-stress-results.json")); assert len(p["results"])==2; assert all(not r["publication_allowed"] for r in p["results"])'
+
+  optional-real-data-acquisition:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Download real AVeriTeC development data (with fallback)
+        id: acquisition
+        continue-on-error: true
+        run: |
+          python -m experiments.claim_stress_lab.acquire_averitec --output /tmp/averitec-dev.json
+      - name: Audit and sample only if real data exists
+        if: steps.acquisition.outcome == 'success'
+        run: |
+          python -m experiments.claim_stress_lab.averitec_audit --input /tmp/averitec-dev.json > /tmp/averitec-audit.json
+          python -m experiments.claim_stress_lab.averitec_sample --input /tmp/averitec-dev.json --count 30 --output /tmp/averitec-sample.json
+          python -c 'import json; p=json.load(open("/tmp/averitec-sample.json")); assert p["sample_size"]==30; assert not p["independent_quote_labels"]'
+      - name: Explain missing data without inventing results
+        if: steps.acquisition.outcome != 'success'
+        run: echo "Dataset unavailable; no real-data evaluation or claim of success."
+      - uses: actions/upload-artifact@v4
+        if: steps.acquisition.outcome == 'success'
+        with:
+          name: averitec-audit-and-sample
+          path: |
+            /tmp/averitec-audit.json
+            /tmp/averitec-sample.json
+          retention-days: 7
