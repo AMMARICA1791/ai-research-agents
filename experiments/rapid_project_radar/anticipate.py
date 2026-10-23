@@ -8,6 +8,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from experiments.rapid_project_radar.derive import extract
 
 SCENARIOS = {
     "agent_security": ("Agents increasingly perform consequential actions",
@@ -34,6 +35,9 @@ PROTOTYPES = {
 def hypotheses(signal):
     if not isinstance(signal,dict):
         raise ValueError("signal must be object")
+    derived=extract(signal)
+    if derived is not None:
+        return [{"topic":"source_claim", **derived, "market_validated":False, "novelty_verified":False}]
     topics=signal.get("signal",{}).get("topics",{})
     if not isinstance(topics,dict):
         raise ValueError("topics must be object")
@@ -47,20 +51,25 @@ def hypotheses(signal):
 
 def scaffold(hypothesis, root, project_id=None):
     topic=hypothesis["topic"]
-    if topic not in SCENARIOS:
+    if topic not in SCENARIOS and topic != "source_claim":
         raise ValueError("unknown template")
     root=Path(root)
     project=root/(project_id or topic)
     project.mkdir(parents=True,exist_ok=True)
     # Topic-specific code comes only from the trusted PROTOTYPES map.
-    code, test = PROTOTYPES[topic]
+    if topic == "source_claim":
+        excerpt = hypothesis["source_excerpt"]
+        code = "SOURCE_EXCERPT = " + repr(excerpt) + "\\n" + "def evidence_matches(text):\\n    return isinstance(text, str) and bool(SOURCE_EXCERPT) and SOURCE_EXCERPT in text\\n"
+        test = "import unittest\\nfrom prototype import evidence_matches\\nclass Tests(unittest.TestCase):\\n    def test_trace(self):\\n        self.assertTrue(evidence_matches(" + repr(excerpt) + "))\\n    def test_missing(self):\\n        self.assertFalse(evidence_matches('unrelated'))\\n"
+    else:
+        code, test = PROTOTYPES[topic]
     (project/"prototype.py").write_text(code,encoding="utf-8")
     (project/"test_prototype.py").write_text(test,encoding="utf-8")
     (project/"hypothesis.json").write_text(json.dumps(hypothesis,indent=2)+"\n",encoding="utf-8")
     (project/"README.md").write_text(
         "# Anticipatory prototype: "+topic+"\n\n"
-        "Experimental hypothesis only; generic authorization-gate scaffold. "
-        "Not a validated solution to this topic.\n\n"
+        "Source-grounded question with executable evidence traceability check. "
+        "Not a domain-specific scientific experiment or validated invention.\n\n"
         "Run: `python -m unittest discover -s . -p 'test_*.py'`\n",encoding="utf-8")
     return str(project)
 
