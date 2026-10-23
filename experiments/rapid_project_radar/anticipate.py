@@ -23,6 +23,14 @@ SCENARIOS = {
         "Can a local redaction stage prevent obvious secret leakage?",
         "Matching secret patterns are replaced before export."),
 }
+# Fixed, audited, topic-specific offline demonstrations. No feed text becomes code.
+PROTOTYPES = {
+    "agent_security": ("def evaluate(value):\n    return isinstance(value, dict) and value.get(\"explicit_approval\") is True and value.get(\"trusted_origin\") == \"user\"\n", "import unittest\nfrom prototype import evaluate\nclass Tests(unittest.TestCase):\n    def test_denies_untrusted(self):\n        self.assertFalse(evaluate({\"explicit_approval\": True, \"trusted_origin\": \"web\"}))\n    def test_allows_approved(self):\n        self.assertTrue(evaluate({\"explicit_approval\": True, \"trusted_origin\": \"user\"}))\n"),
+    "provenance": ("import hashlib\ndef snapshot(text, quotation):\n    if not isinstance(text, str) or not isinstance(quotation, str):\n        raise ValueError(\"text and quotation must be strings\")\n    return {\"sha256\": hashlib.sha256(text.encode(\"utf-8\")).hexdigest(), \"quote_present\": bool(quotation) and quotation in text}\ndef drift(previous, text, quotation):\n    current = snapshot(text, quotation)\n    return {\"content_changed\": current[\"sha256\"] != previous[\"sha256\"], \"quote_disappeared\": bool(previous[\"quote_present\"]) and not current[\"quote_present\"]}\n", "import unittest\nfrom prototype import snapshot, drift\nclass Tests(unittest.TestCase):\n    def test_quote_disappears(self):\n        old = snapshot(\"Research supports claim\", \"supports claim\")\n        self.assertTrue(drift(old, \"Research updated\", \"supports claim\")[\"quote_disappeared\"])\n    def test_no_change(self):\n        old = snapshot(\"stable\", \"stable\")\n        self.assertFalse(drift(old, \"stable\", \"stable\")[\"content_changed\"])\n"),
+    "web_protocols": ("ALLOWED = {\"read_page\": {\"url\"}, \"summarize\": {\"text\"}}\ndef validate(action):\n    if not isinstance(action, dict) or set(action) != {\"type\", \"params\"}:\n        return False\n    kind, params = action[\"type\"], action[\"params\"]\n    return kind in ALLOWED and isinstance(params, dict) and set(params) == ALLOWED[kind] and all(isinstance(v, str) and bool(v.strip()) for v in params.values())\n", "import unittest\nfrom prototype import validate\nclass Tests(unittest.TestCase):\n    def test_unknown_rejected(self):\n        self.assertFalse(validate({\"type\":\"run_shell\",\"params\":{\"cmd\":\"echo hi\"}}))\n    def test_known_accepted(self):\n        self.assertTrue(validate({\"type\":\"summarize\",\"params\":{\"text\":\"hello\"}}))\n"),
+    "privacy": ("import re\nPATTERNS = [re.compile(r\"(?i)\\\\b(?:api[_-]?key|token|secret)\\\\s*[:=]\\\\s*[A-Za-z0-9_-]{8,}\"), re.compile(r\"\\\\b[\\\\w.+-]+@[\\\\w.-]+\\\\.[A-Za-z]{2,}\\\\b\")]\ndef redact(text):\n    if not isinstance(text, str):\n        raise ValueError(\"text must be a string\")\n    for pattern in PATTERNS:\n        text = pattern.sub(\"[REDACTED]\", text)\n    return text\n", "import unittest\nfrom prototype import redact\nclass Tests(unittest.TestCase):\n    def test_secret(self):\n        self.assertNotIn(\"abcd123456\", redact(\"token=abcd123456\"))\n    def test_email(self):\n        self.assertEqual(redact(\"hello me@example.org\"), \"hello [REDACTED]\")\n"),
+}
+
 def hypotheses(signal):
     if not isinstance(signal,dict):
         raise ValueError("signal must be object")
@@ -44,25 +52,8 @@ def scaffold(hypothesis, root):
     root=Path(root)
     project=root/topic
     project.mkdir(parents=True,exist_ok=True)
-    # Code is from a trusted fixed template, never generated from feed text.
-    code='''"""Minimal runnable proof-of-concept for an anticipated need."""
-def evaluate(value):
-    if not isinstance(value, dict):
-        return False
-    return bool(value.get("explicit_approval") is True and
-                value.get("trusted_origin") == "user")
-'''
-    test='''import unittest
-from prototype import evaluate
-class PrototypeTests(unittest.TestCase):
-    def test_denies_unapproved(self):
-        self.assertFalse(evaluate({"explicit_approval": False, "trusted_origin": "user"}))
-    def test_allows_approved(self):
-        self.assertTrue(evaluate({"explicit_approval": True, "trusted_origin": "user"}))
-if __name__ == "__main__":
-    unittest.main()
-'''
-    # A generic gate template is a scaffolding exercise, not a topic-specific invention.
+    # Topic-specific code comes only from the trusted PROTOTYPES map.
+    code, test = PROTOTYPES[topic]
     (project/"prototype.py").write_text(code,encoding="utf-8")
     (project/"test_prototype.py").write_text(test,encoding="utf-8")
     (project/"hypothesis.json").write_text(json.dumps(hypothesis,indent=2)+"\n",encoding="utf-8")
