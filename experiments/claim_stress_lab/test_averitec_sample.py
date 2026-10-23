@@ -12,6 +12,9 @@ class AVeriTeCSampleTests(unittest.TestCase):
         self.assertEqual(len(set(a["selected_indices"])), 10)
         self.assertEqual(sum(i < 20 for i in a["selected_indices"]), 5)
         self.assertFalse(a["independent_quote_labels"])
+        self.assertFalse(a["sample_is_population_representative"])
+        self.assertEqual(a["population_verdict_counts"], {"Supported": 20, "Refuted": 20})
+        self.assertEqual(a["sample_verdict_counts"], {"Supported": 5, "Refuted": 5})
 
     def test_reject_invalid_sample(self):
         with self.assertRaises(ValueError):
