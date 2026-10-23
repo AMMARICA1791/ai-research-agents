@@ -48,3 +48,18 @@ quotations and do not include independent quote-defect labels.
 At the time of implementation, the official dataset download could not be
 completed from the execution environment (network name-resolution failure).
 No real FEVER evaluation results are claimed.
+
+## Verify dataset file integrity before use
+
+The Zenodo v1 record publishes MD5 hashes for the official downloads.
+After obtaining files from that record, verify their bytes before parsing:
+
+```sh
+python -m experiments.claim_stress_lab.verify_fever_files /path/to/paper_dev.jsonl /path/to/wiki-pages.zip
+```
+
+The verifier exits nonzero on a checksum mismatch and rejects unrecognized
+filenames. MD5 here is a **published file identity check**, not a cryptographic
+authenticity guarantee or evidence of correct human labels. The program does
+not download anything, and no full archive has been verified in this repository.
+Source: https://zenodo.org/records/4925954
