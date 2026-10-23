@@ -14,3 +14,6 @@
 5. Explicitly list false alarms and missed errors. If no measurable gain appears, archive as a negative experiment instead of merging into the core pipeline.
 
 No autonomous publication, semantic truth score, or scientific novelty claim is authorized by this gate.
+
+## Known adversarial blind spots
+The synthetic probes in `adversarial_probes.py` show why lexical overlap cannot establish semantic entailment: a negation reversal and an association-to-causation leap can both pass the narrow mechanical checks. These are documented limitations, not independently sourced performance estimates. The evaluation must include such cases with separately recorded semantic labels; mechanical and semantic metrics must never be conflated.
