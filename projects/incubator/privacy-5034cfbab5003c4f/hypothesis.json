@@ -1,0 +1,11 @@
+{
+  "topic": "privacy",
+  "trend_hypothesis": "More workflows process sensitive information",
+  "research_question": "Can a local redaction stage prevent obvious secret leakage?",
+  "falsifiable_prediction": "Matching secret patterns are replaced before export.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "5034cfbab5003c4f",
+  "source_title": "CoSec: Benchmarking Agent Security in Communities",
+  "source_url": "https://arxiv.org/abs/2609.34790"
+}
