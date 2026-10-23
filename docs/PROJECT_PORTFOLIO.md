@@ -39,3 +39,30 @@ The existing code implements **only parts** of this lifecycle. In particular, co
 3. Decide which projects warrant standalone repositories, and move each with preserved history.
 4. Extract the radar into its own repository only after its workflows and source dependencies are inventoried.
 5. Connect event sources, prior-art screening and sandboxed code generation with explicit boundaries.
+
+## Repository audit — 2026-10-23
+
+Compared `main` with all six experiment branches using GitHub compare API.
+All six branches are **diverged** from `main` (13 commits behind at audit time).
+PR #57 is 52 commits ahead; PR #58 is 7 ahead; PR #59 is 4 ahead;
+PR #60 is 5 ahead; PR #61 is 4 ahead; PR #62 is 4 ahead.
+The comparison is historical/structural evidence, **not** a passing test report.
+
+### Important cleanup finding
+PR #62 is now redundant as an integration PR: its four radar files were
+already independently installed on `main`, followed by newer radar components.
+Do **not** merge PR #62 as if it were a new radar installation. Preserve it as
+historical review context until formally closed or annotated.
+
+### Isolation findings
+PRs #57–#61 add their own experiment directories and CI workflows relative
+to the common ancestor. Do not merge them in bulk; first review the changed
+files and current CI independently. Their shared `behind_by` count does not
+by itself prove a merge conflict.
+
+### Required verification before reorganization
+- Run offline unit tests for radar and each branch.
+- Check workflows and logs, not only green commit decorations.
+- Verify scheduled radar and event intake actually execute.
+- Check topic-specific generated prototypes; current scaffolds are generic.
+- Keep branch histories and attribution when extracting repositories.
