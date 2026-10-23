@@ -62,3 +62,24 @@ unweighted sample precision, false-positive rates, or defect prevalence to
 the full dataset. For prevalence estimation, use an independently labeled
 probability sample with documented inclusion probabilities and suitable
 weights, and report uncertainty.
+
+## Verified live acquisition (2026-10-23)
+
+GitHub Actions Claim Stress Lab run **77**, job
+`optional-real-data-acquisition`, successfully downloaded the **official**
+AVeriTeC development JSON directly from
+`https://raw.githubusercontent.com/MichSchli/AVeriTeC/main/data/dev.json`.
+
+- HTTP acquisition succeeded; 1,785,475 bytes, **500** claim records.
+- Source SHA-256: `499793726b4a5406780928a3d9dedc48d6dd53de778f22437d129cacdb08e300`.
+- The audit and deterministic 30-index selection both completed successfully.
+- GitHub artifact `averitec-audit-and-sample` (ID `12490772392`)
+  was uploaded in run `39929282127`, expiring 2026-10-30.
+- Both the Claim Stress Lab (run 77) and Verify MVP (run 296) checks passed.
+- **No independent quote-defect labels were obtained**; therefore no
+  real-world precision, recall, semantic-accuracy or defect-detection
+  performance is established.
+
+This supersedes the earlier note that the data could not be downloaded.
+The GitHub-hosted runner solved the network acquisition barrier; it did
+not solve the independent labeling/semantic validation barrier.
