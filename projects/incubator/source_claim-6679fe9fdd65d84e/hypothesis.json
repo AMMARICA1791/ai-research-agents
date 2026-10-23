@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "DFAH-Bench: What Agreement Leaves Unmeasured in Financial Agents",
+  "source_excerpt": "arXiv:2607.20491v4 Announce Type: replace Abstract: When a financial agent repeats its decision, how much does that tell us about the actions behind it? DFAH-Bench examines this question through replay experiments, a controlled test of omitted tool calls, and banking tasks with authorization checks. Across 570 eligible prospective replay episodes, decisions agreed at rates of 94-95%, while tool paths, including inputs and results, agreed at 45-52",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: DFAH-Bench: What Agreement Leaves Unmeasured in Financial Agents?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6679fe9fdd65d84e",
+  "source_title": "DFAH-Bench: What Agreement Leaves Unmeasured in Financial Agents",
+  "source_url": "https://arxiv.org/abs/2607.20491"
+}
