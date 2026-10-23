@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "EpiSEM-Bench: Evaluating Safety and Evidence Recovery in LLM Agents under Missing Evidence",
+  "source_excerpt": "arXiv:2610.31650v1 Announce Type: cross Abstract: Tool-using language model agents rely on environmental facts to decide whether an action is permitted. When a tool response omits a safety-relevant fact, an agent may carry out a prohibited action even though the user request is benign and every returned statement is true. We introduce \\bench{}, an executable benchmark for evaluating unsafe execution, safety boundaries, and evidence recovery in LL",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: EpiSEM-Bench: Evaluating Safety and Evidence Recovery in LLM Agents under Missing Evidence?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0fd71f25376106a6",
+  "source_title": "EpiSEM-Bench: Evaluating Safety and Evidence Recovery in LLM Agents under Missing Evidence",
+  "source_url": "https://arxiv.org/abs/2610.31650"
+}
