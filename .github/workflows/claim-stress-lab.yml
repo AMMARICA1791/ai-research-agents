@@ -1,0 +1,33 @@
+name: Claim Stress Lab
+
+on:
+  pull_request:
+    paths:
+      - "experiments/claim_stress_lab/**"
+      - ".github/workflows/claim-stress-lab.yml"
+  push:
+    branches:
+      - "experiment/claim-stress-lab"
+    paths:
+      - "experiments/claim_stress_lab/**"
+      - ".github/workflows/claim-stress-lab.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run offline unit tests
+        run: python -m unittest discover -s experiments/claim_stress_lab -p 'test_*.py' -v
+      - name: Run sample diagnostic
+        run: |
+          python -m experiments.claim_stress_lab.lab --input experiments/claim_stress_lab/examples.json --output /tmp/claim-stress-results.json
+          python -c 'import json; p=json.load(open("/tmp/claim-stress-results.json")); assert len(p["results"])==2; assert all(not r["publication_allowed"] for r in p["results"])'
