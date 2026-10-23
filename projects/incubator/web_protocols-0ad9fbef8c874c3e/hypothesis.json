@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0ad9fbef8c874c3e",
+  "source_title": "Continuously hardening ChatGPT Atlas against prompt injection",
+  "source_url": "https://openai.com/index/hardening-atlas-against-prompt-injection"
+}
