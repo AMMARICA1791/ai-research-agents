@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Making AI-Assisted Claims Independently Challengeable: Publication Authority and a Protocol for Falsifiable Publication Records",
+  "source_excerpt": "arXiv:2609.17631v2 Announce Type: replace Abstract: AI-assisted claims can appear authoritative when evidence, analysis, human authorization, presentation, and correction history describe different states. We develop Publication Authority: an exact-state, non-transferable, single-use publication capability within PAC-2026 (Publication-Accountability Calculus), an AIJIM Protocol candidate. The evaluated specification version (SF-4) defines six non",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Making AI-Assisted Claims Independently Challengeable: Publication Authority and a Protocol for Falsifiable Publication Records?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "68b12eb059a981b4",
+  "source_title": "Making AI-Assisted Claims Independently Challengeable: Publication Authority and a Protocol for Falsifiable Publication Records",
+  "source_url": "https://arxiv.org/abs/2609.17631"
+}
