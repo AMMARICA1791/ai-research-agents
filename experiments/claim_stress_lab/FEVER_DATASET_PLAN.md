@@ -63,3 +63,19 @@ filenames. MD5 here is a **published file identity check**, not a cryptographic
 authenticity guarantee or evidence of correct human labels. The program does
 not download anything, and no full archive has been verified in this repository.
 Source: https://zenodo.org/records/4925954
+
+## Sampling and verification controls
+
+Do not treat the first 30 lines of `paper_dev.jsonl` as a representative
+sample. The `--limit 30` commands above are **format smoke tests only**.
+A scientific evaluation must pre-register a reproducible random selection
+(seed and source-file hash), include both positive and negative controls,
+and record missing evidence as exclusions rather than silently replacing it.
+
+Before using extracted data, require **both** `integrity_ok: true` for each
+official input and `resolved_references == requested_references` for the
+selected subset, or explicitly report unresolved references. Neither gate
+provides independent labels for citation defects.
+
+A DNS failure in this execution environment prevents obtaining the Zenodo
+files here; do not substitute fabricated records or report an empirical score.
