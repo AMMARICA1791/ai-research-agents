@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "13d4a9bfec635484",
+  "source_title": "GPT-5.1-Codex-Max System Card",
+  "source_url": "https://openai.com/index/gpt-5-1-codex-max-system-card"
+}
