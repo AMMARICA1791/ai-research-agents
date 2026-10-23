@@ -37,7 +37,6 @@ jobs:
           python -c 'import json; p=json.load(open("/tmp/claim-stress-results.json")); assert len(p["results"])==2; assert all(not r["publication_allowed"] for r in p["results"])'
 
   optional-real-data-acquisition:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
