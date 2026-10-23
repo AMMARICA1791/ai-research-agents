@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Act on Your Behalf, Beyond Your Authorization: Benchmarking LLM Agent Authorization Alignment",
+  "source_excerpt": "arXiv:2610.27548v2 Announce Type: replace Abstract: When an LLM agent acts on behalf of a user, it is expected to act within the authorization scope the user grants. Existing agent evaluations largely measure task completion or harmful consequences and can therefore overlook actions that violate this delegation without producing conventional safety or privacy harms. We introduce AuthorizationBench, a benchmark of authorization alignment grounded ",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Act on Your Behalf, Beyond Your Authorization: Benchmarking LLM Agent Authorization Alignment?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "51ebab1d094c7d60",
+  "source_title": "Act on Your Behalf, Beyond Your Authorization: Benchmarking LLM Agent Authorization Alignment",
+  "source_url": "https://arxiv.org/abs/2610.27548"
+}
