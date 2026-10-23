@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "51ebab1d094c7d60",
+  "source_title": "Act on Your Behalf, Beyond Your Authorization: Benchmarking LLM Agent Authorization Alignment",
+  "source_url": "https://arxiv.org/abs/2610.27548"
+}
