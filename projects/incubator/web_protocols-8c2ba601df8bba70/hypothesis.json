@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "8c2ba601df8bba70",
+  "source_title": "ReDence: A Hybrid Agentic and Decision-Model Framework for Rapid, Evidence-Grounded Detection of Modern Social Engineering Scams",
+  "source_url": "https://arxiv.org/abs/2610.30963"
+}
