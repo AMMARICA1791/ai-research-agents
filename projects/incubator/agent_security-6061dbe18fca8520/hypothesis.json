@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6061dbe18fca8520",
+  "source_title": "Show HN: Lob\u00f6le, open-source parametric CAD that AI agents can drive",
+  "source_url": "https://github.com/eliasaronson/lobole"
+}
