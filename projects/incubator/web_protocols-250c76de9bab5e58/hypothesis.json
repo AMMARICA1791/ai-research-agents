@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "250c76de9bab5e58",
+  "source_title": "Show HN: AI text detector that never sees your text (runs 100% in-browser)",
+  "source_url": "https://kouh.me/ai-text-detector"
+}
