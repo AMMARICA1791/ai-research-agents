@@ -1,0 +1,67 @@
+name: Island Health Check
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'projects/incubator/**'
+      - '.github/workflows/island-health.yml'
+permissions:
+  contents: read
+  issues: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test islands independently and publish failures
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os, subprocess, pathlib, re
+          root = pathlib.Path("projects/incubator")
+          summary = pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"])
+          projects = sorted(p for p in root.iterdir() if p.is_dir()) if root.exists() else []
+          passed = failed = 0
+          with summary.open("a") as f:
+              f.write("# Independent island health\n\n| Island | Status |\n|---|---|\n")
+          for project in projects:
+              tests = list(project.glob("test_*.py"))
+              if not tests:
+                  status, detail = "FAIL", "No test_*.py file"
+              else:
+                  try:
+                      p = subprocess.run(["python", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py", "-v"], cwd=project, capture_output=True, text=True, timeout=25, env={"PATH":os.environ.get("PATH",""),"PYTHONPATH":str(project.resolve())})
+                      status, detail = ("PASS" if p.returncode == 0 else "FAIL"), (p.stdout + "\n" + p.stderr)[-4500:]
+                  except subprocess.TimeoutExpired:
+                      status, detail = "FAIL", "Tests exceeded 25 seconds"
+              with summary.open("a") as f:
+                  f.write(f"| `{project.name}` | {status} |\n")
+              if status == "PASS":
+                  passed += 1
+                  continue
+              failed += 1
+              title = f"[island failure] {project.name}"
+              found = subprocess.run(["gh","issue","list","--repo",os.environ["GH_REPO"],"--state","open","--search",f'{title} in:title',"--json","number,title","--limit","100"],capture_output=True,text=True)
+              import json
+              existing = next((x for x in json.loads(found.stdout or "[]") if x["title"] == title),None) if found.returncode == 0 else None
+              body = f"Island: `projects/incubator/{project.name}`\n\nAutomated isolated unit test failure on main.\n\n```text\n{detail.replace(chr(96), chr(39))}\n```\n\nDevelopers: reproduce, discuss, and propose a scoped PR with regression tests. Do not include secrets."
+              if existing:
+                  subprocess.run(["gh","issue","comment",str(existing["number"]),"--repo",os.environ["GH_REPO"],"--body",body],check=False)
+              else:
+                  subprocess.run(["gh","issue","create","--repo",os.environ["GH_REPO"],"--title",title,"--body",body],check=False)
+          with summary.open("a") as f:
+              f.write(f"\n**{passed} passing; {failed} failing; {len(projects)} total islands.**\n")
+          print(f"Island check: {passed} passing, {failed} failing, {len(projects)} total")
+          if failed:
+              raise SystemExit(1)
+          PY
