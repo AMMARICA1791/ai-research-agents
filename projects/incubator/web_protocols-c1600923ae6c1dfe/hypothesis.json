@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "c1600923ae6c1dfe",
+  "source_title": "Is the browser becoming the common gateway for AI agents?",
+  "source_url": "https://ricuicui.com/articles/navigateur-porte-entree-agents-ia"
+}
