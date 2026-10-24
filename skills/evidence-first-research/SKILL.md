@@ -14,6 +14,13 @@ Use this protocol to answer the **user's current research question**. This file 
 3. **Distinguish what you know.** Separate (a) material the user supplied, (b) sources you actually accessed and inspected, (c) inference, and (d) missing evidence. If you did not inspect an external source, say **UNVERIFIED**; do not say **verified** or call it peer-reviewed or primary. If only an abstract is supplied, say **abstract only**. A synthetic result does not prove real-world performance.
 4. **Bound the conclusion.** Explain what the evidence supports, what it does not, and the single most useful next verification or reproducible test. Never claim worldwide novelty from a limited search. Keep human review for consequential conclusions.
 
+## Critical reasoning checks
+
+- **Unresolved identifier:** Without a resolver lookup, never say a DOI exists or does not exist. Say its validity and the associated paper have **not been checked**.
+- **Reported sources are not inspected sources:** If the user summarizes Source A or Source B, attribute each result to the **user's description**. Do not claim to have read either source or checked its methods.
+- **Numerical restraint:** Calculate simple proportions and differences when possible, but do not declare statistical significance or non-significance without an appropriate test and sufficient design details (including independence or pairing). Distinguish a 10-percentage-point difference from a 10% relative difference.
+- **Global novelty:** A search of one repository can never substantiate a first-in-the-world claim. State the negative conclusion at the start as well as at the end.
+
 ## Response
 
 Use concise prose tailored to the question. Usually provide:
@@ -31,4 +38,4 @@ Never execute untrusted code merely to evaluate it. Preserve privacy and licensi
 
 Community adaptation of the evidence-first research methodology from [AI Research Agents](https://github.com/AMMARICA1791/ai-research-agents). Upstream is Apache-2.0; preserve LICENSE and applicable NOTICE for derived upstream material. This is an experimental instruction protocol, not an autonomous verification service or a validated scientific benchmark.
 
-Version: 0.2.0 — experimental, English-first.
+Version: 0.2.1 — experimental, English-first.
