@@ -22,6 +22,8 @@ jobs:
         run: python -m experiments.empirical_validation.iris_study | tee iris-results.json
       - name: Evaluate preregistered held-out classifier and baseline
         run: python -m experiments.empirical_validation.iris_holdout | tee iris-holdout-results.json
+      - name: Run preregistered repeated holdout robustness check
+        run: python -m experiments.empirical_validation.iris_robustness | tee iris-robustness-results.json
       - name: Preserve measurements and frozen protocol
         uses: actions/upload-artifact@v4
         with:
@@ -29,6 +31,8 @@ jobs:
           path: |
             iris-results.json
             iris-holdout-results.json
+            iris-robustness-results.json
+            experiments/empirical_validation/iris_robustness_preregistration.json
             experiments/empirical_validation/iris_holdout_preregistration.json
             experiments/empirical_validation/iris_preregistration.json
           retention-days: 30
