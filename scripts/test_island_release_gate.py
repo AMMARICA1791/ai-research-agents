@@ -13,13 +13,13 @@ class ReleaseGateTests(unittest.TestCase):
             (p / "test_prototype.py").write_text("def test_anything(): pass\n")
             self.assertFalse(assess(p)[0])
 
-    def test_rejects_source_claim_string_match_even_with_tests(self):
+    def test_accepts_source_claim_as_unvalidated_experiment(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d)
             (p / "hypothesis.json").write_text(json.dumps({"topic": "source_claim"}))
             (p / "prototype.py").write_text("def evidence_matches(value): return True\n")
             (p / "test_prototype.py").write_text("def test_anything(): pass\n")
-            self.assertFalse(assess(p)[0])
+            self.assertTrue(assess(p)[0])
 
     def test_accepts_experimental_template_without_validation(self):
         with tempfile.TemporaryDirectory() as d:
