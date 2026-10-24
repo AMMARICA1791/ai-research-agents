@@ -1,10 +1,11 @@
 import unittest
+import datetime as dt
 from experiments.rapid_project_radar.radar import parse_feed,run,score
 
 XML=b'''<rss><channel><item><title>Agent permission and consent</title>
 <link>https://example.org/paper</link><description>web agent authorization</description>
 <pubDate>Fri, 23 Oct 2026 10:00:00 GMT</pubDate></item>
-<item><title>Unrelated article</title><link>https://example.org/other</link>
+<item><title>Unrelated article</title><link>https://example.org/other</link><pubDate>Fri, 23 Oct 2026 10:00:00 GMT</pubDate>
 </item></channel></rss>'''
 
 class RadarTests(unittest.TestCase):
@@ -18,7 +19,7 @@ class RadarTests(unittest.TestCase):
         items=parse_feed(XML,"sample")
         self.assertIn("Unrelated article",[item["title"] for item in items])
     def test_deduplicate(self):
-        r=run({"a":"https://example.org/a","b":"https://example.org/b"},lambda _:XML)
+        r=run({"a":"https://example.org/a","b":"https://example.org/b"},lambda _:XML,now=dt.datetime(2026,10,24,0,tzinfo=dt.timezone.utc))
         self.assertEqual(len(r["signals"]),2)
         self.assertEqual(r["successful_feeds"],2)
     def test_source_diversity_under_high_volume(self):
@@ -28,13 +29,19 @@ class RadarTests(unittest.TestCase):
             items = "".join(
                 "<item><title>Agent security discovery " + str(i) + "</title>"
                 "<link>https://example.org/" + source + "/" + str(i) + "</link>"
-                "<description>agent authorization privacy</description></item>"
+                "<description>agent authorization privacy</description><pubDate>Fri, 23 Oct 2026 10:00:00 GMT</pubDate></item>"
                 for i in range(count))
             return ("<rss><channel>" + items + "</channel></rss>").encode()
-        report = run({"a":"https://example.org/a","b":"https://example.org/b"},feed)
+        report = run({"a":"https://example.org/a","b":"https://example.org/b"},feed,now=dt.datetime(2026,10,24,0,tzinfo=dt.timezone.utc))
         self.assertEqual(len(report["signals"]),40)
         self.assertEqual({x["source"] for x in report["signals"]},{"a","b"})
         self.assertEqual(len({x["id"] for x in report["signals"]}),40)
+
+    def test_stale_and_undated_excluded(self):
+        report=run({"a":"https://example.org/a"},lambda _:XML,
+                   now=dt.datetime(2026,10,28,0,tzinfo=dt.timezone.utc))
+        self.assertEqual(len(report["signals"]),0)
+        self.assertEqual(report["excluded_stale"],2)
 
     def test_failures_visible(self):
         def fail(_): raise OSError("offline")
