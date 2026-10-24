@@ -148,6 +148,14 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48, seen=None):
         if item["id"] not in chosen_ids:
             chosen.append(item)
             chosen_ids.add(item["id"])
+    # Only first observations qualify for this delay estimate.
+    # RSS pubDate can differ from the original publication time.
+    first_observation_delays=sorted(
+        x["age_hours"] for x in dedup.values() if x["first_seen_this_scan"]
+    )
+    delays=first_observation_delays
+    first_median=((delays[(len(delays)-1)//2]+delays[len(delays)//2])/2
+                  if delays else None)
     ages=sorted(x["age_hours"] for x in chosen)
     median_age=(ages[(len(ages)-1)//2]+ages[len(ages)//2])/2 if ages else None
     return {"generated_at_utc":now.isoformat(),
@@ -157,6 +165,11 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48, seen=None):
             "excluded_undated":undated_count,"excluded_future":future_count,
             "fresh_candidate_count":len(fresh),
             "new_unique_candidates":len(new_ids),
+            "new_candidate_first_observation_delay_hours_median":round(first_median,2) if delays else None,
+            "new_candidate_first_observation_delay_hours_max":delays[-1] if delays else None,
+            "new_candidates_first_observed_within_6_hours":sum(a<=6 for a in delays),
+            "new_candidates_first_observed_within_24_hours":sum(a<=24 for a in delays),
+            "first_observation_delay_basis":"RSS pubDate to first radar observation; not independently verified original publication",
             "previously_seen_candidates":len(dedup)-len(new_ids),
             "first_seen_registry":first_seen,
             "selected_age_hours_min":ages[0] if ages else None,
