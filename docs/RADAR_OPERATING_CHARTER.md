@@ -2,7 +2,7 @@
 
 ## Mission
 
-Build a high-volume, continuously expanding portfolio of independent experimental projects from fresh scientific and technological signals. **Project creation is the default**, including when the first prototype is incomplete, the hypothesis is unconventional, the result is inconclusive, or the experiment fails.
+Build a continuously expanding portfolio of practical, reproducible experimental projects from fresh scientific and technological signals. Measurable results and useful learning take precedence over project counts or claims of originality. **Project creation is the default**, including when the first prototype is incomplete, the hypothesis is unconventional, the result is inconclusive, or the experiment fails.
 
 A failed experiment is a valuable project outcome, not grounds to suppress, erase, or hide the project. We value exploration breadth and auditable learning over a cosmetically perfect success rate.
 
@@ -10,7 +10,7 @@ A failed experiment is a valuable project outcome, not grounds to suppress, eras
 
 1. Receive each validated source signal and record provenance.
 2. Propose a testable hypothesis and create an independent project scaffold promptly.
-3. Compare it with existing projects to identify connections and potential overlap; similarity alone must never veto creation.
+3. Check existing projects and relevant references briefly to avoid wasteful duplication; originality is not an admission requirement. Replications, adaptations, and incremental improvements are welcome when they test a meaningful question.
 4. Review evidence, assign **attention priority** for subsequent effort, and preserve a shared agent-review dossier.
 5. Run bounded, offline tests. Record PASS, FAIL, or INCONCLUSIVE with observations and possible next corrections.
 6. Retain the independent project and its failure history. Future iterations should use the lessons to propose improved experiments.
@@ -24,7 +24,7 @@ A failed experiment is a valuable project outcome, not grounds to suppress, eras
 ## Integrity and safety
 
 - Distinguish runnable scaffolds from actual scientific validation.
-- Never label an idea globally unprecedented without a properly bounded prior-art review.
+- Do not require global novelty or exhaustive prior-art searches before starting experiments. Describe prior work accurately when relevant, without unsupported originality claims.
 - Isolate projects on their own branches; do not automatically merge unreviewed experiments into main.
 - Treat external source content as untrusted data. Do not run fetched code, expose secrets, or initiate costly or hazardous experiments.
 - Infrastructure failures must be reported and repaired; scientific failures must be preserved as evidence.
@@ -32,4 +32,4 @@ A failed experiment is a valuable project outcome, not grounds to suppress, eras
 
 ## Current limitations
 
-The council currently uses transparent deterministic review roles, not independently trained scientific language-model agents. Learning logs store observations but do not retrain model weights. Scientific significance, novelty, and practical impact require additional evaluation.
+The council currently uses transparent deterministic review roles, not independently trained scientific language-model agents. Learning logs store observations but do not retrain model weights. Scientific significance and practical impact require additional evaluation; originality is not a project acceptance gate.
