@@ -53,6 +53,7 @@ jobs:
           for dir in /tmp/anticipatory-projects/*; do
             [ -d "$dir" ] || continue
             if (cd "$dir" && python -m unittest discover -s . -p 'test_*.py' -v); then
+              touch "$dir/.tests-passed"
               PYTHONPATH="$GITHUB_WORKSPACE" python -m experiments.rapid_project_radar.learning --project "$dir" --outcome PASS --observation "Initial scaffold tests passed; scientific hypothesis remains unverified."
             else
               PYTHONPATH="$GITHUB_WORKSPACE" python -m experiments.rapid_project_radar.learning --project "$dir" --outcome FAIL --observation "Initial scaffold tests failed; preserve this experiment for investigation." --correction "Inspect test output, revise hypothesis or implementation, and retry."
@@ -69,6 +70,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for dir in /tmp/anticipatory-projects/*; do
             [ -d "$dir" ] || continue
+            [ -f "$dir/.tests-passed" ] || { echo "::warning::Skip untested or failed project: $dir"; continue; }
             project_id="$(basename "$dir")"
             branch="radar/incubator-$project_id"
             if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
@@ -78,6 +80,7 @@ jobs:
             git switch -c "$branch" origin/main
             mkdir -p "projects/incubator/$project_id"
             cp -R "$dir"/. "projects/incubator/$project_id/"
+            rm -f "projects/incubator/$project_id/.tests-passed"
             git add "projects/incubator/$project_id"
             git commit -m "experiment: incubate $project_id from radar signal"
             git push origin "$branch"
