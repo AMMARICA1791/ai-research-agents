@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "How Commerce.com and Cloudflare are getting storefronts ready for AI agents",
+  "source_excerpt": "Almost 100,000 Commerce.com domains now give AI agents real shopping tools through WebMCP on Cloudflare. Here's how we turned it on across every store at once, while keeping each merchant in control.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: How Commerce.com and Cloudflare are getting storefronts ready for AI agents?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1c5f83daf4c5b5dc",
+  "source_title": "How Commerce.com and Cloudflare are getting storefronts ready for AI agents",
+  "source_url": "https://blog.cloudflare.com/webmcp-commerce/"
+}
