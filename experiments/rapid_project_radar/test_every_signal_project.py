@@ -8,7 +8,7 @@ class EverySignalProjectTests(unittest.TestCase):
     def test_untagged_signal_gets_project(self):
         with tempfile.TemporaryDirectory() as directory:
             result = generate({"signals": [
-                {"id": "abcdef0123456789", "title": "Unclassified research",
+                {"id": "abcdef0123456789", "title": "",
                  "url": "https://example.org/research",
                  "signal": {"score": 0, "topics": {}}}
             ]}, directory)
