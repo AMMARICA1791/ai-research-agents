@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "That's our jam \ud83c\udfbc Astronomers used @ChandraXray to find out that this radio wave formation, known as the \"Treble Clef\" thanks to its distinc\u2026",
+  "source_excerpt": "That&apos;s our jam \ud83c\udfbc Astronomers used @ChandraXray to find out that this radio wave formation, known as the &quot;Treble Clef&quot; thanks to its distinctive shape, was likely caused by an outburst from a supermassive black hole, followed by a collision of two galaxy clusters.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: That's our jam \ud83c\udfbc Astronomers used @ChandraXray to find out that this radio wave formation, known as the \"Treble Clef\" thanks to its distinc\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "82975c90e5c30dae",
+  "source_title": "That's our jam \ud83c\udfbc Astronomers used @ChandraXray to find out that this radio wave formation, known as the \"Treble Clef\" thanks to its distinc\u2026",
+  "source_url": "https://x.com/NASA/status/2113358139999265160"
+}
