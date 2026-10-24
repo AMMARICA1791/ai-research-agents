@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "I Built a SaaS with AI. Two Months Later, I Have Zero Active Users",
+  "source_excerpt": "Article URL: https://medium.com/@ivan_43200/i-built-a-saas-with-ai-two-months-later-i-have-zero-active-users-1e93436a5b39 Comments URL: https://news.ycombinator.com/item?id=50223278 Points: 2 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: I Built a SaaS with AI. Two Months Later, I Have Zero Active Users?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "2f459fe7851174af",
+  "source_title": "I Built a SaaS with AI. Two Months Later, I Have Zero Active Users",
+  "source_url": "https://medium.com/@ivan_43200/i-built-a-saas-with-ai-two-months-later-i-have-zero-active-users-1e93436a5b39"
+}
