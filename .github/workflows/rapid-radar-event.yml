@@ -69,9 +69,9 @@ jobs:
           for dir in /tmp/event-projects/*; do
             [ -d "$dir" ] || continue
             if (cd "$dir" && python -m unittest discover -s . -p 'test_*.py' -v); then
-              python -m experiments.rapid_project_radar.learning --project "$dir" --outcome PASS --observation "Initial scaffold tests passed; scientific hypothesis remains unverified."
+              PYTHONPATH="$GITHUB_WORKSPACE" python -m experiments.rapid_project_radar.learning --project "$dir" --outcome PASS --observation "Initial scaffold tests passed; scientific hypothesis remains unverified."
             else
-              python -m experiments.rapid_project_radar.learning --project "$dir" --outcome FAIL --observation "Initial scaffold tests failed; preserve this experiment for investigation." --correction "Inspect test output, revise hypothesis or implementation, and retry."
+              PYTHONPATH="$GITHUB_WORKSPACE" python -m experiments.rapid_project_radar.learning --project "$dir" --outcome FAIL --observation "Initial scaffold tests failed; preserve this experiment for investigation." --correction "Inspect test output, revise hypothesis or implementation, and retry."
             fi
           done
       - name: Publish isolated project branch
