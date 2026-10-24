@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "AI gets about 10x cheaper every year",
+  "source_excerpt": "Article URL: https://stevekrouse.com/10x Comments URL: https://news.ycombinator.com/item?id=50221446 Points: 3 # Comments: 2",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: AI gets about 10x cheaper every year?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "177b2d16f2e167f3",
+  "source_title": "AI gets about 10x cheaper every year",
+  "source_url": "https://stevekrouse.com/10x"
+}
