@@ -112,7 +112,7 @@ jobs:
                 continue
               fi
             fi
-            if gh pr merge "$pr_number" --squash --delete-branch; then
+            if gh pr merge "$pr_number" --squash; then
               echo "Merged tested signal project into main: $project_id (PR #$pr_number)"
             else
               echo "::warning::Merge pending or blocked for PR #$pr_number; retry next cycle without bypassing branch protections."
