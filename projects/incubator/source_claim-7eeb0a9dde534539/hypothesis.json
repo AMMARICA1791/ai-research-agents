@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle",
+  "source_excerpt": "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "7eeb0a9dde534539",
+  "source_title": "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle",
+  "source_url": "https://research.google/blog/open-and-emergent-problems-in-agentic-privacy-and-security-a-contextual-angle/"
+}
