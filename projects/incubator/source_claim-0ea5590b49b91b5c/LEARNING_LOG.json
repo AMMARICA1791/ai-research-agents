@@ -1,0 +1,15 @@
+{
+  "project_id": "source_claim-0ea5590b49b91b5c",
+  "iterations": [
+    {
+      "iteration": 1,
+      "outcome": "PASS",
+      "observation": "Initial scaffold tests passed; scientific hypothesis remains unverified.",
+      "proposed_correction": "",
+      "evidence_status": "self_report_not_independently_verified"
+    }
+  ],
+  "lessons": [],
+  "automatic_code_changes": false,
+  "model_weights_updated": false
+}
