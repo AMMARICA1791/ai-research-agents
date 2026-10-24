@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "The Foundations of Scalable AI",
+  "source_excerpt": "Article URL: https://www.technologyreview.com/2026/10/22/1146103/the-foundations-of-scalable-ai/ Comments URL: https://news.ycombinator.com/item?id=50220098 Points: 2 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: The Foundations of Scalable AI?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "285861fa05fad723",
+  "source_title": "The Foundations of Scalable AI",
+  "source_url": "https://www.technologyreview.com/2026/10/22/1146103/the-foundations-of-scalable-ai/"
+}
