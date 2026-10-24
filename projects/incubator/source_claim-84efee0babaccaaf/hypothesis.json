@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "I created an selfimproment AI predictions site for soccer",
+  "source_excerpt": "Article URL: https://road2sushi.com/ Comments URL: https://news.ycombinator.com/item?id=50223644 Points: 1 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: I created an selfimproment AI predictions site for soccer?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "84efee0babaccaaf",
+  "source_title": "I created an selfimproment AI predictions site for soccer",
+  "source_url": "https://road2sushi.com/"
+}
