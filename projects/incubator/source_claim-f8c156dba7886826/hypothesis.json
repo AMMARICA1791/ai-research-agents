@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Securing our frontier model training environment",
+  "source_excerpt": "OpenAI explains how we strengthened containment for frontier model training and evaluation, including offline environments and high-compute red-teaming.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Securing our frontier model training environment?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "f8c156dba7886826",
+  "source_title": "Securing our frontier model training environment",
+  "source_url": "https://openai.com/index/securing-our-frontier-model-training-environment"
+}
