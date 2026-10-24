@@ -47,7 +47,7 @@ KEYWORDS = {
     "privacy": ("privacy", "data minimization", "personal data", "local model"),
 }
 MAX_BYTES = 1_000_000
-ARXIV_ID = re.compile(r"^https://(?:www\\.)?(?:arxiv\\.org|export\\.arxiv\\.org)/abs/(\\d{2})(\\d{2})\\.\\d{4,5}(?:v\\d+)?/?$")
+ARXIV_ID = re.compile(r"^https://(?:www\.)?(?:arxiv\.org|export\.arxiv\.org)/abs/(\d{2})(\d{2})\.\d{4,5}(?:v\d+)?/?$")
 def arxiv_month_mismatch(item, published_utc):
     """Conservative flag: arXiv ID encodes submission month, not precise first-post date."""
     match=ARXIV_ID.match(item["url"])
