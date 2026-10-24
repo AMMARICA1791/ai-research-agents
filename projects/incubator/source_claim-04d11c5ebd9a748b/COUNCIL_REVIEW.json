@@ -1,0 +1,62 @@
+{
+  "project_id": "source_claim-04d11c5ebd9a748b",
+  "protocol": "shared_dossier_v1",
+  "reviewers": [
+    {
+      "agent": "source_analyst",
+      "finding": "source_excerpt_present",
+      "source_words": 12,
+      "confidence": "limited"
+    },
+    {
+      "agent": "similarity_reviewer",
+      "possible_overlaps": [],
+      "method": "title_word_jaccard_not_semantic_equivalence"
+    },
+    {
+      "agent": "evidence_validator",
+      "source_grounded": true,
+      "scientific_result_reproduced": false,
+      "finding": "scientific_validation_not_established"
+    },
+    {
+      "agent": "priority_coordinator",
+      "decision": "RESEARCH_NEXT",
+      "next_action": "design_domain_specific_replication"
+    }
+  ],
+  "peer_messages": [
+    {
+      "from": "source_analyst",
+      "to": "evidence_validator",
+      "message": "source_excerpt_present"
+    },
+    {
+      "from": "similarity_reviewer",
+      "to": "priority_coordinator",
+      "message": "potential_overlap_count=0"
+    },
+    {
+      "from": "evidence_validator",
+      "to": "priority_coordinator",
+      "message": "scientific_validation_not_established"
+    }
+  ],
+  "priority": {
+    "score": 45,
+    "band": "RESEARCH_NEXT",
+    "basis": "heuristic_triage_only",
+    "not_measured": [
+      "global_novelty",
+      "scientific_impact",
+      "commercial_value"
+    ]
+  },
+  "status": "reviewed_not_validated",
+  "portfolio_comparison": {
+    "historical_candidates": 0,
+    "inventory_complete": false,
+    "scope": "radar_branches_and_current_batch",
+    "semantic_equivalence_verified": false
+  }
+}
