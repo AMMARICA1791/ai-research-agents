@@ -4,6 +4,7 @@
 # Topic-specific incubator validation trigger; runtime behavior unchanged.
 import argparse
 import datetime as dt
+from email.utils import parsedate_to_datetime
 import hashlib
 import json
 import re
@@ -79,14 +80,35 @@ def fetch(url):
             raise ValueError("feed too large")
         return data
 
-def run(feeds=FEEDS, fetcher=fetch):
+def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
+    now = now or dt.datetime.now(dt.timezone.utc)
+    if now.tzinfo is None:
+        raise ValueError("now must be timezone-aware")
     results=[]; errors=[]
     for name,url in feeds.items():
         try:
             results.extend(parse_feed(fetcher(url),name))
         except (OSError,ValueError,ET.ParseError) as exc:
             errors.append({"feed":name,"error":type(exc).__name__})
-    dedup={x["id"]:x for x in results}
+    fresh=[]; stale_count=0; undated_count=0; future_count=0
+    for item in results:
+        try:
+            stamp=parsedate_to_datetime(item["published"])
+            if stamp.tzinfo is None:
+                raise ValueError("missing timezone")
+            age=(now-stamp.astimezone(dt.timezone.utc)).total_seconds()/3600
+        except (TypeError, ValueError, IndexError, OverflowError):
+            undated_count+=1
+            continue
+        if age < -1:
+            future_count+=1
+            continue
+        if age > max_age_hours:
+            stale_count+=1
+            continue
+        item["age_hours"]=round(max(0,age),2)
+        fresh.append(item)
+    dedup={x["id"]:x for x in fresh}
     items=sorted(dedup.values(),key=lambda x:(-x["signal"]["score"],x["id"]))
     # Give every responding source one opportunity before filling remaining slots.
     # This prevents one high-volume feed from consuming the whole 40-item batch.
@@ -105,6 +127,9 @@ def run(feeds=FEEDS, fetcher=fetch):
     return {"generated_at_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
             "status":"source_diversified_discovery","signals":chosen,
             "feed_errors":errors,"successful_feeds":len(feeds)-len(errors),
+            "freshness_window_hours":max_age_hours,"excluded_stale":stale_count,
+            "excluded_undated":undated_count,"excluded_future":future_count,
+            "fresh_candidate_count":len(fresh),
             "autonomous_code_generation":False}
 
 def write_report(path, report):
