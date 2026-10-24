@@ -28,7 +28,9 @@ jobs:
             echo "::warning::ISLAND_PUBLISH_TOKEN is missing. Public repository publishing is not enabled."
             echo "enabled=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Publish tested islands to public repositories
+      - name: Verify release gate regression tests
+        run: python -m unittest discover -s scripts -p "test_island_release_gate.py" -v
+      - name: Publish validated islands to public repositories
         if: steps.credential.outputs.enabled == 'true'
         env:
           GH_TOKEN: ${{ secrets.ISLAND_PUBLISH_TOKEN }}
