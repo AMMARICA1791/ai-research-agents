@@ -59,9 +59,8 @@ jobs:
             fi
           done
       - name: Publish new isolated project branches
-        # Research-quality gate: preserve artifacts, but do not publish more scaffold-only branches automatically.
-        # Manual dispatch remains available for deliberate, reviewed incubator publication.
-        if: github.event_name == 'workflow_dispatch'
+        # Automatically propose source-linked scaffold projects as draft PRs. Never merge automatically.
+        # Publication only follows successful unit tests and candidate generation.
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
