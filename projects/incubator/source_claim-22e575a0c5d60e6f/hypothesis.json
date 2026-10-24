@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "\ud83c\udfaf",
+  "source_excerpt": "\ud83c\udfaf OpenResearch now has @TrackioApp built in \ud83d\udcc8 Your agent logs its experiments to Trackio, charts open right next to each run, and it reads the curves back to decide what to try next. Open source and local-first. Running on HF Jobs, Modal, k8s or Slurm? Save a @huggingface Space an\u2026",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: \ud83c\udfaf?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "22e575a0c5d60e6f",
+  "source_title": "\ud83c\udfaf",
+  "source_url": "https://x.com/huggingface/status/2113675645607706981"
+}
