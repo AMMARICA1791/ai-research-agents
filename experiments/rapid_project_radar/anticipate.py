@@ -51,13 +51,16 @@ def hypotheses(signal):
 
 def scaffold(hypothesis, root, project_id=None):
     topic=hypothesis["topic"]
-    if topic not in SCENARIOS and topic != "source_claim":
+    if topic not in SCENARIOS and topic not in ("source_claim", "signal_trace"):
         raise ValueError("unknown template")
     root=Path(root)
     project=root/(project_id or topic)
     project.mkdir(parents=True,exist_ok=True)
     # Topic-specific code comes only from the trusted PROTOTYPES map.
-    if topic == "source_claim":
+    if topic == "signal_trace":
+        code = "def trace(source):\\n    return isinstance(source, dict) and bool(source.get(\\\"url\\\", \\\"\\\").startswith(\\\"https://\\\")) and bool(source.get(\\\"title\\\"))\\n"
+        test = "import unittest\\nfrom prototype import trace\\nclass Tests(unittest.TestCase):\\n    def test_source(self):\\n        self.assertTrue(trace({\\\"url\\\":\\\"https://example.org/paper\\\",\\\"title\\\":\\\"Research\\\"}))\\n    def test_untrusted(self):\\n        self.assertFalse(trace({\\\"url\\\":\\\"http://example.org\\\",\\\"title\\\":\\\"Research\\\"}))\\n"
+    elif topic == "source_claim":
         excerpt = hypothesis["source_excerpt"]
         code = "SOURCE_EXCERPT = " + repr(excerpt) + "\n" + "def evidence_matches(text):\n    return isinstance(text, str) and bool(SOURCE_EXCERPT) and SOURCE_EXCERPT in text\n"
         test = "import unittest\nfrom prototype import evidence_matches\nclass Tests(unittest.TestCase):\n    def test_trace(self):\n        self.assertTrue(evidence_matches(" + repr(excerpt) + "))\n    def test_missing(self):\n        self.assertFalse(evidence_matches('unrelated'))\n"
@@ -87,7 +90,13 @@ def generate(report, root):
                 continue
             source_id=hashlib.sha256(source_id.encode()).hexdigest()[:16]
         source_id=source_id[:16].lower()
-        for hypothesis in hypotheses(signal):
+        proposed = hypotheses(signal)
+        if not proposed:
+            proposed = [{"topic": "signal_trace",
+                         "research_question": "What verifiable claim does this source make?",
+                         "falsifiable_prediction": "A source can be traced to its original publication.",
+                         "market_validated": False, "novelty_verified": False}]
+        for hypothesis in proposed:
             topic=hypothesis["topic"]
             project_id=f"{topic}-{source_id}"
             if project_id in seen:
