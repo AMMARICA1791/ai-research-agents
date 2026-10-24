@@ -1,0 +1,30 @@
+name: Empirical Calibration — Birthday Collision
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'experiments/empirical_validation/**'
+      - '.github/workflows/empirical-calibration.yml'
+permissions:
+  contents: read
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Engineering tests (not scientific validation)
+        run: python -m unittest experiments.empirical_validation.test_protocol -v
+      - name: Run preregistered numerical calibration
+        run: python -m experiments.empirical_validation.birthday_calibration | tee calibration-results.json
+      - name: Archive raw comparison
+        uses: actions/upload-artifact@v4
+        with:
+          name: birthday-calibration-results
+          path: |
+            calibration-results.json
+            experiments/empirical_validation/preregistration.json
+          retention-days: 30
