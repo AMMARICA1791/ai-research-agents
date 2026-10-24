@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Using a single Nano Banana image and Blender MCP, Gemini 4 Argon built a 3D Gothic cathedral in @Antigravity. It iterates on the geometry, t\u2026",
+  "source_excerpt": "Using a single Nano Banana image and Blender MCP, Gemini 4 Argon built a 3D Gothic cathedral in @Antigravity. It iterates on the geometry, textures, and lighting to create the finished scene. Media",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Using a single Nano Banana image and Blender MCP, Gemini 4 Argon built a 3D Gothic cathedral in @Antigravity. It iterates on the geometry, t\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d09d5986ae671cc0",
+  "source_title": "Using a single Nano Banana image and Blender MCP, Gemini 4 Argon built a 3D Gothic cathedral in @Antigravity. It iterates on the geometry, t\u2026",
+  "source_url": "https://x.com/GoogleDeepMind/status/2113645959762575623"
+}
