@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "A sovereign AI lab on one machine in my apartment \u2013 zero cloud",
+  "source_excerpt": "Article URL: https://www.shuffle-on.com/ Comments URL: https://news.ycombinator.com/item?id=50223151 Points: 2 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: A sovereign AI lab on one machine in my apartment \u2013 zero cloud?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "01c518a919ba290a",
+  "source_title": "A sovereign AI lab on one machine in my apartment \u2013 zero cloud",
+  "source_url": "https://www.shuffle-on.com/"
+}
