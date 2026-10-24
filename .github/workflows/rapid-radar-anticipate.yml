@@ -75,7 +75,7 @@ jobs:
               if [ -n "$existing_pr" ]; then
                 echo "Already has PR #$existing_pr: $project_id"
               else
-                if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $project_id (signal prototype)" --body "Automated trusted-template scaffold, not a validated invention. Requires a domain-specific empirical protocol, independent evidence, and human review. Do not merge automatically."; then
+                if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $project_id (signal prototype)" --body "Automated trusted-template scaffold, not a validated invention. Generated from a radar signal. Initial tests required; eligible projects are merged automatically into main."; then
                   echo "::warning::Existing branch still has no PR: $branch"
                 fi
               fi
@@ -88,7 +88,7 @@ jobs:
             git add "projects/incubator/$project_id"
             git commit -m "experiment: incubate $project_id from radar signal"
             git push origin "$branch"
-            if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $project_id (signal prototype)" --body "Automated trusted-template scaffold, not a validated invention. Requires a domain-specific empirical protocol, independent evidence, and human review. Do not merge automatically."; then
+            if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $project_id (signal prototype)" --body "Automated trusted-template scaffold, not a validated invention. Generated from a radar signal. Initial tests required; eligible projects are merged automatically into main."; then
               echo "::warning::Branch published but PR creation unavailable; inspect $branch"
             fi
             git switch --detach "${{ github.sha }}"
@@ -118,6 +118,50 @@ jobs:
               echo "::warning::Merge pending or blocked for PR #$pr_number; retry next cycle without bypassing branch protections."
             fi
           done
+      - name: Merge previously generated radar projects
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          # Recover open radar PRs even when their source signals are no longer in today's report.
+          # Process a bounded batch each run to keep the five-minute schedule sustainable.
+          gh pr list --state open --limit 200 --json number,headRefName --jq '.[] | select(.headRefName | startswith("radar/incubator-")) | [.number, .headRefName] | @tsv' > /tmp/radar-open-prs.tsv
+          processed=0
+          while IFS="$(printf '\t')" read -r pr_number branch; do
+            [ -n "$pr_number" ] || continue
+            [ "$processed" -lt 20 ] || break
+            processed=$((processed + 1))
+            project_id="${branch#radar/incubator-}"
+            tmp="$(mktemp -d)"
+            if ! git fetch --depth=1 origin "$branch"; then
+              echo "::warning::Unable to fetch project branch $branch"
+              rm -rf "$tmp"
+              continue
+            fi
+            if ! git archive FETCH_HEAD "projects/incubator/$project_id" | tar -x -C "$tmp"; then
+              echo "::warning::Unable to read project files for $branch"
+              rm -rf "$tmp"
+              continue
+            fi
+            project="$tmp/projects/incubator/$project_id"
+            if [ ! -f "$project/test_prototype.py" ] || ! (cd "$project" && python -m unittest discover -s . -p 'test_*.py' -v); then
+              echo "::warning::Tests failed or missing for $branch; no merge"
+              rm -rf "$tmp"
+              continue
+            fi
+            rm -rf "$tmp"
+            if [ "$(gh pr view "$pr_number" --json isDraft --jq '.isDraft')" = "true" ]; then
+              if ! gh pr ready "$pr_number"; then
+                echo "::warning::Unable to mark PR #$pr_number ready"
+                continue
+              fi
+            fi
+            if gh pr merge "$pr_number" --squash; then
+              echo "Merged backlog project $project_id via PR #$pr_number"
+            else
+              echo "::warning::GitHub blocked PR #$pr_number; protections remain enforced"
+            fi
+          done < /tmp/radar-open-prs.tsv
       - name: Upload prototype archive
         uses: actions/upload-artifact@v4
         with:
