@@ -2,7 +2,7 @@ name: Rapid Radar Anticipatory Prototypes
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17,47 * * * *'
+    - cron: '*/5 * * * *'
 permissions:
   contents: write
   pull-requests: write
@@ -56,7 +56,7 @@ jobs:
             fi
           done
       - name: Publish new isolated project branches
-        # Automatically propose source-linked scaffold projects as draft PRs. Never merge automatically.
+        # Publish tested, source-linked projects; the next step merges eligible PRs.
         # Publication only follows successful unit tests and candidate generation.
         env:
           GH_TOKEN: ${{ github.token }}
@@ -93,6 +93,30 @@ jobs:
             fi
             git switch --detach "${{ github.sha }}"
             git branch -D "$branch"
+          done
+      - name: Merge tested signal projects into main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          for dir in /tmp/anticipatory-projects/*; do
+            [ -d "$dir" ] || continue
+            [ -f "$dir/.tests-passed" ] || continue
+            project_id="$(basename "$dir")"
+            branch="radar/incubator-$project_id"
+            pr_number="$(gh pr list --state open --head "$branch" --json number --jq '.[0].number // empty')"
+            [ -n "$pr_number" ] || { echo "::warning::No open PR for tested project: $project_id"; continue; }
+            if [ "$(gh pr view "$pr_number" --json isDraft --jq '.isDraft')" = "true" ]; then
+              if ! gh pr ready "$pr_number"; then
+                echo "::warning::Cannot mark PR #$pr_number ready; retry next cycle."
+                continue
+              fi
+            fi
+            if gh pr merge "$pr_number" --squash --delete-branch; then
+              echo "Merged tested signal project into main: $project_id (PR #$pr_number)"
+            else
+              echo "::warning::Merge pending or blocked for PR #$pr_number; retry next cycle without bypassing branch protections."
+            fi
           done
       - name: Upload prototype archive
         uses: actions/upload-artifact@v4
