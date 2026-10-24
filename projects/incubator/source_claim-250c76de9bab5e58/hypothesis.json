@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Show HN: AI text detector that never sees your text (runs 100% in-browser)",
+  "source_excerpt": "Article URL: https://kouh.me/ai-text-detector Comments URL: https://news.ycombinator.com/item?id=50220254 Points: 5 # Comments: 7",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Show HN: AI text detector that never sees your text (runs 100% in-browser)?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "250c76de9bab5e58",
+  "source_title": "Show HN: AI text detector that never sees your text (runs 100% in-browser)",
+  "source_url": "https://kouh.me/ai-text-detector"
+}
