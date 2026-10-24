@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Regulate the deployment, not just the model: a who-does-what plan for AI safety",
+  "source_excerpt": "Article URL: https://substack.norabble.com/p/ai-safety-is-all-hands-on-deck Comments URL: https://news.ycombinator.com/item?id=50220831 Points: 2 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Regulate the deployment, not just the model: a who-does-what plan for AI safety?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "e071c7424f3c40e5",
+  "source_title": "Regulate the deployment, not just the model: a who-does-what plan for AI safety",
+  "source_url": "https://substack.norabble.com/p/ai-safety-is-all-hands-on-deck"
+}
