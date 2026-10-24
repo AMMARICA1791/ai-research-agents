@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Shigeru Miyamoto on Gen AI",
+  "source_excerpt": "Article URL: https://www.ndw.jp/nintendo-interview-261023/ Comments URL: https://news.ycombinator.com/item?id=50220413 Points: 1 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Shigeru Miyamoto on Gen AI?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "d4fb2e7b15a9bc3f",
+  "source_title": "Shigeru Miyamoto on Gen AI",
+  "source_url": "https://www.ndw.jp/nintendo-interview-261023/"
+}
