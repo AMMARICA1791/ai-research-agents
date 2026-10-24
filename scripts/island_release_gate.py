@@ -10,6 +10,7 @@ REQUIRED = {
     "privacy": {"redact"},
     "provenance": {"snapshot", "drift"},
     "web_protocols": {"validate"},
+    "source_claim": {"evidence_matches"},
 }
 
 def assess(folder):

@@ -43,7 +43,7 @@ def main():
             break
         if not island.is_dir() or not re.fullmatch(r"[a-zA-Z0-9_-]+", island.name):
             continue
-        # Publish one discoverable public repository per project family.
+        # Use descriptive source titles for distinct signal experiments; avoid hash-based names.
         # Signal hashes are provenance identifiers, not public project names.
         family = re.sub(r"-[0-9a-f]{16}$", "", island.name)
         titles = {
@@ -54,6 +54,14 @@ def main():
             "provenance": "evidence-provenance",
         }
         name = titles.get(family)
+        if family == "source_claim":
+            try:
+                hypothesis = json.loads((island / "hypothesis.json").read_text(encoding="utf-8"))
+                title = hypothesis.get("source_title") or hypothesis.get("title") or ""
+                slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:55].strip("-")
+                name = "source-" + slug if len(slug) >= 8 else None
+            except (OSError, ValueError):
+                name = None
         if not name:
             print(f"SKIP {island.name}: unknown family needs a descriptive title")
             continue
