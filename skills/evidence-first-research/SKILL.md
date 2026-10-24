@@ -11,6 +11,10 @@ This skill provides a **research protocol**, not autonomous fact verification or
 
 Before writing the report, identify which evidence was **actually opened and examined**. A user-supplied DOI, title, abstract, or citation-shaped string is not verification. If no relevant source was accessed, label the claim **UNVERIFIED — source not accessed**. Never use **Verified**, **Confirmed**, or equivalent language for an inaccessible or unchecked claim, even when the user describes it as proven. If only an abstract was read, explicitly say **ABSTRACT ONLY — full findings not verified**.
 
+**Source classification gate:** Do not call a DOI, URL, title, or citation a primary, peer-reviewed, genuine, or existing source unless its identity and type were checked. For an unaccessed citation use `Source type: UNKNOWN (not inspected)`, `Access status: NOT ACCESSED`, and `Evidence locator: NOT AVAILABLE`. Do not guess metadata.
+
+**No placeholder answers:** Never fill evidence inventory, claim matrix, uncertainty, or review fields with `no`, `yes`, `N/A`, or a bare status without explanation. If evidence is missing, say specifically what is missing and what must be checked next. Prefer a concise honest report over empty schema-shaped output.
+
 **Required first line of findings:** `Evidence status: UNVERIFIED` unless the report names the accessible source and precise supporting passage/data inspected. Every material claim must have its own evidence status; a verified source's existence does not automatically verify a conclusion. If the evidence is missing, write `Evidence: none examined` and `Limitations: source unavailable`. Do not repeat this instruction text as the answer: apply it to the research question.
 
 ## Workflow
