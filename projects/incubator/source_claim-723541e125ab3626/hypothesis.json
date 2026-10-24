@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "LIVE: @NASAAdmin and agency leaders are sharing the latest updates on next year's Artemis III mission and our plans to return astronauts to \u2026",
+  "source_excerpt": "LIVE: @NASAAdmin and agency leaders are sharing the latest updates on next year&apos;s Artemis III mission and our plans to return astronauts to the surface of the Moon by 2028. https://x.com/i/broadcasts/1RJZzBdZYQgJB",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: LIVE: @NASAAdmin and agency leaders are sharing the latest updates on next year's Artemis III mission and our plans to return astronauts to \u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "723541e125ab3626",
+  "source_title": "LIVE: @NASAAdmin and agency leaders are sharing the latest updates on next year's Artemis III mission and our plans to return astronauts to \u2026",
+  "source_url": "https://x.com/NASA/status/2113693409772761305"
+}
