@@ -64,6 +64,10 @@ def main():
         if not (island / "prototype.py").is_file() or not (island / "test_prototype.py").is_file():
             print(f"SKIP {island.name}: no executable prototype and test")
             continue
+        gate = run(["python", "scripts/island_release_gate.py", str(island)], check=False)
+        if gate.returncode:
+            print(f"SKIP {island.name}: {gate.stdout.strip()}")
+            continue
         check = run(["python", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py", "-v"], cwd=island, check=False)
         if check.returncode:
             print(f"SKIP {island.name}: tests failed: {check.stderr[-350:]}")
