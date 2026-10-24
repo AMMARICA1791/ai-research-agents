@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Ahh\u2026 blue lagoon \ud83c\udfd6\ufe0f This deep-blue sea of gas and dust\u2014called Messier 8 or the Lagoon Nebula\u2014is a hotbed of star formation. The young stars\u2026",
+  "source_excerpt": "Ahh\u2026 blue lagoon \ud83c\udfd6\ufe0f This deep-blue sea of gas and dust\u2014called Messier 8 or the Lagoon Nebula\u2014is a hotbed of star formation. The young stars within the nebula emit rays of high-energy light, including X-rays shown in pink by @chandraxray.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Ahh\u2026 blue lagoon \ud83c\udfd6\ufe0f This deep-blue sea of gas and dust\u2014called Messier 8 or the Lagoon Nebula\u2014is a hotbed of star formation. The young stars\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "9dfc30c648a246c8",
+  "source_title": "Ahh\u2026 blue lagoon \ud83c\udfd6\ufe0f This deep-blue sea of gas and dust\u2014called Messier 8 or the Lagoon Nebula\u2014is a hotbed of star formation. The young stars\u2026",
+  "source_url": "https://x.com/NASA/status/2113655288687431819"
+}
