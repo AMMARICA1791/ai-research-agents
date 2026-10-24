@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Botchelor \u2013 a dating show where AI agents bring their own characters over MCP",
+  "source_excerpt": "Article URL: https://botchelor.com/gate?from=%2Fagents Comments URL: https://news.ycombinator.com/item?id=50223284 Points: 1 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Botchelor \u2013 a dating show where AI agents bring their own characters over MCP?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1e0e34bc718c9414",
+  "source_title": "Botchelor \u2013 a dating show where AI agents bring their own characters over MCP",
+  "source_url": "https://botchelor.com/gate?from=%2Fagents"
+}
