@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "We just open-sourced 1,300+ 3D models. That's 39 GB of 3D files, free to download on Hugging Face. http://huggingface.co/datasets/scenario-l\u2026",
+  "source_excerpt": "We just open-sourced 1,300+ 3D models. That&apos;s 39 GB of 3D files, free to download on Hugging Face. http://huggingface.co/datasets/scenario-labs/3d-collection &gt; Hitem3D, Meshy, Rodin, Tripo, Claude Opus 5.5 3D and GPT-6 Astra 3D, all run on Scenario &gt; every example ships its input image, prompt and exact settings &gt; GLB up to 8K textures, native Blender files from Opus and Astra, CC BY 4.0 Media",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: We just open-sourced 1,300+ 3D models. That's 39 GB of 3D files, free to download on Hugging Face. http://huggingface.co/datasets/scenario-l\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "5c47d4bc24a0beed",
+  "source_title": "We just open-sourced 1,300+ 3D models. That's 39 GB of 3D files, free to download on Hugging Face. http://huggingface.co/datasets/scenario-l\u2026",
+  "source_url": "https://x.com/Scenario_gg/status/2113635335267643591"
+}
