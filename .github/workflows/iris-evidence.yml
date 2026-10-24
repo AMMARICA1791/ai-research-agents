@@ -24,6 +24,10 @@ jobs:
         run: python -m experiments.empirical_validation.iris_holdout | tee iris-holdout-results.json
       - name: Run preregistered repeated holdout robustness check
         run: python -m experiments.empirical_validation.iris_robustness | tee iris-robustness-results.json
+      - name: Test evidence-conditioned proposal logic
+        run: python -m unittest experiments.empirical_validation.test_next_experiment -v
+      - name: Generate next experiment proposal from observed measurements
+        run: python -m experiments.empirical_validation.next_experiment --evidence iris-robustness-results.json | tee next-experiment-proposal.json
       - name: Preserve measurements and frozen protocol
         uses: actions/upload-artifact@v4
         with:
@@ -32,6 +36,7 @@ jobs:
             iris-results.json
             iris-holdout-results.json
             iris-robustness-results.json
+            next-experiment-proposal.json
             experiments/empirical_validation/iris_robustness_preregistration.json
             experiments/empirical_validation/iris_holdout_preregistration.json
             experiments/empirical_validation/iris_preregistration.json
