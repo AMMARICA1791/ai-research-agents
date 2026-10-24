@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "eb73a5e6221f7ebc",
+  "source_title": "Our newest decision model is the world's best decision model. Introducing GLiDE v1.2, the #1 model on the @huggingface Decision Index. With \u2026",
+  "source_url": "https://x.com/fastinoAI/status/2113308639566164012"
+}
