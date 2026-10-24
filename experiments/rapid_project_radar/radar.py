@@ -24,6 +24,12 @@ FEEDS = {
     "cloudflare_blog": "https://blog.cloudflare.com/rss/",
     "google_research": "https://research.google/blog/rss/",
     "openai_news": "https://openai.com/news/rss.xml",
+    # Experimental third-party public X profile feeds (FxEmbed, NOT X's official API).
+    # Best-effort only: feeds may fail, lag, or become unavailable without notice.
+    "x_nasa": "https://fxtwitter.com/NASA/feed.xml?count=20",
+    "x_google_deepmind": "https://fxtwitter.com/GoogleDeepMind/feed.xml?count=20",
+    "x_huggingface": "https://fxtwitter.com/huggingface/feed.xml?count=20",
+    "x_arxiv": "https://fxtwitter.com/arxiv/feed.xml?count=20",
 }
 KEYWORDS = {
     "agent_security": ("agent", "permission", "authorization", "prompt injection", "consent"),
