@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "f2815bea079b745e",
+  "source_title": "Show HN: AI agent swarms test if new CVEs are exploitable in your env",
+  "source_url": "https://app.enclave.ai/threat-feed"
+}
