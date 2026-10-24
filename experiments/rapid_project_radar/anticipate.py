@@ -36,12 +36,12 @@ def hypotheses(signal):
     if not isinstance(signal,dict):
         raise ValueError("signal must be object")
     derived=extract(signal)
+    result = []
     if derived is not None:
-        return [{"topic":"source_claim", **derived, "market_validated":False, "novelty_verified":False}]
+        result.append({"topic":"source_claim", **derived, "market_validated":False, "novelty_verified":False})
     topics=signal.get("signal",{}).get("topics",{})
     if not isinstance(topics,dict):
         raise ValueError("topics must be object")
-    result=[]
     for topic in sorted(set(topics)&set(SCENARIOS)):
         trend,question,prediction=SCENARIOS[topic]
         result.append({"topic":topic,"trend_hypothesis":trend,
