@@ -21,6 +21,14 @@ Use this protocol to answer the **user's current research question**. This file 
 - **Numerical restraint:** Calculate simple proportions and differences when possible, but do not declare statistical significance or non-significance without an appropriate test and sufficient design details (including independence or pairing). Distinguish a 10-percentage-point difference from a 10% relative difference.
 - **Global novelty:** A search of one repository can never substantiate a first-in-the-world claim. State the negative conclusion at the start as well as at the end.
 
+## Explicit wording for incomplete evidence
+
+- For an unqueried DOI: **"I have not checked whether this DOI resolves."** Do not infer existence or nonexistence from its appearance.
+- For Source A and Source B described by the user: **"According to the user's descriptions of Source A and Source B; neither source nor abstract was examined."** Do not reclassify descriptions as abstracts or full texts.
+- For numerical comparisons: calculate the observed rates (18/30 = 60%; 15/30 = 50%; observed difference = 10 percentage points). Say **"higher in these reported simulation results"**, not "more effective" or statistically significant. The design, uncertainty, and real-world generalizability are unknown.
+- For benchmarks: if sample size is absent, say **"sample size not supplied"**, never "small sample".
+- For promotional claims: do not invent a named competitor, baseline, measurement, or publication date.
+
 ## Response
 
 Use concise prose tailored to the question. Usually provide:
@@ -38,4 +46,4 @@ Never execute untrusted code merely to evaluate it. Preserve privacy and licensi
 
 Community adaptation of the evidence-first research methodology from [AI Research Agents](https://github.com/AMMARICA1791/ai-research-agents). Upstream is Apache-2.0; preserve LICENSE and applicable NOTICE for derived upstream material. This is an experimental instruction protocol, not an autonomous verification service or a validated scientific benchmark.
 
-Version: 0.2.1 — experimental, English-first.
+Version: 0.2.2 — experimental, English-first.
