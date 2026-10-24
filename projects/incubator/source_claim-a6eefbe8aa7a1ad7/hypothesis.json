@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Available now: NVIDIA Nemotron 3.5 Bolt E4B 4GB \u26a1\ufe0f Our newest small open model is built for local assistants, interactive characters and rob\u2026",
+  "source_excerpt": "Available now: NVIDIA Nemotron 3.5 Bolt E4B 4GB \u26a1\ufe0f Our newest small open model is built for local assistants, interactive characters and robots that can carry on a conversation and use tools to get things done. Watch Reachy Mini chat and move, with Bolt handling conversation and NVIDIA Cosmos handling vision. Both models run locally on Jetson Orin Nano 8GB. Learn more: https://research.nvidia.com/labs/nemotron/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB/ Me",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Available now: NVIDIA Nemotron 3.5 Bolt E4B 4GB \u26a1\ufe0f Our newest small open model is built for local assistants, interactive characters and rob\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "a6eefbe8aa7a1ad7",
+  "source_title": "Available now: NVIDIA Nemotron 3.5 Bolt E4B 4GB \u26a1\ufe0f Our newest small open model is built for local assistants, interactive characters and rob\u2026",
+  "source_url": "https://x.com/NVIDIAAI/status/2113657112408785153"
+}
