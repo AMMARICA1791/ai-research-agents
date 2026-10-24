@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Decompiling Games with AI: Virtueel Zoetermeer",
+  "source_excerpt": "Article URL: https://bou.ke/blog/zoetermeer/ Comments URL: https://news.ycombinator.com/item?id=50225054 Points: 1 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Decompiling Games with AI: Virtueel Zoetermeer?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1014b2ca8f172479",
+  "source_title": "Decompiling Games with AI: Virtueel Zoetermeer",
+  "source_url": "https://bou.ke/blog/zoetermeer/"
+}
