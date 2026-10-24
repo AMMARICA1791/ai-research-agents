@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Over half of reported crimes in Singapore use sophisticated social engineering. With @GovTechSG, we\u2019re building on-device fraud detection us\u2026",
+  "source_excerpt": "Over half of reported crimes in Singapore use sophisticated social engineering. With @GovTechSG, we\u2019re building on-device fraud detection using our open model Gemma. By fine-tuning it on local scam tactics, it identifies threats in real time without compromising personal privacy \u2192 https://goo.gle/4ygVkJa",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Over half of reported crimes in Singapore use sophisticated social engineering. With @GovTechSG, we\u2019re building on-device fraud detection us\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1d6700b1de1e5158",
+  "source_title": "Over half of reported crimes in Singapore use sophisticated social engineering. With @GovTechSG, we\u2019re building on-device fraud detection us\u2026",
+  "source_url": "https://x.com/GoogleDeepMind/status/2110190101707858039"
+}
