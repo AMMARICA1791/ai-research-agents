@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "AI-Assisted Paper on Z-Library Cites a TorrentFreak Article That Doesn't Exist",
+  "source_excerpt": "Article URL: https://torrentfreak.com/ai-assisted-paper-on-z-library-cites-a-torrentfreak-article-that-doesnt-exist/ Comments URL: https://news.ycombinator.com/item?id=50220204 Points: 56 # Comments: 17",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: AI-Assisted Paper on Z-Library Cites a TorrentFreak Article That Doesn't Exist?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "a274a475efbd40d3",
+  "source_title": "AI-Assisted Paper on Z-Library Cites a TorrentFreak Article That Doesn't Exist",
+  "source_url": "https://torrentfreak.com/ai-assisted-paper-on-z-library-cites-a-torrentfreak-article-that-doesnt-exist/"
+}
