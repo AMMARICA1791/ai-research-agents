@@ -1,0 +1,48 @@
+name: Radar Signal Delta
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/radar-signal-delta.yml'
+      - 'projects/signal-delta/**'
+  schedule:
+    - cron: '29,59 * * * *'
+permissions:
+  contents: read
+jobs:
+  build-delta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test Signal Delta
+        run: python -m unittest discover -s projects/signal-delta -p 'test_*.py' -v
+      - name: Restore first-seen registry
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/radar-delta-seen.json
+          key: radar-delta-${{ github.run_id }}
+          restore-keys: radar-delta-
+      - name: Collect signals
+        run: python -m experiments.rapid_project_radar.radar --output /tmp/radar-report.json --seen-file /tmp/radar-delta-seen.json
+      - name: Persist registry
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/radar-delta-seen.json
+          key: radar-delta-${{ github.run_id }}
+      - name: Generate delta
+        run: python projects/signal-delta/delta.py --report /tmp/radar-report.json --output /tmp/signal-delta.json
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-signal-delta-output
+          path: |
+            /tmp/radar-report.json
+            /tmp/signal-delta.json
+          if-no-files-found: warn
+          retention-days: 14
