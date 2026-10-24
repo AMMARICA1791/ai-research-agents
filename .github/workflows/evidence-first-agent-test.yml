@@ -31,7 +31,7 @@ jobs:
           ollama pull qwen2.5:0.5b
       - name: Run real agent prompts
         env:
-          CASES: ${{ github.event.inputs.cases || '1' }}
+          CASES: ${{ github.event.inputs.cases || '8' }}
         run: |
           python skills/evidence-first-research/tests/run_ollama_behavior.py --model qwen2.5:0.5b --limit "$CASES" --output behavior-results.json
       - name: Upload raw responses (including failures)
