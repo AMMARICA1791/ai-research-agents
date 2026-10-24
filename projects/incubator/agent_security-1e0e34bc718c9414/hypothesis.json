@@ -1,0 +1,11 @@
+{
+  "topic": "agent_security",
+  "trend_hypothesis": "Agents increasingly perform consequential actions",
+  "research_question": "Can a minimal authorization gate prevent unapproved actions?",
+  "falsifiable_prediction": "A deterministic gate denies actions without trusted user approval.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1e0e34bc718c9414",
+  "source_title": "Botchelor \u2013 a dating show where AI agents bring their own characters over MCP",
+  "source_url": "https://botchelor.com/gate?from=%2Fagents"
+}
