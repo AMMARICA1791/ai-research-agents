@@ -1,0 +1,11 @@
+{
+  "topic": "provenance",
+  "trend_hypothesis": "Generated claims proliferate faster than evidence reviews",
+  "research_question": "Can source snapshots reveal when quoted support disappears?",
+  "falsifiable_prediction": "A source change triggers a quote-presence recheck.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "28cb8bd63f151c63",
+  "source_title": "The Customer Is the Builder: How AI Coding Agents Are Rewriting the Economics of Software",
+  "source_url": "https://arxiv.org/abs/2610.30307"
+}
