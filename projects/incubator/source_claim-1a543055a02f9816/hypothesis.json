@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "OpenAI and Poland\u2019s NASK partner to advance AI safety and security",
+  "source_excerpt": "OpenAI and Poland\u2019s NASK are partnering on AI safety, security, and technical research to strengthen safeguards and support a more resilient digital ecosystem.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: OpenAI and Poland\u2019s NASK partner to advance AI safety and security?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1a543055a02f9816",
+  "source_title": "OpenAI and Poland\u2019s NASK partner to advance AI safety and security",
+  "source_url": "https://openai.com/index/openai-nask-ai-safety-security-partnership"
+}
