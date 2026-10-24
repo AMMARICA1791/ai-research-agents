@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "NVIDIA CEO Jensen Huang asked 4 tiny robots to sit, stand, nap, and do somersaults. And they actually did it. NVIDIA is bringing AI agents f\u2026",
+  "source_excerpt": "NVIDIA CEO Jensen Huang asked 4 tiny robots to sit, stand, nap, and do somersaults. And they actually did it. NVIDIA is bringing AI agents from virtual world to real world with these robotic ducks. Media",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: NVIDIA CEO Jensen Huang asked 4 tiny robots to sit, stand, nap, and do somersaults. And they actually did it. NVIDIA is bringing AI agents f\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "214a06d9649f867d",
+  "source_title": "NVIDIA CEO Jensen Huang asked 4 tiny robots to sit, stand, nap, and do somersaults. And they actually did it. NVIDIA is bringing AI agents f\u2026",
+  "source_url": "https://x.com/CodeByPoonam/status/2113219836084142465"
+}
