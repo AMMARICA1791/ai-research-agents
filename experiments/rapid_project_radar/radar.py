@@ -47,6 +47,18 @@ KEYWORDS = {
     "privacy": ("privacy", "data minimization", "personal data", "local model"),
 }
 MAX_BYTES = 1_000_000
+ARXIV_ID = re.compile(r"^https://(?:www\\.)?arxiv\\.org/abs/(\\d{2})(\\d{2})\\.\\d{4,5}(?:v\\d+)?/?$")
+def arxiv_month_mismatch(item, published_utc):
+    """Conservative flag: arXiv ID encodes submission month, not precise first-post date."""
+    match=ARXIV_ID.match(item["url"])
+    if not match:
+        return False
+    year=2000+int(match.group(1))
+    month=int(match.group(2))
+    if not 1 <= month <= 12:
+        return False
+    return (year,month)<(published_utc.year,published_utc.month)
+
 
 def score(title, description):
     text=(title+" "+description).lower()
@@ -90,7 +102,7 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
             results.extend(parse_feed(fetcher(url),name))
         except (OSError,ValueError,ET.ParseError) as exc:
             errors.append({"feed":name,"error":type(exc).__name__})
-    fresh=[]; stale_count=0; undated_count=0; future_count=0
+    fresh=[]; stale_count=0; undated_count=0; future_count=0; older_arxiv_count=0
     for item in results:
         try:
             stamp=parsedate_to_datetime(item["published"])
@@ -105,6 +117,9 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
             continue
         if age > max_age_hours:
             stale_count+=1
+            continue
+        if arxiv_month_mismatch(item,stamp.astimezone(dt.timezone.utc)):
+            older_arxiv_count+=1
             continue
         item["age_hours"]=round(max(0,age),2)
         fresh.append(item)
@@ -130,6 +145,7 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
             "freshness_window_hours":max_age_hours,"excluded_stale":stale_count,
             "excluded_undated":undated_count,"excluded_future":future_count,
             "fresh_candidate_count":len(fresh),
+            "excluded_older_arxiv_submission_month":older_arxiv_count,
             "autonomous_code_generation":False}
 
 def write_report(path, report):
