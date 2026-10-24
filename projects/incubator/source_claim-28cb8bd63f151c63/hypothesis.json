@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "The Customer Is the Builder: How AI Coding Agents Are Rewriting the Economics of Software",
+  "source_excerpt": "arXiv:2610.30307v1 Announce Type: cross Abstract: AI coding agents could change whether organizations buy software or build the functionality they need. We focus on organizations and professional buyers whose domain knowledge can help them specify and evaluate tools for their work. We define the software substitution frontier as the functions customers could build and maintain at an acceptable standard for less than buying them. Using public data",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: The Customer Is the Builder: How AI Coding Agents Are Rewriting the Economics of Software?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "28cb8bd63f151c63",
+  "source_title": "The Customer Is the Builder: How AI Coding Agents Are Rewriting the Economics of Software",
+  "source_url": "https://arxiv.org/abs/2610.30307"
+}
