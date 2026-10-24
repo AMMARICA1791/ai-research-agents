@@ -70,7 +70,15 @@ jobs:
             project_id="$(basename "$dir")"
             branch="radar/incubator-$project_id"
             if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-              echo "Already proposed: $project_id"
+              echo "Existing incubator branch: $project_id"
+              existing_pr="$(gh pr list --state all --head "$branch" --json number --jq '.[0].number // empty')"
+              if [ -n "$existing_pr" ]; then
+                echo "Already has PR #$existing_pr: $project_id"
+              else
+                if ! gh pr create --base main --head "$branch" --draft --title "Radar incubator: $project_id (signal prototype)" --body "Automated trusted-template scaffold, not a validated invention. Requires a domain-specific empirical protocol, independent evidence, and human review. Do not merge automatically."; then
+                  echo "::warning::Existing branch still has no PR: $branch"
+                fi
+              fi
               continue
             fi
             git switch -c "$branch" origin/main
