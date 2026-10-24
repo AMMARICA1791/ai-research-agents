@@ -1,0 +1,41 @@
+name: Radar Freshness Lens
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/radar-freshness-lens.yml'
+      - 'projects/freshness-lens/**'
+  schedule:
+    - cron: '23,53 * * * *'
+  workflow_run:
+    workflows: [Rapid Project Radar]
+    types: [completed]
+permissions:
+  contents: read
+jobs:
+  collect-and-publish:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test Freshness Lens
+        run: python -m unittest discover -s projects/freshness-lens -p 'test_*.py' -v
+      - name: Fetch radar signals
+        run: python -m experiments.rapid_project_radar.radar --output /tmp/radar-report.json
+      - name: Generate freshness scorecard
+        run: python projects/freshness-lens/lens.py --report /tmp/radar-report.json --output /tmp/freshness.json
+      - name: Publish results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-freshness-lens-output
+          path: |
+            /tmp/radar-report.json
+            /tmp/freshness.json
+          if-no-files-found: warn
+          retention-days: 14
