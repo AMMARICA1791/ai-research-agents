@@ -1,0 +1,12 @@
+{
+  "claim": "The corrected Fisher Iris dataset has 150 observations, 50 per species; Setosa is separable from the other two species by petal length on this fixed dataset.",
+  "source": "Fisher 1936, UCI Iris dataset DOI 10.24432/C56C76; corrected Fisher/R variant bundled with scikit-learn",
+  "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
+  "dataset_variant": "sklearn_corrected_fisher",
+  "data_sha256": "c963159b401f3a844673a6dec6dac21a3c6448f92773975b36b572d1f9a5965d",
+  "canonical_encoding": "UTF-8 rows: sepal length,width,petal length,width each 1 decimal, lowercase species name, comma-separated, newline after each row",
+  "petal_length_threshold_cm": 2,
+  "expected_setosa_binary_accuracy": 1,
+  "study_limitations": "In-sample separability only; not Fisher's original discriminant analysis nor independent test-set performance.",
+  "preregistered_before_ci_execution": true
+}
