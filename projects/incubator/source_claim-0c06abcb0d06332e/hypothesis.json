@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Patent Advisory Group recommends continuing work on Open Screen Application Protocol",
+  "source_excerpt": "W3C launches a Patent Advisory Group (PAG) to resolve issues in the event a patent has been disclosed that may be essential, but is not available under the W3C Royalty-Free licensing terms.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Patent Advisory Group recommends continuing work on Open Screen Application Protocol?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "0c06abcb0d06332e",
+  "source_title": "Patent Advisory Group recommends continuing work on Open Screen Application Protocol",
+  "source_url": "https://www.w3.org/news/2026/patent-advisory-group-recommends-continuing-work-on-open-screen-application-protocol/"
+}
