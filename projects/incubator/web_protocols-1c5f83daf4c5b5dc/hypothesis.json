@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1c5f83daf4c5b5dc",
+  "source_title": "How Commerce.com and Cloudflare are getting storefronts ready for AI agents",
+  "source_url": "https://blog.cloudflare.com/webmcp-commerce/"
+}
