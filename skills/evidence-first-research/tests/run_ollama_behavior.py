@@ -21,7 +21,11 @@ def main():
     p=argparse.ArgumentParser();p.add_argument("--model",default="qwen2.5:0.5b");p.add_argument("--limit",type=int,default=1);p.add_argument("--timeout",type=int,default=180);p.add_argument("--output",default="behavior-results.json");p.add_argument("--pro-skill-path",default=None,help="Private local Pro SKILL.md; never upload this file");a=p.parse_args()
     rows=[]
     for case,question in CASES[:max(1,min(a.limit,len(CASES)))]: 
-        conditions=[("baseline",""),("community",SKILL+"\n\n")]\n        if a.pro_skill_path:\n            pro=pathlib.Path(a.pro_skill_path).read_text(encoding="utf-8")\n            conditions.append(("pro",pro+"\n\n"))\n        for condition,prefix in conditions:
+        conditions=[("baseline",""),("community",SKILL+"\n\n")]
+        if a.pro_skill_path:
+            pro=pathlib.Path(a.pro_skill_path).read_text(encoding="utf-8")
+            conditions.append(("pro",pro+"\n\n"))
+        for condition,prefix in conditions:
             t=time.time();entry={"case":case,"condition":condition,"model":a.model,"prompt":question,"timestamp_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime())}
             try:
                 entry["output"]=ask(a.model,prefix+"Research request: "+question,a.timeout)
