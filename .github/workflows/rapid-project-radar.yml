@@ -25,6 +25,7 @@ jobs:
           python-version: '3.11'
       - name: Offline tests
         run: python -m unittest discover -s experiments/rapid_project_radar -p 'test_*.py' -v
+      # The first run seeds the cache; later runs must demonstrate restore hits.
       - name: Restore first-seen registry
         uses: actions/cache/restore@v4
         with:
