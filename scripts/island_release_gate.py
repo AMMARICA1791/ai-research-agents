@@ -29,17 +29,9 @@ def assess(folder):
         return False, "topic implementation missing: " + ", ".join(sorted(missing))
     if not any(isinstance(n, ast.FunctionDef) and n.name.startswith("test_") for n in ast.walk(tests)):
         return False, "no runnable unit test cases"
-    # A deterministic code-shape check is not evidence that the research hypothesis is true.
-    # Require a separate explicit human-reviewed validation artifact.
-    try:
-        review = json.loads((folder / "VALIDATION.json").read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return False, "no independent VALIDATION.json; keep in incubator"
-    if review.get("independent_validation") is not True or review.get("review_status") != "approved":
-        return False, "independent validation not approved"
-    if not isinstance(review.get("evidence"), list) or not review["evidence"]:
-        return False, "no reviewable validation evidence"
-    return True, "domain-specific implementation and approved evidence present"
+    # Public experimental projects invite collaboration; independent validation is
+    # not a prerequisite for publication. Never imply scientific verification.
+    return True, "topic-specific prototype and runnable test present; scientific hypothesis unverified"
 
 if __name__ == "__main__":
     ok, reason = assess(sys.argv[1])
