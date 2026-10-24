@@ -139,12 +139,20 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
         if item["id"] not in chosen_ids:
             chosen.append(item)
             chosen_ids.add(item["id"])
-    return {"generated_at_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
+    ages=sorted(x["age_hours"] for x in chosen)
+    median_age=(ages[(len(ages)-1)//2]+ages[len(ages)//2])/2 if ages else None
+    return {"generated_at_utc":now.isoformat(),
             "status":"source_diversified_discovery","signals":chosen,
             "feed_errors":errors,"successful_feeds":len(feeds)-len(errors),
             "freshness_window_hours":max_age_hours,"excluded_stale":stale_count,
             "excluded_undated":undated_count,"excluded_future":future_count,
             "fresh_candidate_count":len(fresh),
+            "selected_age_hours_min":ages[0] if ages else None,
+            "selected_age_hours_median":round(median_age,2) if ages else None,
+            "selected_age_hours_max":ages[-1] if ages else None,
+            "selected_within_6_hours":sum(a<=6 for a in ages),
+            "selected_within_24_hours":sum(a<=24 for a in ages),
+            "latency_measurement_note":"Age since feed publication at scan; not first-seen latency",
             "excluded_older_arxiv_submission_month":older_arxiv_count,
             "autonomous_code_generation":False}
 
