@@ -1,0 +1,17 @@
+{
+  "claim": "Under independent uniform birthdays across 365 days, a group of 23 has a birthday collision probability close to 0.5073.",
+  "metric": "fraction_of_20000_groups_with_at_least_one_duplicate_birthday_per_seed",
+  "expected_value": 0.5072972343239857,
+  "tolerance": 0.02,
+  "data_sha256": "9c6c1d8e21df39e1016be4c36e4e8a03c286e02e64f307508a6681b7fcdbc187",
+  "protocol_version": "birthday-calibration-v1",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "trials_per_seed": 20000,
+  "group_size": 23,
+  "days": 365,
+  "interpretation_limit": "Synthetic uniform model; not empirical human birth frequencies."
+}
