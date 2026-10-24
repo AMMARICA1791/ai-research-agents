@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "AI gets more diagnoses right than generalist doctors in medical challenge",
+  "source_excerpt": "Article URL: https://medicalxpress.com/news/2026-10-ai-generalist-doctors-medical.html Comments URL: https://news.ycombinator.com/item?id=50220694 Points: 6 # Comments: 0",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: AI gets more diagnoses right than generalist doctors in medical challenge?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "4454f5185dc52119",
+  "source_title": "AI gets more diagnoses right than generalist doctors in medical challenge",
+  "source_url": "https://medicalxpress.com/news/2026-10-ai-generalist-doctors-medical.html"
+}
