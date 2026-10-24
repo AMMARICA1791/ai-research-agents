@@ -33,6 +33,13 @@ jobs:
         env:
           GH_TOKEN: \${{ github.token }}
         run: python -m experiments.rapid_project_radar.portfolio --repo \${{ github.repository }} --output /tmp/radar-portfolio.json
+      - name: Generate successor experiments from distinct new questions
+        run: |
+          if [ -f /tmp/radar-portfolio.json ]; then
+            python -m experiments.rapid_project_radar.successors --projects /tmp/anticipatory-projects --portfolio /tmp/radar-portfolio.json --output-dir /tmp/anticipatory-projects --limit 12
+          else
+            echo "::warning::Historical inventory unavailable; skip successor generation rather than invent lineage."
+          fi
       - name: Council peer review and priority triage
         run: |
           if [ -f /tmp/radar-portfolio.json ]; then
