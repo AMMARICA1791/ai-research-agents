@@ -1,0 +1,37 @@
+name: Radar Experiment Seed
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/radar-experiment-seed.yml'
+      - 'projects/experiment-seed/**'
+  schedule:
+    - cron: '51 * * * *'
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test
+        run: python -m unittest discover -s projects/experiment-seed -p 'test_*.py' -v
+      - name: Collect live radar signals
+        run: python -m experiments.rapid_project_radar.radar --output /tmp/radar-report.json
+      - name: Generate source-linked experiment seeds
+        run: python projects/experiment-seed/seed.py --report /tmp/radar-report.json --output /tmp/experiment-seeds.json
+      - name: Upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-experiment-seeds
+          path: |
+            /tmp/radar-report.json
+            /tmp/experiment-seeds.json
+          if-no-files-found: warn
+          retention-days: 14
