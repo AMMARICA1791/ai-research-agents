@@ -1,0 +1,8 @@
+{
+  "topic": "provenance",
+  "trend_hypothesis": "Generated claims proliferate faster than evidence reviews",
+  "research_question": "Can source snapshots reveal when quoted support disappears?",
+  "falsifiable_prediction": "A source change triggers a quote-presence recheck.",
+  "market_validated": false,
+  "novelty_verified": false
+}
