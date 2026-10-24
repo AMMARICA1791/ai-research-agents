@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "What if you could have AI applied to your brain?",
+  "source_excerpt": "Imagine this. You can control Alexa with your voice and ask it to play songs, remember grocery lists, add reminders to your calendar. Elon Musk's Neuralink can interface with your brain and reduce the latency with which you can communicate with computers. What if you had AI applied to your brain and you could train it to think like you just like how you train your agents at work? Comments URL: https://news.ycombinator.com/item?id=50223726 Points:",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: What if you could have AI applied to your brain??",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "c73499090aa615f7",
+  "source_title": "What if you could have AI applied to your brain?",
+  "source_url": "https://news.ycombinator.com/item?id=50223726"
+}
