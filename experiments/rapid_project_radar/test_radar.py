@@ -22,6 +22,9 @@ class RadarTests(unittest.TestCase):
         r=run({"a":"https://example.org/a","b":"https://example.org/b"},lambda _:XML,now=dt.datetime(2026,10,24,0,tzinfo=dt.timezone.utc))
         self.assertEqual(len(r["signals"]),2)
         self.assertEqual(r["successful_feeds"],2)
+        self.assertEqual(r["selected_within_24_hours"],2)
+        self.assertAlmostEqual(r["selected_age_hours_median"],14)
+        self.assertIn("not first-seen latency",r["latency_measurement_note"])
     def test_source_diversity_under_high_volume(self):
         def feed(url):
             source = "a" if url.endswith("/a") else "b"
