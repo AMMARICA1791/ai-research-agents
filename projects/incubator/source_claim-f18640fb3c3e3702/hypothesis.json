@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Ready for an Artemis update? Tune in Friday, Oct. 23, at 2 p.m. ET (1800 UTC) to hear our latest progress and accelerated plans for Artemis \u2026",
+  "source_excerpt": "Ready for an Artemis update? Tune in Friday, Oct. 23, at 2 p.m. ET (1800 UTC) to hear our latest progress and accelerated plans for Artemis lunar missions. Watch live: https://www.youtube.com/live/pAKqJxuxDgk",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Ready for an Artemis update? Tune in Friday, Oct. 23, at 2 p.m. ET (1800 UTC) to hear our latest progress and accelerated plans for Artemis \u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "f18640fb3c3e3702",
+  "source_title": "Ready for an Artemis update? Tune in Friday, Oct. 23, at 2 p.m. ET (1800 UTC) to hear our latest progress and accelerated plans for Artemis \u2026",
+  "source_url": "https://x.com/NASAArtemis/status/2113361341071212918"
+}
