@@ -88,8 +88,22 @@ def run(feeds=FEEDS, fetcher=fetch):
             errors.append({"feed":name,"error":type(exc).__name__})
     dedup={x["id"]:x for x in results}
     items=sorted(dedup.values(),key=lambda x:(-x["signal"]["score"],x["id"]))
+    # Give every responding source one opportunity before filling remaining slots.
+    # This prevents one high-volume feed from consuming the whole 40-item batch.
+    chosen=[]; chosen_ids=set(); represented=set()
+    for item in items:
+        if item["source"] not in represented and len(chosen)<40:
+            chosen.append(item)
+            chosen_ids.add(item["id"])
+            represented.add(item["source"])
+    for item in items:
+        if len(chosen)>=40:
+            break
+        if item["id"] not in chosen_ids:
+            chosen.append(item)
+            chosen_ids.add(item["id"])
     return {"generated_at_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
-            "status":"unfiltered_source_discovery","signals":items[:40],
+            "status":"source_diversified_discovery","signals":chosen,
             "feed_errors":errors,"successful_feeds":len(feeds)-len(errors),
             "autonomous_code_generation":False}
 
