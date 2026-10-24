@@ -37,13 +37,30 @@ def main():
         print("No incubator directory")
         return
     done = 0
+    attempted = set()
     for island in sorted(root.iterdir()):
         if done >= args.limit:
             break
         if not island.is_dir() or not re.fullmatch(r"[a-zA-Z0-9_-]+", island.name):
             continue
-        name = "radar-" + island.name.replace("_", "-").lower()
-        name = name[:100]
+        # Publish one discoverable public repository per project family.
+        # Signal hashes are provenance identifiers, not public project names.
+        family = re.sub(r"-[0-9a-f]{16}$", "", island.name)
+        titles = {
+            "agent_security": "authorization-trust-gate",
+            "source_claim": "source-claim-traceability",
+            "web_protocols": "web-protocol-experiments",
+            "privacy": "privacy-checks",
+            "provenance": "evidence-provenance",
+        }
+        name = titles.get(family)
+        if not name:
+            print(f"SKIP {island.name}: unknown family needs a descriptive title")
+            continue
+        name = "radar-" + name
+        if name in attempted:
+            continue
+        attempted.add(name)
         if not (island / "prototype.py").is_file() or not (island / "test_prototype.py").is_file():
             print(f"SKIP {island.name}: no executable prototype and test")
             continue
