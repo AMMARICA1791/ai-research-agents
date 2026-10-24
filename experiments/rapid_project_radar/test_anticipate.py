@@ -11,6 +11,17 @@ class AnticipateTests(unittest.TestCase):
         self.assertEqual(len(h),1)
         self.assertFalse(h[0]["novelty_verified"])
         self.assertEqual(h[0]["topic"],"source_claim")
+    def test_source_claim_and_topic_both_generate(self):
+        signal={"id":"sample","title":"New privacy approach",
+                "description":"We propose a privacy-preserving retrieval method.",
+                "signal":{"topics":{"privacy":1,"provenance":1}}}
+        with tempfile.TemporaryDirectory() as d:
+            result=generate({"signals":[signal]},d)
+            self.assertEqual({item["topic"] for item in result},
+                             {"source_claim","privacy","provenance"})
+            for item in result:
+                self.assertTrue((Path(item["path"])/"hypothesis.json").exists())
+
     def test_distinct_signals_get_distinct_projects(self):
         report={"signals":[{"id":"a","title":"Novel approach A","description":"We present a method for A."},
                            {"id":"b","title":"Novel approach B","description":"We introduce a method for B."}]}
