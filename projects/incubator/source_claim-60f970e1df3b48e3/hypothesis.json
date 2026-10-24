@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Origin Range Requests: Serving large files without range-request tuning",
+  "source_excerpt": "Naive byte-range caching can waste gigabytes of origin bandwidth on small requests. We rebuilt our cache architecture in Pingora to coordinate partial fetches automatically, cutting R2 p99 latency in half.",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Origin Range Requests: Serving large files without range-request tuning?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "60f970e1df3b48e3",
+  "source_title": "Origin Range Requests: Serving large files without range-request tuning",
+  "source_url": "https://blog.cloudflare.com/origin-range-requests/"
+}
