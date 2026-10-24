@@ -1,0 +1,11 @@
+{
+  "topic": "web_protocols",
+  "trend_hypothesis": "Browser-agent protocols diversify",
+  "research_question": "Can an adapter reject unknown action schemas before execution?",
+  "falsifiable_prediction": "Unknown action types fail closed.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "227cecfcb7bfdf5e",
+  "source_title": "Soma \u2013 memory and proofs for AI agents, measured not asserted",
+  "source_url": "https://github.com/mrpkk/soma-protocol"
+}
