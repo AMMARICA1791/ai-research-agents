@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "AI: EU Member States approve \"digital expropriation\" for AI companies",
+  "source_excerpt": "Article URL: https://noyb.eu/en/ai-eu-member-states-approve-digital-expropriation-europeans-ai-companies Comments URL: https://news.ycombinator.com/item?id=50223856 Points: 3 # Comments: 2",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: AI: EU Member States approve \"digital expropriation\" for AI companies?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "4238ef120285d29a",
+  "source_title": "AI: EU Member States approve \"digital expropriation\" for AI companies",
+  "source_url": "https://noyb.eu/en/ai-eu-member-states-approve-digital-expropriation-europeans-ai-companies"
+}
