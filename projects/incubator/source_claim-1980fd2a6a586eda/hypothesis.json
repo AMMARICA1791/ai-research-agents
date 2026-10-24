@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Thank you @SPARC_NA for interviewing arXiv for #OAWeek! arXiv's CEO chatted with SPARC about the cost of knowledge & what it takes to operat\u2026",
+  "source_excerpt": "Thank you @SPARC_NA for interviewing arXiv for #OAWeek! arXiv&apos;s CEO chatted with SPARC about the cost of knowledge &amp; what it takes to operate an essential open infrastructure in today&apos;s rapidly changing research landscape. Read the full profile here: https://www.openaccessweek.org/theme-profiles/arxiv",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Thank you @SPARC_NA for interviewing arXiv for #OAWeek! arXiv's CEO chatted with SPARC about the cost of knowledge & what it takes to operat\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1980fd2a6a586eda",
+  "source_title": "Thank you @SPARC_NA for interviewing arXiv for #OAWeek! arXiv's CEO chatted with SPARC about the cost of knowledge & what it takes to operat\u2026",
+  "source_url": "https://x.com/arxiv/status/2113676852761854067"
+}
