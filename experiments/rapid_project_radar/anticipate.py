@@ -58,8 +58,8 @@ def scaffold(hypothesis, root, project_id=None):
     project.mkdir(parents=True,exist_ok=True)
     # Topic-specific code comes only from the trusted PROTOTYPES map.
     if topic == "signal_trace":
-        code = "def trace(source):\\n    return isinstance(source, dict) and bool(source.get(\\\"url\\\", \\\"\\\").startswith(\\\"https://\\\")) and bool(source.get(\\\"title\\\"))\\n"
-        test = "import unittest\\nfrom prototype import trace\\nclass Tests(unittest.TestCase):\\n    def test_source(self):\\n        self.assertTrue(trace({\\\"url\\\":\\\"https://example.org/paper\\\",\\\"title\\\":\\\"Research\\\"}))\\n    def test_untrusted(self):\\n        self.assertFalse(trace({\\\"url\\\":\\\"http://example.org\\\",\\\"title\\\":\\\"Research\\\"}))\\n"
+        code = "def trace(source):\n    return isinstance(source, dict) and bool(source.get(\\"url\\", \\"\\").startswith(\\"https://\\")) and bool(source.get(\\"title\\"))\n"
+        test = "import unittest\nfrom prototype import trace\nclass Tests(unittest.TestCase):\n    def test_source(self):\n        self.assertTrue(trace({\\"url\\":\\"https://example.org/paper\\",\\"title\\":\\"Research\\"}))\n    def test_untrusted(self):\n        self.assertFalse(trace({\\"url\\":\\"http://example.org\\",\\"title\\":\\"Research\\"}))\n"
     elif topic == "source_claim":
         excerpt = hypothesis["source_excerpt"]
         code = "SOURCE_EXCERPT = " + repr(excerpt) + "\n" + "def evidence_matches(text):\n    return isinstance(text, str) and bool(SOURCE_EXCERPT) and SOURCE_EXCERPT in text\n"
