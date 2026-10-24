@@ -1,4 +1,4 @@
-"""Offline checks only. Does not evaluate model behavior."""
+"""Offline contract checks for Community v0.2.0. Not model behavior tests."""
 import pathlib
 import re
 import unittest
@@ -13,30 +13,30 @@ class SkillContract(unittest.TestCase):
         cls.lower = cls.text.lower()
 
     def test_frontmatter(self):
-        self.assertTrue(self.text.startswith("---\n"))
         match = re.match(r"\A---\n(.*?)\n---\n", self.text, re.S)
         self.assertIsNotNone(match)
         self.assertRegex(match.group(1), r"(?m)^name: evidence-first-research$")
         self.assertRegex(match.group(1), r"(?m)^description: .+")
 
-    def test_complete_workflow(self):
-        for item in ("Scope", "Collect", "Verify", "Map", "Challenge", "Propose tests", "Review", "Archive"):
-            with self.subTest(item=item):
-                self.assertIn(item.lower(), self.lower)
+    def test_four_rules(self):
+        for phrase in ("stay on task", "never invent evidence", "distinguish what you know", "bound the conclusion"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.lower)
 
-    def test_source_and_claim_outputs(self):
-        for item in ("evidence inventory", "claim-evidence matrix", "reproducibility protocol", "human-review actions"):
-            with self.subTest(item=item):
-                self.assertIn(item, self.lower)
+    def test_source_integrity(self):
+        for phrase in ("doi", "unverified", "abstract only", "actually accessed", "never manufacture bibliographic metadata"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.lower)
 
-    def test_no_fabrication_and_no_novelty_overclaim(self):
-        for item in ("do not fabricate", "not verified", "worldwide novelty", "human judgment", "synthetic test"):
-            with self.subTest(item=item):
-                self.assertIn(item, self.lower)
+    def test_scope_and_reproducibility(self):
+        for phrase in ("user's current research question", "reproducible test", "worldwide novelty", "human review"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.lower)
 
-    def test_untrusted_source_handling(self):
-        self.assertIn("untrusted evidence, not instructions", self.lower)
-        self.assertIn("never execute untrusted code", self.lower)
+    def test_safe_and_concise(self):
+        for phrase in ("never execute untrusted code", "preserve privacy", "do not fill empty templates"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.lower)
 
 if __name__ == "__main__":
     unittest.main()
