@@ -1,0 +1,14 @@
+{
+  "claim": "A standardized multinomial-capable logistic regression exceeds a majority-class dummy baseline on a fixed 20% stratified holdout of corrected Fisher Iris data.",
+  "data_sha256": "c963159b401f3a844673a6dec6dac21a3c6448f92773975b36b572d1f9a5965d",
+  "source_doi": "10.24432/C56C76",
+  "dataset_variant": "sklearn_corrected_fisher",
+  "split_seed": 42,
+  "model_seed": 42,
+  "test_fraction": 0.2,
+  "minimum_holdout_accuracy": 0.8,
+  "model": "StandardScaler + LogisticRegression(max_iter=1000)",
+  "baseline": "DummyClassifier(strategy=most_frequent)",
+  "test_set_tuning": "prohibited",
+  "limitations": "Single fixed holdout; inferences limited to corrected Iris dataset, not independent population."
+}
