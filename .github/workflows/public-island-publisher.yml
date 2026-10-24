@@ -1,0 +1,36 @@
+name: Publish Public Project Islands
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: public-island-publisher
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check publisher credential
+        id: credential
+        env:
+          ISLAND_TOKEN: ${{ secrets.ISLAND_PUBLISH_TOKEN }}
+        run: |
+          if [ -n "$ISLAND_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::ISLAND_PUBLISH_TOKEN is missing. Public repository publishing is not enabled."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish tested islands to public repositories
+        if: steps.credential.outputs.enabled == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ISLAND_PUBLISH_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+        run: python scripts/publish_public_islands.py --limit 10
