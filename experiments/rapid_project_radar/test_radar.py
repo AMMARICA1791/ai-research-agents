@@ -52,6 +52,17 @@ class RadarTests(unittest.TestCase):
         self.assertEqual(len(report["signals"]),1)
         self.assertEqual(report["excluded_older_arxiv_submission_month"],1)
 
+    def test_first_seen_registry_distinguishes_repeat(self):
+        now=dt.datetime(2026,10,24,0,tzinfo=dt.timezone.utc)
+        feeds={"a":"https://example.org/a"}
+        first=run(feeds,lambda _:XML,now=now)
+        again=run(feeds,lambda _:XML,now=now+dt.timedelta(minutes=5),
+                  seen=first["first_seen_registry"])
+        self.assertEqual(first["new_unique_candidates"],2)
+        self.assertEqual(again["new_unique_candidates"],0)
+        self.assertEqual(again["previously_seen_candidates"],2)
+        self.assertTrue(all(not x["first_seen_this_scan"] for x in again["signals"]))
+
     def test_stale_and_undated_excluded(self):
         report=run({"a":"https://example.org/a"},lambda _:XML,
                    now=dt.datetime(2026,10,28,0,tzinfo=dt.timezone.utc))
