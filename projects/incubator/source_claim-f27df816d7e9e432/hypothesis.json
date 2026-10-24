@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Scale and Selection: What Makes Automatic Harness Evolution Work for Visual-Interface Robot Agents",
+  "source_excerpt": "arXiv:2609.39304v4 Announce Type: replace Abstract: When an off-the-shelf coding agent is used directly as a robot policy, observing a browser-based 3D interface through screenshots and acting by posing a virtual target gripper through a few tools, the agent's harness, its prompts, tools, and control rules, largely determines success, and until now it has been written by hand. We show that this harness can be improved automatically by another cod",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Scale and Selection: What Makes Automatic Harness Evolution Work for Visual-Interface Robot Agents?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "f27df816d7e9e432",
+  "source_title": "Scale and Selection: What Makes Automatic Harness Evolution Work for Visual-Interface Robot Agents",
+  "source_url": "https://arxiv.org/abs/2609.39304"
+}
