@@ -20,11 +20,15 @@ jobs:
         run: python -m unittest experiments.empirical_validation.test_protocol -v
       - name: Run preregistered numerical calibration
         run: python -m experiments.empirical_validation.birthday_calibration | tee calibration-results.json
+      - name: Run preregistered evidence-linked successor
+        run: python -m experiments.empirical_validation.birthday_successor | tee successor-results.json
       - name: Archive raw comparison
         uses: actions/upload-artifact@v4
         with:
           name: birthday-calibration-results
           path: |
             calibration-results.json
+            successor-results.json
+            experiments/empirical_validation/successor_preregistration.json
             experiments/empirical_validation/preregistration.json
           retention-days: 30
