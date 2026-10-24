@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Show HN: AI Trend Video \u2013 Put your photo into viral AI video templates",
+  "source_excerpt": "Article URL: https://aitrendvideo.net Comments URL: https://news.ycombinator.com/item?id=50223635 Points: 1 # Comments: 1",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Show HN: AI Trend Video \u2013 Put your photo into viral AI video templates?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "6ab869bd4026074a",
+  "source_title": "Show HN: AI Trend Video \u2013 Put your photo into viral AI video templates",
+  "source_url": "https://aitrendvideo.net"
+}
