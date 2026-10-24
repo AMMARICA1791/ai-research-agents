@@ -21,6 +21,21 @@ class RadarTests(unittest.TestCase):
         r=run({"a":"https://example.org/a","b":"https://example.org/b"},lambda _:XML)
         self.assertEqual(len(r["signals"]),2)
         self.assertEqual(r["successful_feeds"],2)
+    def test_source_diversity_under_high_volume(self):
+        def feed(url):
+            source = "a" if url.endswith("/a") else "b"
+            count = 60 if source == "a" else 1
+            items = "".join(
+                "<item><title>Agent security discovery " + str(i) + "</title>"
+                "<link>https://example.org/" + source + "/" + str(i) + "</link>"
+                "<description>agent authorization privacy</description></item>"
+                for i in range(count))
+            return ("<rss><channel>" + items + "</channel></rss>").encode()
+        report = run({"a":"https://example.org/a","b":"https://example.org/b"},feed)
+        self.assertEqual(len(report["signals"]),40)
+        self.assertEqual({x["source"] for x in report["signals"]},{"a","b"})
+        self.assertEqual(len({x["id"] for x in report["signals"]}),40)
+
     def test_failures_visible(self):
         def fail(_): raise OSError("offline")
         r=run({"a":"https://example.org/a"},fail)
