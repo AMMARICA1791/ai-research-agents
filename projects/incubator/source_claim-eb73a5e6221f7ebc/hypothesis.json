@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Our newest decision model is the world's best decision model. Introducing GLiDE v1.2, the #1 model on the @huggingface Decision Index. With \u2026",
+  "source_excerpt": "Our newest decision model is the world&apos;s best decision model. Introducing GLiDE v1.2, the #1 model on the @huggingface Decision Index. With an overall score of 71.5, GLiDE v1.2 also has one of the lowest calibration errors on the entire Decision Index, meaning its confidence more closely reflects how often its answers are correct. Beyond improved benchmark performance, it also adds support for multimodal inputs, enabling decision-making usin",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Our newest decision model is the world's best decision model. Introducing GLiDE v1.2, the #1 model on the @huggingface Decision Index. With \u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "eb73a5e6221f7ebc",
+  "source_title": "Our newest decision model is the world's best decision model. Introducing GLiDE v1.2, the #1 model on the @huggingface Decision Index. With \u2026",
+  "source_url": "https://x.com/fastinoAI/status/2113308639566164012"
+}
