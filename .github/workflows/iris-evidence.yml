@@ -1,0 +1,30 @@
+name: Published Dataset — Fisher Iris Verification
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'experiments/empirical_validation/iris_*'
+      - '.github/workflows/iris-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  verify-published-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed dataset package
+        run: python -m pip install scikit-learn==1.5.2
+      - name: Verify corrected Fisher Iris dataset
+        run: python -m experiments.empirical_validation.iris_study | tee iris-results.json
+      - name: Preserve measurements and frozen protocol
+        uses: actions/upload-artifact@v4
+        with:
+          name: iris-published-dataset-evidence
+          path: |
+            iris-results.json
+            experiments/empirical_validation/iris_preregistration.json
+          retention-days: 30
