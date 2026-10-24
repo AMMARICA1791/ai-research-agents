@@ -1,6 +1,8 @@
 name: Rapid Radar Anticipatory Prototypes
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '17,47 * * * *'
   workflow_run:
     workflows: [Rapid Project Radar]
     types: [completed]
@@ -9,7 +11,7 @@ permissions:
   pull-requests: write
 jobs:
   anticipate:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     concurrency:
