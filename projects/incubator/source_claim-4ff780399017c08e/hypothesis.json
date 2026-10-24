@@ -1,0 +1,16 @@
+{
+  "topic": "source_claim",
+  "title": "Live From SF! We\u2019re teaching these folk how to train their own open weight agents. Sorry, but we won\u2019t live stream. Full recording coming to\u2026",
+  "source_excerpt": "Live From SF! We\u2019re teaching these folk how to train their own open weight agents. Sorry, but we won\u2019t live stream. Full recording coming tomorrow! Join us tomorrow on the training agents livestream, and here from experts about how they&apos;re scaling RL and evals to train frontier agents. \u200bWe will look beyond single-turn RL to multi-step, environment-driven training: reward design, rollouts, benchmarks, and the practical gap be\u2026",
+  "method_excerpt": "",
+  "research_question": "Can the central claim in this source be independently reproduced: Live From SF! We\u2019re teaching these folk how to train their own open weight agents. Sorry, but we won\u2019t live stream. Full recording coming to\u2026?",
+  "falsifiable_prediction": "A separately implemented test reproduces a measurable outcome described by the source; otherwise record inconclusive or failed.",
+  "derivation_method": "bounded_sentence_extraction_not_semantic_model",
+  "independent_validation": false,
+  "requires_domain_specific_test": true,
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "4ff780399017c08e",
+  "source_title": "Live From SF! We\u2019re teaching these folk how to train their own open weight agents. Sorry, but we won\u2019t live stream. Full recording coming to\u2026",
+  "source_url": "https://x.com/SergioPaniego/status/2113444541936398753"
+}
