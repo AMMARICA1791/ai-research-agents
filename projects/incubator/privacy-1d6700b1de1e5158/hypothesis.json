@@ -1,0 +1,11 @@
+{
+  "topic": "privacy",
+  "trend_hypothesis": "More workflows process sensitive information",
+  "research_question": "Can a local redaction stage prevent obvious secret leakage?",
+  "falsifiable_prediction": "Matching secret patterns are replaced before export.",
+  "market_validated": false,
+  "novelty_verified": false,
+  "source_id": "1d6700b1de1e5158",
+  "source_title": "Over half of reported crimes in Singapore use sophisticated social engineering. With @GovTechSG, we\u2019re building on-device fraud detection us\u2026",
+  "source_url": "https://x.com/GoogleDeepMind/status/2110190101707858039"
+}
