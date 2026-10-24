@@ -92,7 +92,8 @@ def fetch(url):
             raise ValueError("feed too large")
         return data
 
-def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
+def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48, seen=None):
+    """seen maps stable signal IDs to their first observed UTC ISO timestamp."""
     now = now or dt.datetime.now(dt.timezone.utc)
     if now.tzinfo is None:
         raise ValueError("now must be timezone-aware")
@@ -124,6 +125,14 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
         item["age_hours"]=round(max(0,age),2)
         fresh.append(item)
     dedup={x["id"]:x for x in fresh}
+    previous=seen if seen is not None else {}
+    new_ids=set(dedup)-set(previous)
+    first_seen=dict(previous)
+    for sid in new_ids:
+        first_seen[sid]=now.isoformat()
+    for item in dedup.values():
+        item["first_seen_utc"]=first_seen[item["id"]]
+        item["first_seen_this_scan"]=item["id"] in new_ids
     items=sorted(dedup.values(),key=lambda x:(-x["signal"]["score"],x["id"]))
     # Give every responding source one opportunity before filling remaining slots.
     # This prevents one high-volume feed from consuming the whole 40-item batch.
@@ -147,6 +156,9 @@ def run(feeds=FEEDS, fetcher=fetch, now=None, max_age_hours=48):
             "freshness_window_hours":max_age_hours,"excluded_stale":stale_count,
             "excluded_undated":undated_count,"excluded_future":future_count,
             "fresh_candidate_count":len(fresh),
+            "new_unique_candidates":len(new_ids),
+            "previously_seen_candidates":len(dedup)-len(new_ids),
+            "first_seen_registry":first_seen,
             "selected_age_hours_min":ages[0] if ages else None,
             "selected_age_hours_median":round(median_age,2) if ages else None,
             "selected_age_hours_max":ages[-1] if ages else None,
@@ -164,8 +176,19 @@ def write_report(path, report):
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--output",default="radar-report.json")
+    parser.add_argument("--seen-file",default=None)
     args=parser.parse_args()
-    result=run()
+    seen={}
+    if args.seen_file:
+        try:
+            data=json.loads(Path(args.seen_file).read_text(encoding="utf-8"))
+            if isinstance(data,dict):
+                seen={k:v for k,v in data.items() if isinstance(k,str) and isinstance(v,str)}
+        except (FileNotFoundError,ValueError,OSError):
+            pass
+    result=run(seen=seen)
+    if args.seen_file:
+        write_report(args.seen_file,result["first_seen_registry"])
     write_report(args.output,result)
     print(f"Signals: {len(result['signals'])}; feeds: {result['successful_feeds']}/{len(FEEDS)}")
     if result["successful_feeds"]==0:
