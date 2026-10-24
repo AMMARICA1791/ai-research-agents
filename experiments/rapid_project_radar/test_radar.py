@@ -37,6 +37,18 @@ class RadarTests(unittest.TestCase):
         self.assertEqual({x["source"] for x in report["signals"]},{"a","b"})
         self.assertEqual(len({x["id"] for x in report["signals"]}),40)
 
+    def test_older_arxiv_month_is_not_a_new_discovery(self):
+        xml=b"""<rss><channel><item><title>Old submission reappears</title>
+<link>https://arxiv.org/abs/2607.27204</link>
+<pubDate>Fri, 23 Oct 2026 10:00:00 GMT</pubDate></item>
+<item><title>Current month submission</title>
+<link>https://arxiv.org/abs/2610.29812</link>
+<pubDate>Fri, 23 Oct 2026 10:00:00 GMT</pubDate></item></channel></rss>"""
+        report=run({"a":"https://example.org/a"},lambda _:xml,
+                   now=dt.datetime(2026,10,24,0,tzinfo=dt.timezone.utc))
+        self.assertEqual(len(report["signals"]),1)
+        self.assertEqual(report["excluded_older_arxiv_submission_month"],1)
+
     def test_stale_and_undated_excluded(self):
         report=run({"a":"https://example.org/a"},lambda _:XML,
                    now=dt.datetime(2026,10,28,0,tzinfo=dt.timezone.utc))
