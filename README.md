@@ -1,12 +1,12 @@
 # AI Research Agents
 
-> **Open Radar Project Gallery — community discussion welcome:** [Browse all indexed independent experiments](docs/RADAR_PROJECT_REGISTRY.md) · [Council review and attention ranking](docs/radar-council/PORTFOLIO_COUNCIL_REVIEW.md) · [Suggest ideas, challenge assumptions, or report failures](https://github.com/AMMARICA1791/ai-research-agents/issues/67). Every experiment is public, including failed and inconclusive work. English is the primary working language. None of these prototypes should be interpreted as a validated scientific discovery.
-
 > **Project navigation:** [Experiment index](experiments/README.md) · [Portfolio organization and migration plan](docs/PROJECT_PORTFOLIO.md). Experimental branches are not merged products.
 
 **Evidence-first, free-first AI research for reproducible experiments, open-weight models and verifiable engineering.**
 
 > **Seven coordinated pipeline stages, NOT seven independent thinking AI agents.** This laboratory is experimental; human review remains mandatory.
+
+> **Open Radar Project Gallery — community discussion welcome:** [Browse all indexed independent experiments](docs/RADAR_PROJECT_REGISTRY.md) · [Council review and attention ranking](docs/radar-council/PORTFOLIO_COUNCIL_REVIEW.md) · [Suggest ideas, challenge assumptions, or report failures](https://github.com/AMMARICA1791/ai-research-agents/issues/67). Every experiment is public, including failed and inconclusive work. English is the primary working language. None of these prototypes should be interpreted as a validated scientific discovery.
 
 > **Open for external project-wide review:** [Read the public project tour](docs/PROJECT_SHOWCASE.md) · [Share a criticism or research idea — Issue #54](https://github.com/AMMARICA1791/ai-research-agents/issues/54). The project is an experimental prototype, **not** a validated autonomous research institute.
 
