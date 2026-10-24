@@ -59,7 +59,10 @@ class RadarTests(unittest.TestCase):
         again=run(feeds,lambda _:XML,now=now+dt.timedelta(minutes=5),
                   seen=first["first_seen_registry"])
         self.assertEqual(first["new_unique_candidates"],2)
+        self.assertEqual(first["new_candidate_first_observation_delay_hours_median"],14)
+        self.assertEqual(first["new_candidates_first_observed_within_24_hours"],2)
         self.assertEqual(again["new_unique_candidates"],0)
+        self.assertIsNone(again["new_candidate_first_observation_delay_hours_median"])
         self.assertEqual(again["previously_seen_candidates"],2)
         self.assertTrue(all(not x["first_seen_this_scan"] for x in again["signals"]))
 
