@@ -1,0 +1,37 @@
+name: Radar Topic Pulse
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/radar-topic-pulse.yml'
+      - 'projects/topic-pulse/**'
+  schedule:
+    - cron: '37 * * * *'
+permissions:
+  contents: read
+jobs:
+  generate-pulse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test Topic Pulse
+        run: python -m unittest discover -s projects/topic-pulse -p 'test_*.py' -v
+      - name: Read live radar feeds
+        run: python -m experiments.rapid_project_radar.radar --output /tmp/radar-report.json
+      - name: Generate topic pulse
+        run: python projects/topic-pulse/pulse.py --report /tmp/radar-report.json --output /tmp/topic-pulse.json
+      - name: Publish output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-topic-pulse-output
+          path: |
+            /tmp/radar-report.json
+            /tmp/topic-pulse.json
+          if-no-files-found: warn
+          retention-days: 14
