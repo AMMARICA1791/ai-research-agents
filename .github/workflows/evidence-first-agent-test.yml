@@ -1,0 +1,45 @@
+name: Evidence First Real Agent Smoke Test
+on:
+  push:
+    branches:
+      - skill/evidence-first-community
+    paths:
+      - '.github/workflows/evidence-first-agent-test.yml'
+      - 'skills/evidence-first-research/**'
+  workflow_dispatch:
+    inputs:
+      cases:
+        description: 'Number of cases (1-8)'
+        required: false
+        default: '8'
+jobs:
+  real-model-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check original skill contract
+        run: python -m unittest discover -s skills/evidence-first-research/tests -p 'test_skill_contract.py' -v
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+      - name: Start Ollama and download small open model
+        run: |
+          ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 40); do curl -fsS http://127.0.0.1:11434/api/tags && break || sleep 2; done
+          ollama pull qwen2.5:0.5b
+      - name: Run real agent prompts
+        env:
+          CASES: ${{ github.event.inputs.cases || '1' }}
+        run: |
+          python skills/evidence-first-research/tests/run_ollama_behavior.py --model qwen2.5:0.5b --limit "$CASES" --output behavior-results.json
+      - name: Upload raw responses (including failures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-first-agent-raw
+          path: |
+            behavior-results.json
+            /tmp/ollama.log
+          if-no-files-found: warn
