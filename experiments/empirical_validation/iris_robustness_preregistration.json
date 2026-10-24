@@ -1,0 +1,19 @@
+{
+  "claim": "A fixed logistic-regression pipeline exceeds a dummy baseline across five preregistered stratified Iris holdouts.",
+  "source_doi": "10.24432/C56C76",
+  "data_sha256": "c963159b401f3a844673a6dec6dac21a3c6448f92773975b36b572d1f9a5965d",
+  "split_seeds": [
+    11,
+    23,
+    42,
+    71,
+    101
+  ],
+  "model_seed": 42,
+  "test_fraction": 0.2,
+  "minimum_mean_accuracy": 0.85,
+  "minimum_single_split_accuracy": 0.75,
+  "baseline": "most_frequent",
+  "analysis": "mean, sample standard deviation, min/max, improvement over dummy baseline",
+  "limitations": "Overlapping splits of same 150 observations; no external test set; no claim of independent repetitions."
+}
