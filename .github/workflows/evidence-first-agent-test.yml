@@ -28,12 +28,12 @@ jobs:
         run: |
           ollama serve > /tmp/ollama.log 2>&1 &
           for i in $(seq 1 40); do curl -fsS http://127.0.0.1:11434/api/tags && break || sleep 2; done
-          ollama pull qwen2.5:0.5b
+          ollama pull qwen2.5:1.5b
       - name: Run real agent prompts
         env:
           CASES: ${{ github.event.inputs.cases || '8' }}
         run: |
-          python skills/evidence-first-research/tests/run_ollama_behavior.py --model qwen2.5:0.5b --limit "$CASES" --output behavior-results.json
+          python skills/evidence-first-research/tests/run_ollama_behavior.py --model qwen2.5:1.5b --limit "$CASES" --output behavior-results.json
       - name: Upload raw responses (including failures)
         if: always()
         uses: actions/upload-artifact@v4
