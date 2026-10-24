@@ -1,0 +1,37 @@
+name: Radar Source Gap
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/radar-source-gap.yml'
+      - 'projects/source-gap/**'
+  schedule:
+    - cron: '43 * * * *'
+permissions:
+  contents: read
+jobs:
+  report-gaps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline tests
+        run: python -m unittest discover -s projects/source-gap -p 'test_*.py' -v
+      - name: Collect public radar feeds
+        run: python -m experiments.rapid_project_radar.radar --output /tmp/radar-report.json
+      - name: Analyze source gaps
+        run: python projects/source-gap/gap.py --report /tmp/radar-report.json --output /tmp/source-gap.json
+      - name: Publish report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-source-gap-output
+          path: |
+            /tmp/radar-report.json
+            /tmp/source-gap.json
+          if-no-files-found: warn
+          retention-days: 14
